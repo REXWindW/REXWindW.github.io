@@ -4,6 +4,33 @@
   
   
   <entry>
+    <title>Codeforces Round /#676 (Div. 2) D. Hexagons 题解</title>
+    <link href="/2020/10/20/cf-676/"/>
+    <url>/2020/10/20/cf-676/</url>
+    
+    <content type="html"><![CDATA[<h1 id="题意"><a href="#题意" class="headerlink" title="题意"></a>题意</h1><p><img src="/img/cf-676/cft.png" alt="cft"> </p><p>​        有这样一个六边形坐标系，并给了六个移动方向C1-6。</p><p><img src="/img/cf-676/cf2.png" alt="cf2"> </p><p>​        输入给定目标坐标xy，并且给定C1-6每个方向的费用，求从(0,0)到(x,y)的最小费用。</p><h1 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h1><p>​        我们可以发现，要进行一次C2的移动，可以通过一次C1和一次C3合成，同理如果向进行一次C1移动，也可以通过C6和C2进行合成。所以我们先进行一次类似最短路的操作，如果一个方向x的费用比它左右x+1,x-1相加的还要多，则需要把这个费用替换。</p><p>​        这样操作之后，我们可以得到如果要从(0,0)到(x,y)，最多只需要走用到两个方向。（注意，这里的方向经过了之前的操作，其实和一开始的移动是不一样的）</p><p>​        之后我们枚举选哪两种方向就行了。我比赛的时候选择的方法比较傻逼，是给定一个坐标(x,y)，我先枚举：要先搞定x还是先搞定y，然后判断x(或y)变成0之后，需要用哪一个方向，套了两重循环，比较不科学。后来看了大佬们的代码发现有效率更高更好写的方法。</p><h1 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h1><p>比赛时的代码</p><pre><code class="c++">#include&lt;iostream&gt;#include&lt;cstring&gt;#include&lt;cstdio&gt;#include&lt;algorithm&gt;#include&lt;vector&gt;#include&lt;map&gt;#include&lt;queue&gt;#include&lt;cmath&gt;using namespace std;template&lt;class T&gt;inline void read(T &amp;x)&#123;x=0;char o,f=1;while(o=getchar(),o&lt;48)if(o==45)f=-f;do x=(x&lt;&lt;3)+(x&lt;&lt;1)+(o^48);while(o=getchar(),o&gt;47);x*=f;&#125;int cansel_sync=(ios::sync_with_stdio(0),cin.tie(0),0);#define ll long long#define ull unsigned long long#define rep(i,a,b) for(int i=(a);i&lt;=(b);i++)#define repb(i,a,b) for(int i=(a);i&gt;=b;i--)#define log(x) (31-__builtin_clz(x))#define INF 0x3f3f3f3f#define int llll gcd(ll a,ll b)&#123; while(b^=a^=b^=a%=b); return a; &#125;//#define INF 0x7fffffffint dir[6][2] = &#123;1,1,0,1, -1,0,-1,-1, 0,-1,1,0&#125;;ll c[6];ll tx,ty;ll res;inline ll cd(int x)&#123; return c[ (x+6)%6 ]; &#125;inline bool th(ll a,ll b)&#123;//判断同号    if(a==b&amp;&amp;a==0) return 1;    else if(a&gt;0&amp;&amp;b&gt;0) return 1;    else if(a&lt;0&amp;&amp;b&lt;0) return 1;    return 0;&#125;void solve()&#123;    res = 0;    cin&gt;&gt;tx&gt;&gt;ty;    rep(i,0,5) cin&gt;&gt;c[i];//费用;    rep(i,0,5)&#123;//最短路思想        if(cd(i-1)+cd(i+1)&lt;cd(i)) c[i] = cd(i-1)+cd(i+1);    &#125;    ll minn = 1LL&lt;&lt;62;    //我懂了，最多只需要两种方向。    //先把tx弄到相同的方案    //先搞x再搞y的情况    rep(i,0,5)&#123;        res = 0;        ll tty = ty;ll ttx = tx;        if(dir[i][0]==0) continue;        if(th(dir[i][0],ttx)||ttx==0)&#123;            ll tim = abs(ttx);            tty -= tim*dir[i][1];            ttx = 0;            res += c[i]*tim;            rep(j,0,5)&#123;                if(dir[j][0]!=0) continue;                if(dir[j][1]==0) continue;                if(th(dir[j][1],tty)||tty==0)&#123;                    ll tim = abs(tty);                    ll res2 = res + c[j]*tim;                    minn = min(minn,res2);                    //cout&lt;&lt;i&lt;&lt;&#39; &#39;&lt;&lt;j&lt;&lt;&#39;:&#39;&lt;&lt;res&lt;&lt;&#39; &#39;&lt;&lt;res2&lt;&lt;endl;                &#125;            &#125;        &#125;    &#125;    //先搞y再搞x    rep(i,0,5)&#123;        res = 0;        ll tty = ty;ll ttx = tx;        if(dir[i][1]==0) continue;        if(th(dir[i][1],tty)||tty==0)&#123;            ll tim = abs(tty);            ttx -= tim*dir[i][0];            tty = 0;            res += c[i]*tim;            rep(j,0,5)&#123;                if(dir[j][1]!=0) continue;                if(dir[j][0]==0) continue;                if(th(dir[j][0],ttx)||ttx==0)&#123;                    ll tim = abs(ttx);                    ll res2 = res + c[j]*tim;                    minn = min(minn,res2);                    //cout&lt;&lt;i&lt;&lt;&#39; &#39;&lt;&lt;j&lt;&lt;&#39;:&#39;&lt;&lt;res&lt;&lt;&#39; &#39;&lt;&lt;res2&lt;&lt;endl;                &#125;            &#125;        &#125;    &#125;    cout&lt;&lt;minn&lt;&lt;endl;&#125;signed main()&#123;    int z;    cin&gt;&gt;z;    while(z--) solve();&#125;</code></pre>]]></content>
+    
+    
+    <categories>
+      
+      <category>题解</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Codeforces</tag>
+      
+      <tag>思维</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>To Begin With</title>
     <link href="/2020/10/20/first-blog/"/>
     <url>/2020/10/20/first-blog/</url>
