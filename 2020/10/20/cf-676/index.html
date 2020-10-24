@@ -180,7 +180,7 @@
 <p>​        这样操作之后，我们可以得到如果要从(0,0)到(x,y)，最多只需要走用到两个方向。（注意，这里的方向经过了之前的操作，其实和一开始的移动是不一样的）</p>
 <p>​        之后我们枚举选哪两种方向就行了。我比赛的时候选择的方法比较傻逼，是给定一个坐标(x,y)，我先枚举：要先搞定x还是先搞定y，然后判断x(或y)变成0之后，需要用哪一个方向，套了两重循环，比较不科学。后来看了大佬们的代码发现有效率更高更好写的方法。</p>
 <h1 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h1><p>比赛时的代码</p>
-<pre><code class="c++">#include&lt;iostream&gt;
+<pre><code class="lang-c++">#include&lt;iostream&gt;
 #include&lt;cstring&gt;
 #include&lt;cstdio&gt;
 #include&lt;algorithm&gt;
@@ -273,7 +273,8 @@ signed main()&#123;
     int z;
     cin&gt;&gt;z;
     while(z--) solve();
-&#125;</code></pre>
+&#125;
+</code></pre>
 
             <hr>
           </div>
