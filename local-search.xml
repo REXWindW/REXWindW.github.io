@@ -4,6 +4,35 @@
   
   
   <entry>
+    <title>Codeforces Round /#679 (Div. 2) C.Perform Easily(二分/集合)有两种不同方法的题解</title>
+    <link href="/2020/10/28/cf-679-c/"/>
+    <url>/2020/10/28/cf-679-c/</url>
+    
+    <content type="html"><![CDATA[<h1 id="题目地址"><a href="#题目地址" class="headerlink" title="题目地址"></a>题目地址</h1><p><a href="http://codeforces.com/contest/1435/problem/C">http://codeforces.com/contest/1435/problem/C</a></p><h1 id="大致题意"><a href="#大致题意" class="headerlink" title="大致题意"></a>大致题意</h1><p>有一个长度为6的数组a，代表每根弦的初始值。</p><p>有另外一个数组b，代表需要弹奏的每个音符。</p><p>每根琴弦的琴格从1开始。（在弹吉他里应该叫x品吧）</p><p>如果我要弹音符$b_i$,找到$x$满足$b_i=x+a_j $则可以按琴弦j的琴格$x$来弹出这个音。（$j$弦$x$品）</p><p>问怎么弹所有音符可以让最大的$x$和最小的$x$之间的差值最少？</p><h1 id="题目思路"><a href="#题目思路" class="headerlink" title="题目思路"></a>题目思路</h1><h2 id="方法1：二分"><a href="#方法1：二分" class="headerlink" title="方法1：二分"></a>方法1：二分</h2><p>方法来自大佬的博客：<a href="https://www.cnblogs.com/acceptedzhs/p/13876630.html">https://www.cnblogs.com/acceptedzhs/p/13876630.html</a></p><p>先对ab两个数组进行排序并且去重（这里a的去重是必要的，并不仅仅是为了速度）</p><p>设a的长度为m，b的长度为n，我们枚举n和m，复杂度$O(n) $</p><p>即对音符和琴弦进行枚举，$minx = b_j - a_i $,设$minx$就是之后最小的琴格，比$minx $还小的就是不可行的了。</p><p>我们定义”最悲惨的音符”是那些“刚好可以使用琴弦a[k]却无法使用琴弦$a_{k-1} $中的音符”里最大的。</p><p><img src="\img\cf-679-c\tj.png" alt="tj"></p><p>显然这样的音符最多只有$m-1 $个。（之前去重就是因为这里，不然$a<em>k = a</em>{k-1} $就出错了。</p><p>如果$b_1 &lt; minx + a_1 $,则不可能存在”能使用$a_1 $但无法使用$a_2 $的音符”，对于这种情况我们直接判定这个$minx$不合法，跳过。</p><p>琴格的最大位置一定在这些“最悲惨的音符”和最大的那个音符中产生。</p><h3 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h3><pre><code class="lang-c++">#include&lt;iostream&gt;#include&lt;cstring&gt;#include&lt;cstdio&gt;#include&lt;algorithm&gt;#include&lt;vector&gt;#include&lt;map&gt;#include&lt;queue&gt;#include&lt;cmath&gt;using namespace std;template&lt;class T&gt;inline void read(T &amp;x)&#123;x=0;char o,f=1;while(o=getchar(),o&lt;48)if(o==45)f=-f;do x=(x&lt;&lt;3)+(x&lt;&lt;1)+(o^48);while(o=getchar(),o&gt;47);x*=f;&#125;int cansel_sync=(ios::sync_with_stdio(0),cin.tie(0),0);#define ll long long#define ull unsigned long long#define rep(i,a,b) for(int i=(a);i&lt;=(b);i++)#define repb(i,a,b) for(int i=(a);i&gt;=b;i--)#define mkp make_pair#define ft first#define sd second#define log(x) (31-__builtin_clz(x))#define INF 0x3f3f3f3ftypedef pair&lt;int,int&gt; pii;typedef pair&lt;ll,ll&gt; pll;ll gcd(ll a,ll b)&#123; while(b^=a^=b^=a%=b); return a; &#125;//#define INF 0x7fffffffconst int MAXN = 1e5+5;ll a[8];ll b[MAXN];int n;void solve()&#123;    int m = 6;    rep(i,1,m) cin&gt;&gt;a[i];    sort(a+1,a+1+m);    m = unique(a+1,a+1+m)-a-1;    cin&gt;&gt;n;    rep(i,1,n) cin&gt;&gt;b[i];    sort(b+1,b+1+n);    n = unique(b+1,b+1+n)-b-1;    //读入两个数组，排序去重    ll minx,maxx,minn = 1ll&lt;&lt;62;    rep(i,1,n)&#123;        rep(j,1,m)&#123;            maxx = 0;            minx = b[i]-a[j];            if(b[1]-a[1]&lt;minx) continue;            rep(k,1,m)&#123;                //注意琴格从1开始                //b[?]-a[k]&gt;=minx 变形 b[?]&gt;=minx+a[k]                int px = lower_bound(b+1,b+1+n,minx+a[k])-b-1;                //找到最后一个可以用a[k-1]但一定用不了a[k]的                maxx = max(b[px]-a[k-1],maxx);            &#125;            repb(k,m,1)&#123;                if(b[n]-a[k]&gt;=minx)&#123;//和音符中的最大值进行比较,并且找一根尽可能大的琴弦                    maxx = max(maxx,b[n]-a[k]);                    break;                &#125;            &#125;            minn = min(maxx-minx,minn);        &#125;    &#125;    cout&lt;&lt;minn&lt;&lt;endl;&#125;int main()&#123;    solve();&#125;</code></pre><h2 id="方法2：集合"><a href="#方法2：集合" class="headerlink" title="方法2：集合"></a>方法2：集合</h2><p>来自另一个大佬的博客：<a href="https://blog.csdn.net/I_have_a_world/article/details/109287448">https://blog.csdn.net/I_have_a_world/article/details/109287448</a></p><p>我更喜欢这第二种方法，复杂度上应该都是$O(nlogn)$的。但是这个方法真的挺简洁易懂的。</p><p>两个数组可以不去重,但是去重的话效率应该会更高。</p><p>搞一个in[MAXN]数组，记录当前这个音符所在的弦。</p><p>设排序去重后有n个音符，m个琴弦。</p><p>一开始每个音符都在弦m上，用pair<ll,ll>来记录，分别记录$b<em>i - a</em>{in[i]} $和编号$i$。</p><p>把这些二元组都存在集合set里，然后每次取出first最小的(即$b<em>i - a</em>{in[i]} $)最大的元素i，和集合中first最大的做差。在这些数值中找最小值。</p><p>这样以后，把最小的i对应的in[i]—，即让他变得更大再加入集合。</p><p>重复这些步骤直到最小的元素也是用的1弦。为什么？因为这时候其他弦如果再往下换弦，也只能使$b<em>i - a</em>{in[i]} $变得更大，使最大-最小的值变大或者不变，所以到这里就没必要继续往下了。</p><h3 id="代码-1"><a href="#代码-1" class="headerlink" title="代码"></a>代码</h3><pre><code class="lang-c++">#include&lt;iostream&gt;#include&lt;cstring&gt;#include&lt;cstdio&gt;#include&lt;algorithm&gt;#include&lt;set&gt;#include&lt;cmath&gt;using namespace std;int cansel_sync=(ios::sync_with_stdio(0),cin.tie(0),0);#define ll long long#define rep(i,a,b) for(int i=(a);i&lt;=(b);i++)#define repb(i,a,b) for(int i=(a);i&gt;=b;i--)#define mkp make_pair#define ft first#define sd secondtypedef pair&lt;ll,ll&gt; pll;const int MAXN = 1e5+5;ll a[8];ll b[MAXN];int in[MAXN];int n;set&lt;pll&gt;st;void solve()&#123;    int m = 6;    rep(i,1,m) cin&gt;&gt;a[i];    sort(a+1,a+1+m);    m = unique(a+1,a+1+m)-a-1;    cin&gt;&gt;n;    rep(i,1,n) cin&gt;&gt;b[i];    sort(b+1,b+1+n);    n = unique(b+1,b+1+n)-b-1;    //这里其实没太大必要去重，但是我想了一下还是去重了    rep(i,1,n)&#123;        in[i] = m;        st.insert(mkp(b[i]-a[m],(ll)i));//一开始都是用m弦弹的    &#125;    ll minn = st.rbegin()-&gt;ft-st.begin()-&gt;ft;    while(1)&#123;        pll now = *st.begin();        st.erase(st.begin());//这边的参数是迭代器,这样删复杂度更小        if(in[now.sd]==1) break;        //如果最小的都是1,那么其他的音符换弦也不可能让结果更小了,因为往下换只会让bi-aj更大        in[now.sd]--;//每次换成更小的弦        st.insert(mkp(b[now.sd]-a[in[now.sd]],now.sd));        minn = min(minn,st.rbegin()-&gt;ft-st.begin()-&gt;ft);    &#125;    cout&lt;&lt;minn&lt;&lt;endl;&#125;int main()&#123;    solve();&#125;</code></pre>]]></content>
+    
+    
+    <categories>
+      
+      <category>题解</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Codeforces</tag>
+      
+      <tag>二分</tag>
+      
+      <tag>集合</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>【周记】2020年10月25日</title>
     <link href="/2020/10/25/zhouji1/"/>
     <url>/2020/10/25/zhouji1/</url>
