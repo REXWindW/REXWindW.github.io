@@ -4,7 +4,7 @@
   
   
   <entry>
-    <title>关于Mathjax踩过的坑</title>
+    <title>Mathjax内联公式出错的问题与解决方案</title>
     <link href="/2020/11/08/matjax-tips/"/>
     <url>/2020/11/08/matjax-tips/</url>
     
@@ -145,7 +145,7 @@
     <link href="/2020/10/20/first-blog/"/>
     <url>/2020/10/20/first-blog/</url>
     
-    <content type="html"><![CDATA[<h2 id="为什么要写博客"><a href="#为什么要写博客" class="headerlink" title="为什么要写博客"></a>为什么要写博客</h2><p>​        其实没有什么非写不可的理由，只是看lhd他们啥都会，就想着自己也学着搞点东西。</p><p>​        之前都是在CSDN上用的博客，方便是方便，但是看转爷他们的博客那么好看其实还挺羡慕的，所以今天闲着就想着搭一个博客看看。</p><h2 id="参考的帖子"><a href="#参考的帖子" class="headerlink" title="参考的帖子"></a>参考的帖子</h2><p>Hexo的基本使用参考了</p><p><a href="https://www.cnblogs.com/liuxianan/p/build-blog-website-by-hexo-github.html">https://www.cnblogs.com/liuxianan/p/build-blog-website-by-hexo-github.html</a></p><p>Hexo环境变量配置</p><p><a href="https://blog.csdn.net/weixin_30673611/article/details/94825385">https://blog.csdn.net/weixin_30673611/article/details/94825385</a></p><p><em>一开始没有加到path里面而是新建了一个变量，后来发现要加到path里面才行</em></p><p>用Gitee更快clone仓库</p><p><a href="https://blog.csdn.net/huitailang2020/article/details/104813219">https://blog.csdn.net/huitailang2020/article/details/104813219</a></p><p>本博客用的主题</p><p><a href="https://zhuanlan.zhihu.com/p/137679728">https://zhuanlan.zhihu.com/p/137679728</a></p><p>fluid主题的配置指南</p><p><a href="https://fluid-dev.github.io/hexo-fluid-docs/guide/">https://fluid-dev.github.io/hexo-fluid-docs/guide/</a></p><p>npm安装</p><p><a href="https://www.cnblogs.com/lgx5/p/10732016.html">https://www.cnblogs.com/lgx5/p/10732016.html</a></p>]]></content>
+    <content type="html"><![CDATA[<h2 id="为什么要写博客"><a href="#为什么要写博客" class="headerlink" title="为什么要写博客"></a>为什么要写博客</h2><p>​        其实没有什么非写不可的理由，只是看lhd他们啥都会，就想着自己也学着搞点东西。</p><p>​        之前都是在CSDN上用的博客，方便是方便，但是看转爷他们的博客那么好看其实还挺羡慕的，所以今天闲着就想着搭一个博客看看。</p><h2 id="参考的帖子"><a href="#参考的帖子" class="headerlink" title="参考的帖子"></a>参考的帖子</h2><p>Hexo的基本使用参考了</p><p><a href="https://www.cnblogs.com/liuxianan/p/build-blog-website-by-hexo-github.html">https://www.cnblogs.com/liuxianan/p/build-blog-website-by-hexo-github.html</a></p><p>Hexo环境变量配置</p><p><a href="https://blog.csdn.net/weixin_30673611/article/details/94825385">https://blog.csdn.net/weixin_30673611/article/details/94825385</a></p><p><em>一开始没有加到path里面而是新建了一个变量，后来发现要加到path里面才行</em></p><p>用Gitee更快clone仓库</p><p><a href="https://blog.csdn.net/huitailang2020/article/details/104813219">https://blog.csdn.net/huitailang2020/article/details/104813219</a></p><p>本博客用的主题</p><p><a href="https://zhuanlan.zhihu.com/p/137679728">https://zhuanlan.zhihu.com/p/137679728</a></p><p>fluid主题的配置指南</p><p><a href="https://fluid-dev.github.io/hexo-fluid-docs/guide/">https://fluid-dev.github.io/hexo-fluid-docs/guide/</a></p><p>npm安装</p><p><a href="https://www.cnblogs.com/lgx5/p/10732016.html">https://www.cnblogs.com/lgx5/p/10732016.html</a></p><p>渲染MathJax数学公式-解决了我内联公式渲染失败的问题</p><p><a href="https://www.jianshu.com/p/7ab21c7f0674">https://www.jianshu.com/p/7ab21c7f0674</a></p>]]></content>
     
     
     <categories>
