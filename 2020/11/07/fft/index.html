@@ -131,7 +131,7 @@
                   
                   &nbsp;<i class="far fa-chart-bar"></i>
                   <span class="post-count">
-                    1.8k 字
+                    2k 字
                   </span>&nbsp;
                 
 
@@ -139,7 +139,7 @@
                   
                   &nbsp;<i class="far fa-clock"></i>
                   <span class="post-count">
-                      8 分钟
+                      9 分钟
                   </span>&nbsp;
                 
 
@@ -184,9 +184,10 @@
 <p>$A(x)=(a_{0}+a_{2}x^{2}\dots a_{n-2}x^{n-2}) + (a_{1}x\dots a_{n-1}x^{n-1})$</p>
 <p>则有$A(x) = A_1(x^{2}) + x A_2(x^{2})$</p>
 <p>把$w_n ^k (k&lt; \frac{n}{2})$带入有</p>
-<p>$A( w_{n} ^{k} ) = A_{1}( w_{n} ^{k}) +  w_{n} ^{k} A_2( w_{n} ^{k})$</p>
+<p>$A( w_{n} ^{k} ) = A_{1}( w_{n} ^{2k}) +  w_{n} ^{k} A_2( w_{n} ^{2k})$</p>
+<p>$= A_1(w_{ \frac{n}{2}}^{k}) + w_n ^k A_2(w_{ \frac{n}{2}}^{k})$<strong>式子1</strong></p>
 <p>把$w_{n} ^{k + \frac{n}{2}}$带入得到</p>
-<p>$A( w_n ^{k + \frac{n}{2} } ) = A_1( (w_n ^{k + \frac{n}{2} })^2 ) +  w_n ^{k + \frac{n}{2} } A_2( (w_n ^{k + \frac{n}{2} })^2 )$<strong>式子1</strong></p>
+<p>$A( w_n ^{k + \frac{n}{2} } ) = A_1( (w_n ^{k + \frac{n}{2} })^2 ) +  w_n ^{k + \frac{n}{2} } A_2( (w_n ^{k + \frac{n}{2} })^2 )$</p>
 <p>$= A_1(w_{n}^{2k+n}) - w_n ^k A_2(w_{n}^{2k+n})$//+号因为正好去掉一个$\pi$所以变成-了,里面把平方去了</p>
 <p>$= A_1(w_{n}^{2k}) - w_n ^k A_2(w_{n}^{2k})$//n可以去掉</p>
 <p>$= A_1(w_{ \frac{n}{2}}^{k}) - w_n ^k A_2(w_{ \frac{n}{2}}^{k})$<strong>式子2</strong></p>
@@ -280,7 +281,24 @@ int main()&#123;
         a1[i&gt;&gt;1]=a[i],a2[i&gt;&gt;1]=a[i+1];
 </code></pre>
 <p>这里显然会出现数组越界的情况，要么数组再开大点，要么&lt;=limit改成&lt;limit。验证过两种都行，不过显然第二种会比较好一点。</p>
-<h1 id="算法优化"><a href="#算法优化" class="headerlink" title="算法优化"></a>算法优化</h1><h2 id="蝴蝶操作"><a href="#蝴蝶操作" class="headerlink" title="蝴蝶操作"></a>蝴蝶操作</h2>
+<h1 id="算法优化"><a href="#算法优化" class="headerlink" title="算法优化"></a>算法优化</h1><h2 id="蝴蝶操作"><a href="#蝴蝶操作" class="headerlink" title="蝴蝶操作"></a>蝴蝶操作</h2><h3 id="优化计算了两次的部分"><a href="#优化计算了两次的部分" class="headerlink" title="优化计算了两次的部分"></a>优化计算了两次的部分</h3><p>上面在计算$A_1$和$A_2$时：</p>
+<p>$A( w_{n} ^{k} ) =A_1(w_{ \frac{n}{2}}^{k}) + w_n ^k A_2(w_{ \frac{n}{2}}^{k})$<strong>式子1</strong></p>
+<p>$A( w_n ^{k + \frac{n}{2} } )= A_1(w_{ \frac{n}{2}}^{k}) - w_n ^k A_2(w_{ \frac{n}{2}}^{k})$<strong>式子2</strong></p>
+<p>前一项完全相同，后一项也仅仅是相差一个正负号。但是在之前的代码里我们这一步计算了两次。</p>
+<pre><code class="lang-c++">for(int i=0;i&lt;(limit&gt;&gt;1);i++,w=w*Wn)&#123;//w相当于公式中的w_n^k
+    a[i]=a1[i]+w*a2[i];//偶
+    a[i+(limit&gt;&gt;1)]=a1[i]-w*a2[i];//O(1)算另外一部分
+&#125;
+</code></pre>
+<p>是吧，这里显然是可以优化的</p>
+<pre><code class="lang-c++">cplx tmp;
+for(int i=0;i&lt;(limit&gt;&gt;1);i++,w=w*Wn)&#123;//w相当于公式中的w_n^k
+    tmp = w*a2[i];//蝴蝶操作
+    a[i]=a1[i]+tmp;//偶
+    a[i+(limit&gt;&gt;1)]=a1[i]-tmp;//O(1)算另外一部分
+&#125;
+</code></pre>
+
             <hr>
           </div>
           <br>
