@@ -131,7 +131,7 @@
                   
                   &nbsp;<i class="far fa-chart-bar"></i>
                   <span class="post-count">
-                    418 字
+                    482 字
                   </span>&nbsp;
                 
 
@@ -193,6 +193,34 @@
   em: /^\*((?:\*\*|[\s\S])+?)\*(?!\*)/,
 </code></pre>
 <p>重新启动hexo（先clean再generate）,问题完美解决。哦，如果不幸还没解决的话，看看是不是还需要在使用的主题中配置mathjax开关。</p>
+<h1 id="补充"><a href="#补充" class="headerlink" title="补充"></a>补充</h1><p>在以上步骤之后，还是存在一些显示错误</p>
+<p><img src="/img/mathjax_tips/cdot.png" srcset="/img/loading.gif" alt="cdot"></p>
+<p>我自己猜测的是mathjax最好不要用*号来乘，可以用点乘和叉乘</p>
+<p>如下：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>符号</th>
+<th>写法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>叉乘</td>
+<td>a \times b</td>
+</tr>
+<tr>
+<td>点除</td>
+<td>a \div b</td>
+</tr>
+<tr>
+<td>点乘</td>
+<td>a \cdot b</td>
+</tr>
+</tbody>
+</table>
+</div>
 
             <hr>
           </div>
