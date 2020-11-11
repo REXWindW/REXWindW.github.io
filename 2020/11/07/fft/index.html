@@ -131,7 +131,7 @@
                   
                   &nbsp;<i class="far fa-chart-bar"></i>
                   <span class="post-count">
-                    2k 字
+                    3k 字
                   </span>&nbsp;
                 
 
@@ -139,7 +139,7 @@
                   
                   &nbsp;<i class="far fa-clock"></i>
                   <span class="post-count">
-                      9 分钟
+                      14 分钟
                   </span>&nbsp;
                 
 
@@ -175,6 +175,8 @@
             <h1 id="理论部分"><a href="#理论部分" class="headerlink" title="理论部分"></a>理论部分</h1><h2 id="是这篇博客的学习笔记（自己看的整理总结，侵删）"><a href="#是这篇博客的学习笔记（自己看的整理总结，侵删）" class="headerlink" title="是这篇博客的学习笔记（自己看的整理总结，侵删）"></a>是这篇博客的学习笔记（自己看的整理总结，侵删）</h2><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/zwfymqz/p/8244902.html">https://www.cnblogs.com/zwfymqz/p/8244902.html</a></p>
 <p><a target="_blank" rel="noopener" href="https://www.luogu.com.cn/blog/attack/solution-p3803">https://www.luogu.com.cn/blog/attack/solution-p3803</a></p>
 <p>神犇博客</p>
+<p>看完了才发现B站上有个特别好的视频BV1Y7411W73U</p>
+<p><u>非常好非常好非常好非常牛逼非常牛逼非常牛逼这个视频</u></p>
 <h2 id="多项式知识"><a href="#多项式知识" class="headerlink" title="多项式知识"></a>多项式知识</h2><h3 id="负数运算法则"><a href="#负数运算法则" class="headerlink" title="负数运算法则"></a>负数运算法则</h3><p>$(a+bi)*(c+di)=ac+adi+bci-bd=(ac-bd)+(bc+ad)i$</p>
 <h3 id="单位根"><a href="#单位根" class="headerlink" title="单位根"></a>单位根</h3><p>复平面上把这个圆分成n等分的终点，角度最小的哪一个就是n次单位根，记作$w_{n}$</p>
 <p>单位根$w_{n}^{k}$的数值即$\cos(k\cdot\frac{2\pi}{n})+\sin(k\cdot\frac{2\pi}{n})i$</p>
@@ -298,8 +300,92 @@ for(int i=0;i&lt;(limit&gt;&gt;1);i++,w=w*Wn)&#123;//w相当于公式中的w_n^k
     a[i+(limit&gt;&gt;1)]=a1[i]-tmp;//O(1)算另外一部分
 &#125;
 </code></pre>
-<h2 id="迭代实现FFT"><a href="#迭代实现FFT" class="headerlink" title="迭代实现FFT"></a>迭代实现FFT</h2><h3 id="观察多次奇偶拆分后下标的变化"><a href="#观察多次奇偶拆分后下标的变化" class="headerlink" title="观察多次奇偶拆分后下标的变化"></a>观察多次奇偶拆分后下标的变化</h3><p><img src="/img/ft/xiabiao.png" srcset="/img/loading.gif" alt="xiabiao"></p>
+<h2 id="迭代实现FFT"><a href="#迭代实现FFT" class="headerlink" title="迭代实现FFT"></a>迭代实现FFT</h2><h3 id="观察多次奇偶拆分后下标的变化"><a href="#观察多次奇偶拆分后下标的变化" class="headerlink" title="观察多次奇偶拆分后下标的变化"></a>观察多次奇偶拆分后下标的变化</h3><p><img src="/img/fft/xiabiao.png" srcset="/img/loading.gif" alt="xiabiao"></p>
 <p><img src="/img/fft/xiabiao2.png" srcset="/img/loading.gif" alt="xiabiao2"></p>
+<p>是按照位逆序置换排列的，$O(n)$来预处理</p>
+<h3 id="如何O-n-预处理位逆序置换"><a href="#如何O-n-预处理位逆序置换" class="headerlink" title="如何O(n)预处理位逆序置换"></a>如何O(n)预处理位逆序置换</h3><p><img src="/img/fft/wnx.jpg" srcset="/img/loading.gif" alt="wnx"></p>
+<p>有递推式<code>rev[i] = (rev[i&gt;&gt;1]&gt;&gt;1) | ((i&amp;1)&lt;&lt;(len-1))</code></p>
+<p>解释一下这段代码：</p>
+<ul>
+<li>如图中所说的，每组数字的位逆序置换的<strong>后面几位都是上一级问题的子问题的解</strong></li>
+</ul>
+<p>1为100，2为010 而 4为001，可以看到这一层一层网上推的时候就是把上一层的<strong>往后移动一位</strong></p>
+<p>最前面的<code>(rev[i&gt;&gt;1]&gt;&gt;1)</code>中<code>rev[i&gt;&gt;1]</code>是上一级子问题的解，最后再<code>&gt;&gt;1</code>是往后移动一位</p>
+<ul>
+<li>第一位即<strong>最底层的子问题</strong>——模2余1还是余0，确定首位是1还是0</li>
+</ul>
+<p><code>(i&amp;1)</code>取来下标的最后一位，<code>&lt;&lt;(len-1)</code>把这个数字<strong>移动到首位</strong></p>
+<h3 id="按照位逆序从底层往上进行蝴蝶操作"><a href="#按照位逆序从底层往上进行蝴蝶操作" class="headerlink" title="按照位逆序从底层往上进行蝴蝶操作"></a>按照位逆序从底层往上进行蝴蝶操作</h3><p><img src="/img/fft/wnx2.png" srcset="/img/loading.gif" alt="wnx2"></p>
+<p>第二层是2个一组，第三层是4个一组每组里面，即每层每组的个数m为1&lt;&lt;dep</p>
+<ul>
+<li><p>枚举m的数值之后就是每层分成limit/m个<strong>m个元素的组</strong></p>
+</li>
+<li><p>外面一个循环：k表示<strong>每个m元组的起始位置</strong>，每次k要+=m；</p>
+</li>
+<li><p>再来一个循环，j从0到m/2 -1循环：</p>
+</li>
+</ul>
+<p>这样一来，就是k+j和k+j+m/2两两进行蝴蝶操作</p>
+<h3 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h3><p>（基本上就是抄BV1Y7411W73U的，这个视频非常nice）</p>
+<p>之前一直错，结果发现是错在这个地方</p>
+<p><img src="/img/fft/jgxh.png" srcset="/img/loading.gif" alt="jgxh"></p>
+<p>a[k+j]的数值已经更改后,算a[k+j+m/2]就有问题</p>
+<pre><code class="lang-c++">#include&lt;iostream&gt;
+#include&lt;cmath&gt;
+#include&lt;cstdio&gt;
+using namespace std;
+inline int read()&#123;
+    char c=getchar();int x=0,f=1;
+    while(c&lt;&#39;0&#39;||c&gt;&#39;9&#39;)&#123;if(c==&#39;-&#39;)f=-1;c=getchar();&#125;
+    while(c&gt;=&#39;0&#39;&amp;&amp;c&lt;=&#39;9&#39;)&#123;x=x*10+c-&#39;0&#39;;c=getchar();&#125;
+    return x*f;
+&#125;
+#define rep(i,a,b) for(int i=(a);i&lt;=(b);i++)
+const int MAXN = 3e6+5;
+const double Pi = acos(-1.0);
+struct cplx&#123;//手写负数complex用起来会更快
+    double x,y;
+    cplx(double x=0,double y=0):x(x),y(y)&#123;&#125;
+    friend cplx operator + (cplx a,cplx b)&#123;return cplx(a.x+b.x,a.y+b.y);&#125;
+    friend cplx operator - (cplx a,cplx b)&#123;return cplx(a.x-b.x,a.y-b.y);&#125;
+    friend cplx operator * (cplx a,cplx b)&#123;return cplx(a.x*b.x-a.y*b.y,a.x*b.y+a.y*b.x);&#125;
+&#125;a[MAXN],b[MAXN];
+void FFT(int limit,cplx *a,int type)&#123;//limit记录项数
+    if(limit==1) return;//只有一个常数项结束递归(即只剩下0次的)
+    cplx a1[limit&gt;&gt;1],a2[limit&gt;&gt;1];//按照奇偶分组
+    for(int i=0;i&lt;limit;i+=2)
+        a1[i&gt;&gt;1] = a[i],a2[i&gt;&gt;1] = a[i+1];
+    FFT(limit&gt;&gt;1,a1,type);
+    FFT(limit&gt;&gt;1,a2,type);
+    cplx Wn(cos(2*Pi/limit),type*sin(2*Pi/limit));//单位根
+    //这里type挺重要的,反变换的时候用-1,因为是-k
+    cplx w(1,0);//一会儿算单位根幂的时候用w存
+    cplx tmp;
+    for(int i=0;i&lt;(limit&gt;&gt;1);i++,w=w*Wn)&#123;//w相当于公式中的w_n^k
+        tmp = w*a2[i];//蝴蝶操作
+        a[i]=a1[i]+tmp;//偶
+        a[i+(limit&gt;&gt;1)]=a1[i]-tmp;//O(1)算另外一部分
+    &#125;
+&#125;
+int main()&#123;
+    int n=read(),m=read();
+    rep(i,0,n) a[i].x=read();
+    rep(i,0,m) b[i].x=read();
+    int limit = 1;
+    while(limit&lt;=n+m) limit&lt;&lt;=1;//这里非常精髓
+    //把长度补到2的幂，这样就不用考虑%2余数的情况
+    //而且不必担心高次项的系数，因为默认为0
+    FFT(limit,a,1);
+    FFT(limit,b,1);
+    //1表示FFT，-1则是反变换   
+    rep(i,0,limit) a[i] = a[i]*b[i];//转换为点值后直接相乘
+    FFT(limit,a,-1);//现在变回去
+    rep(i,0,n+m) printf(&quot;%d &quot;,(int)(a[i].x/limit+0.5));//还要除以n的
+    printf(&quot;\n&quot;);
+&#125;
+//P3803 【模板】多项式乘法（FFT）
+//https://www.luogu.com.cn/problem/P3803
+</code></pre>
 
             <hr>
           </div>
