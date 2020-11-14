@@ -131,7 +131,7 @@
                   
                   &nbsp;<i class="far fa-chart-bar"></i>
                   <span class="post-count">
-                    13.5k 字
+                    14.2k 字
                   </span>&nbsp;
                 
 
@@ -139,7 +139,7 @@
                   
                   &nbsp;<i class="far fa-clock"></i>
                   <span class="post-count">
-                      70 分钟
+                      74 分钟
                   </span>&nbsp;
                 
 
@@ -279,7 +279,7 @@ int main()&#123;
     &#125;
     cout&lt;&lt;msum&lt;&lt;endl;
 </code></pre>
-<h2 id="线段树"><a href="#线段树" class="headerlink" title="线段树"></a>线段树</h2><pre><code class="lang-c++">#define mid ((l+r)&gt;&gt;1)
+<h2 id="主席树"><a href="#主席树" class="headerlink" title="主席树"></a>主席树</h2><pre><code class="lang-c++">#define mid ((l+r)&gt;&gt;1)
 
 const int MAXN = 2e5+5;
 int n,q,m,cnt=0;
@@ -1209,7 +1209,7 @@ int main()&#123;
 &#125; 
 //Uva10305 https://vjudge.net/problem/UVA-10305
 </code></pre>
-<h1 id="HASH"><a href="#HASH" class="headerlink" title="HASH"></a>HASH</h1><pre><code class="lang-c++">const int med = 1000007;//模数 
+<h1 id="HASH"><a href="#HASH" class="headerlink" title="HASH"></a>HASH</h1><h2 id="拉链法"><a href="#拉链法" class="headerlink" title="拉链法"></a>拉链法</h2><pre><code class="lang-c++">const int med = 1000007;//模数 
 const int MAXN = 2e6+5;//数据总量 
 
 struct Hash_table&#123;
@@ -1236,6 +1236,24 @@ struct Hash_table&#123;
         return value; 
     &#125;
 &#125;;
+</code></pre>
+<h1 id="几何"><a href="#几何" class="headerlink" title="几何"></a>几何</h1><h2 id="三个点求圆心"><a href="#三个点求圆心" class="headerlink" title="三个点求圆心"></a>三个点求圆心</h2><pre><code class="lang-c++">struct point&#123;
+    double x;
+    double y;
+&#125;;
+
+point cal(point a,point b,point c)&#123;
+    double x1 = a.x;double y1 = a.y;
+    double x2 = b.x;double y2 = b.y;
+    double x3 = c.x; double y3 = c.y;
+    double a1 = 2*(x2-x1); double a2 = 2*(x3-x2);
+    double b1 = 2*(y2-y1); double b2 = 2*(y3-y2);
+    double c1 = x2*x2 + y2*y2 - x1*x1 - y1*y1;
+    double c2 = x3*x3 + y3*y3 - x2*x2 - y2*y2;
+    double rx = (c1*b2-c2*b1)/(a1*b2-a2*b1);
+    double ry = (c2*a1-c1*a2)/(a1*b2-a2*b1);
+    return point&#123;rx,ry&#125;;
+&#125;
 </code></pre>
 <h1 id="数学"><a href="#数学" class="headerlink" title="数学"></a>数学</h1><h2 id="组合数板子"><a href="#组合数板子" class="headerlink" title="组合数板子"></a>组合数板子</h2><pre><code class="lang-c++">const int MAXN = 3e5+5;
 const int med = 998244353;
@@ -1347,7 +1365,21 @@ int main()&#123;
     &#125;
 &#125;
 </code></pre>
-<h1 id="数论"><a href="#数论" class="headerlink" title="数论"></a>数论</h1><h2 id="EXCRT扩展中国剩余"><a href="#EXCRT扩展中国剩余" class="headerlink" title="EXCRT扩展中国剩余"></a>EXCRT扩展中国剩余</h2><pre><code class="lang-c++">template&lt;class T&gt;
+<h1 id="数论"><a href="#数论" class="headerlink" title="数论"></a>数论</h1><h2 id="线性求逆元"><a href="#线性求逆元" class="headerlink" title="线性求逆元"></a>线性求逆元</h2><pre><code class="lang-c++">void init(int p)&#123;
+    inv[1] = 1;
+    for(int i=2;i&lt;=n;i++)&#123;
+        inv[i] = (ll)(p-p/i)*inv[p%i]%p;
+    &#125;
+&#125;
+</code></pre>
+<h2 id="单个欧拉函数"><a href="#单个欧拉函数" class="headerlink" title="单个欧拉函数"></a>单个欧拉函数</h2><pre><code class="lang-c++">void init(int p)&#123;
+    inv[1] = 1;
+    for(int i=2;i&lt;=n;i++)&#123;
+        inv[i] = (ll)(p-p/i)*inv[p%i]%p;
+    &#125;
+&#125;
+</code></pre>
+<h2 id="EXCRT扩展中国剩余"><a href="#EXCRT扩展中国剩余" class="headerlink" title="EXCRT扩展中国剩余"></a>EXCRT扩展中国剩余</h2><pre><code class="lang-c++">template&lt;class T&gt;
 void wt(T x)&#123;//快写
    if(x &lt; 0) putchar(&#39;-&#39;), x = -x;
    if(x &gt;= 10) wt(x / 10);
@@ -1691,7 +1723,82 @@ int main()&#123;
     &#125;
 &#125;
 </code></pre>
-<h1 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h1><h2 id="并查集"><a href="#并查集" class="headerlink" title="并查集"></a>并查集</h2><pre><code class="lang-c++">int par[MAXN];//记录父亲节点 
+<h1 id="动态规划DP"><a href="#动态规划DP" class="headerlink" title="动态规划DP"></a>动态规划DP</h1><h2 id="数位DP"><a href="#数位DP" class="headerlink" title="数位DP"></a>数位DP</h2><pre><code class="lang-c++">int l,r;
+const int MAXN = 25;
+int dp[MAXN][2];//第二维记录前面一个是否为2
+int a[MAXN];
+int n,m;
+
+int dfs(int pos,bool stat,int pre,bool limit)&#123;
+    //limit记录之前是否都在上界，state记录之前的是不是6(记忆化作第二维)，pre记录上一个数字
+    if(pos==-1) return 1;
+    if(!limit&amp;&amp;dp[pos][stat]!=-1) return dp[pos][stat];
+    int up = limit?a[pos]:9;//如果前面的都在上界则只能到a[pos]
+    int ans = 0;
+    for(int i=0;i&lt;=up;i++)&#123;
+        if(pre==6&amp;&amp;i==2) continue;//62的情况
+        if(i==4) continue;
+        ans += dfs(pos-1,i==6,i,limit&amp;&amp;i==a[pos]);
+    &#125;
+    if(!limit) dp[pos][stat] = ans;
+    return ans;
+&#125;
+
+int solve(int x)&#123;
+    //先按位转化到数组
+    int px = 0;
+    while(x)&#123;
+        a[px++] = x%10;
+        x/=10;
+    &#125;
+    memset(dp,-1,sizeof(dp));//清空记忆化数组
+    return dfs(px-1,0,-1,1);
+&#125;
+
+int main()&#123;
+    while(cin&gt;&gt;l&gt;&gt;r)&#123;
+        if(l==0&amp;&amp;r==0) break;
+        //cout&lt;&lt;solve(r)&lt;&lt;&#39; &#39;&lt;&lt;solve(l-1)&lt;&lt;endl;
+        cout&lt;&lt;solve(r)-solve(l-1)&lt;&lt;endl;
+    &#125;
+&#125;
+//HDOJ2089 不要62
+</code></pre>
+<h1 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h1><h2 id="母函数"><a href="#母函数" class="headerlink" title="母函数"></a>母函数</h2><pre><code class="lang-c++">#include&lt;iostream&gt;
+using namespace std;
+#define rep(i,a,b) for(int (i)=a;i&lt;=b;i++)
+
+const int MAXN = 1e4;
+int c1[MAXN+1];
+int c2[MAXN+1];
+
+int main()&#123;
+    int n;
+    while(cin&gt;&gt;n)&#123; 
+        for(int i=0;i&lt;=n;i++)&#123;//初始化 
+            c1[i]=0;
+            c2[i]=0;
+        &#125;
+        for(int i=0;i&lt;=n;i++)&#123;
+            c1[i]=1;//面值为一元的
+        &#125;
+        for(int i=2;i&lt;=n;i++)&#123;//枚举邮票的面值(一共有几组括号 
+            for(int j=0;j&lt;=n;j++)&#123;//枚举左边次数为0到次数为n的项 
+                for(int k=0;j+k&lt;=n;k+=i)&#123;//右边的乘过来，枚举放几枚
+                //次数大于n的就不用管了 
+                    c2[j+k]+=c1[j];
+                &#125;
+            &#125;
+            for(int i=0;i&lt;=n;i++)&#123;//最左边两个括号完成处理 
+                c1[i]=c2[i];//把c2算出来的值挪到左边作为下一次的左边 
+                c2[i]=0;//清空c2记录下一次括号相乘的结果 
+            &#125;
+        &#125;
+        cout&lt;&lt;c1[n]&lt;&lt;endl; 
+    &#125; 
+&#125;
+</code></pre>
+<h2 id="并查集"><a href="#并查集" class="headerlink" title="并查集"></a>并查集</h2><pre><code class="lang-c++">int par[MAXN];//记录父亲节点 
 int rank[MAXN];//记录树高,根节点(祖先节点)那层是不算进去的  
 
 void init(int n)&#123;
