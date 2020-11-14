@@ -4,6 +4,33 @@
   
   
   <entry>
+    <title>WSL (Windows Subsystem for Linux)</title>
+    <link href="/2020/11/15/wsl/"/>
+    <url>/2020/11/15/wsl/</url>
+    
+    <content type="html"><![CDATA[<h1 id="参考的几个帖子"><a href="#参考的几个帖子" class="headerlink" title="参考的几个帖子"></a>参考的几个帖子</h1><p>（黑体为重要帖子）</p><p><strong>windows安装wsl</strong></p><p><a href="https://www.jianshu.com/p/6b02948b3d37">https://www.jianshu.com/p/6b02948b3d37</a></p><p>username开头不能是大写</p><p><a href="https://zhuanlan.zhihu.com/p/111858170">https://zhuanlan.zhihu.com/p/111858170</a></p><p>vim基本操作</p><p><a href="https://www.cnblogs.com/chengjiawei/p/9339951.html">https://www.cnblogs.com/chengjiawei/p/9339951.html</a></p><p>vim保存退出</p><p><a href="https://www.cnblogs.com/chen-nn/p/11531932.html">https://www.cnblogs.com/chen-nn/p/11531932.html</a></p><p> <strong>vscode wsl</strong></p><p><a href="https://zhuanlan.zhihu.com/p/104060131?utm_source=wechat_session">https://zhuanlan.zhihu.com/p/104060131?utm_source=wechat_session</a></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>计算机知识</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>linux</tag>
+      
+      <tag>vscode</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>用Git Bash命令行提交修改</title>
     <link href="/2020/11/09/git-update/"/>
     <url>/2020/11/09/git-update/</url>
