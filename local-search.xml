@@ -4,6 +4,37 @@
   
   
   <entry>
+    <title>Codeforces Round /#683 (Div. 1) B.Catching Cheaters(DP最大子段和+LCS)</title>
+    <link href="/2020/11/17/cf683-B/"/>
+    <url>/2020/11/17/cf683-B/</url>
+    
+    <content type="html"><![CDATA[<h1 id="题目地址"><a href="#题目地址" class="headerlink" title="题目地址"></a>题目地址</h1><p><a href="https://codeforces.com/problemset/problem/1446/B">https://codeforces.com/problemset/problem/1446/B</a></p><h1 id="题目大意"><a href="#题目大意" class="headerlink" title="题目大意"></a>题目大意</h1><p>定义$S(A,B)=4\cdot LCS(A,B)-\left|A\right|-\left|B\right|$</p><p>给两个串串A和B，求AB的两个的子串CD（substring，要求连续），使$S(C,D)$最大。</p><h1 id="解法"><a href="#解法" class="headerlink" title="解法"></a>解法</h1><p>一开始我想的是先求出lcs数组</p><p>再用$res_{i,j}=4\cdot lcs_{i,j}-i-j$记录类似lcs的前缀和。但是后来发现很容易就能推翻，lcs是不能使用这样前缀和的思想的。比如字符串aaa和aaaa，算C为[1,3],D为空结果的就立马会出现问题。</p><p>所以不能这样搞。</p><p>我们先思考如果这些<strong>子串必须都从头开始</strong>，即只能从末尾删去字符，该怎么写：</p><p>可以得到<strong>递推式</strong>$dp_{i,j}=dp_{i-1,j-1}+2$如果ai=bi,(增加了长度1,$1\cdot 4-2=2$)</p><p>$dp_{i,j}=max(dp_{i-1,j},dp_{i,j-1})-1$如果ai!=bi.</p><p>这时候增加一个:也可以从头删去字符，想到怎么写了吗？</p><p>就是利用了<strong>最大连续子段和</strong>的思想：如果在一个位置的$dp_{i,j}&lt;0$则把它归零。</p><p>完了。</p><h1 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h1><pre><code class="lang-c++">#include&lt;iostream&gt;using namespace std;#define rep(i,a,b) for(int i=(a);i&lt;=(b);i++)#define ll long longint cansel_sync=(ios::sync_with_stdio(0),cin.tie(0),0);ll gcd(ll a,ll b)&#123; while(b^=a^=b^=a%=b); return a;&#125;string a,b;int n,m;const int MAXN = 5005;int dp[MAXN][MAXN];int res;void solve()&#123;    res = 0;    cin&gt;&gt;n&gt;&gt;m;    cin&gt;&gt;a&gt;&gt;b;    rep(i,1,n)&#123;        rep(j,1,m)&#123;            if(a[i-1]==b[j-1]) dp[i][j] = dp[i-1][j-1]+2;            else dp[i][j] = max(dp[i-1][j],dp[i][j-1])-1;            dp[i][j] = max(dp[i][j],0);            res = max(res,dp[i][j]);        &#125;    &#125;    cout&lt;&lt;res&lt;&lt;endl;&#125;int main()&#123;    solve();&#125;</code></pre>]]></content>
+    
+    
+    <categories>
+      
+      <category>ACM</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>题解</tag>
+      
+      <tag>Codeforces</tag>
+      
+      <tag>DP</tag>
+      
+      <tag>字符串</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>WSL (Windows Subsystem for Linux)</title>
     <link href="/2020/11/15/wsl/"/>
     <url>/2020/11/15/wsl/</url>
