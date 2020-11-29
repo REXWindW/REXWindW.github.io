@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/icon_fgo.jpg">
+  <link rel="icon" type="image/png" href="/img/icon_fgo.jpg">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="description" content="">
+  <meta name="author" content="REXWind">
+  <meta name="keywords" content="">
+  <title>模板整理--数据结构(持续更新) ~ REXWind&#39;s Blog WELCOME!</title>
+
+  <link rel="stylesheet" href="/lib/font-awesome/css/all.min.css"  >
+<link rel="stylesheet" href="/lib/bootstrap/css/bootstrap.min.css"  >
+<link rel="stylesheet" href="/lib/mdbootstrap/css/mdb.min.css"  >
+<link rel="stylesheet" href="/lib/github-markdown/github-markdown.min.css"  >
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+
+
+
+  <link rel="stylesheet" href="/lib/prettify/tomorrow-night-eighties.min.css"  >
+
+<link rel="stylesheet" href="/css/main.css"  >
+
+
+  <link rel="stylesheet" href="/lib/fancybox/jquery.fancybox.min.css"  >
+
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>REXWind's Blog WELCOME!</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/">首页</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/archives/">归档</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/categories/">分类</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/tags/">标签</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/about/">关于</a>
+          </li>
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background"
+         style="background: url('/img/erciyuan/jiejie.png')no-repeat center center;
+           background-size: cover;
+           background-attachment: fixed;">
+      <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              <br>
+              
+                <p class="mt-3">
+                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>&nbsp;
+                  星期日, 十一月 29日 2020, 3:12 下午
+                </p>
+              
+
+              <p>
+                
+                  
+                  &nbsp;<i class="far fa-chart-bar"></i>
+                  <span class="post-count">
+                    2.4k 字
+                  </span>&nbsp;
+                
+
+                
+                  
+                  &nbsp;<i class="far fa-clock"></i>
+                  <span class="post-count">
+                      11 分钟
+                  </span>&nbsp;
+                
+
+                
+                  <!-- 不蒜子统计文章PV -->
+                  
+                  &nbsp;<i class="far fa-eye" aria-hidden="true"></i>&nbsp;
+                  <span id="busuanzi_container_page_pv">
+                    <span id="busuanzi_value_page_pv"></span> 次
+                  </span>&nbsp;
+                
+              </p>
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="py-5 z-depth-3" id="board">
+        <div class="post-content mx-auto" id="post">
+          <div class="markdown-body">
+            <h2 id="平衡树-无旋转"><a href="#平衡树-无旋转" class="headerlink" title="平衡树(无旋转)"></a>平衡树(无旋转)</h2><h3 id="替罪羊树"><a href="#替罪羊树" class="headerlink" title="替罪羊树"></a>替罪羊树</h3><p>是比较优雅的暴力(想到了莫队)，根据定义的alpha等参数来判断树是否需要重构。重构的时候，先中序遍历得到序列，然后利用分治的思想，每次拎起中间的点作为当前子树的根节点，然后递归处理这个点左右两端的序列。</p>
+<p>每次插入均摊到的复杂度是$O(log(size(T)))$</p>
+<p>2020.11.26</p>
+<pre><code class="lang-c++">#include&lt;iostream&gt;
+#include&lt;vector&gt;
+#include&lt;algorithm&gt;
+#include&lt;cmath&gt;
+using namespace std;
+
+#define rep(i,a,b) for(int i=(a);i&lt;=(b);i++)
+int cansel_sync=(ios::sync_with_stdio(0),cin.tie(0),0);
+const int MAXN = 1e5+5;
+const double alpha = 0.75;//平衡因子
+struct Node&#123;
+    int l,r,val;
+    int size,fact;//子树大小,子树内存在的节点数
+    bool exist;//是否存在
+&#125;tzy[MAXN];
+int cnt,root;//节点堆计数,根节点下标
+void newnode(int &amp;now,int val)&#123;//新建节点
+    now = ++cnt;
+    tzy[now].val=val;
+    tzy[now].size=tzy[now].fact = 1;//初始化
+    tzy[now].exist = 1;
+&#125;
+bool imbalance(int now)&#123;//判断平衡
+    //如果左右子树中的一个重量占比超过平衡因子,或者子树中假的点超过30%
+    if(max(tzy[tzy[now].l].size,tzy[tzy[now].r].size)&gt;tzy[now].size*alpha
+    ||tzy[now].size-tzy[now].fact&gt;tzy[now].size*0.3)
+        return 1;
+    else return 0;
+&#125;
+vector&lt;int&gt; v;
+void ldr(int now)&#123;//中序遍历
+    if(!now) return;//到底了
+    ldr(tzy[now].l);
+    if(tzy[now].exist) v.push_back(now);//存在的点拎起来,不存在的丢掉
+    ldr(tzy[now].r);
+&#125;
+void lift(int l,int r,int &amp;now)&#123;//递归分治把中间的点拎起来
+    if(l==r)&#123;
+        now = v[l];
+        tzy[now].l=tzy[now].r = 0;//叶子节点
+        tzy[now].size=tzy[now].fact = 1;
+        return;
+    &#125;
+    int m = (l+r)&gt;&gt;1;//找到中间节点;
+    //特殊情况,如果是x 5 5 x x的话,相同的值本应该放在右边,这里却放到了左边
+    while(l&lt;m&amp;&amp;tzy[v[m]].val==tzy[v[m-1]].val)//左移,直到找到合适的点
+        m--;
+    now = v[m];//找到应该被拎起来的点
+    //分治思想
+    if(l&lt;m) lift(l,m-1,tzy[now].l);//左边还有可以拎起来的,最后一个参数是为了把树接起来的
+    else tzy[now].l = 0;
+    lift(m+1,r,tzy[now].r);//右边一定有可以拎起来的
+    tzy[now].size = tzy[tzy[now].l].size+tzy[tzy[now].r].size+1;
+    tzy[now].fact = tzy[tzy[now].l].fact+tzy[tzy[now].r].fact+1;
+&#125;
+void rebuild(int &amp;now)&#123;//之前这里now忘了写引用
+    v.clear();
+    ldr(now);//得到中序遍历序列
+    if(v.empty())&#123;//所有的都是被假的点,特判
+        now = 0;
+        return;
+    &#125;
+    lift(0,v.size()-1,now);
+&#125;
+void update(int now,int end)&#123;//因为没有记录父亲的编号,所以只能头递归
+    if(!now) return;
+    if(tzy[end].val&lt;tzy[now].val) update(tzy[now].l,end);
+    else update(tzy[now].r,end);
+    tzy[now].size=tzy[tzy[now].l].size+tzy[tzy[now].r].size+1;
+&#125;
+void check(int &amp;now,int end)&#123;//沿路径检查
+    if(now==end) return;
+    if(imbalance(now))&#123;
+        rebuild(now);//重构
+        update(root,now);//重构后更新
+        return;
+    &#125;
+    if(tzy[end].val&lt;tzy[now].val) check(tzy[now].l,end);
+    else check(tzy[now].r,end);
+&#125;
+void ins(int &amp;now,int val)&#123;//递归插入节点
+    if(!now)&#123;//now=0是没有节点的地方(空儿子)
+        newnode(now,val);
+        check(root,now);//检查插入后是否需要重构
+        return;
+    &#125;
+    tzy[now].size++;
+    tzy[now].fact++;
+    if(val&lt;tzy[now].val) ins(tzy[now].l,val);
+    else ins(tzy[now].r,val);
+&#125;
+void del(int now,int val)&#123;
+    if(tzy[now].exist&amp;&amp;tzy[now].val==val)&#123;//找到要删的了
+        tzy[now].exist = 0;
+        tzy[now].fact--;
+        check(root,now);//检查删除后是否需要重构
+        return;
+    &#125;
+    tzy[now].fact--;//路径上的节点的fact都需要更新
+    //这里是因为数据没有删除&quot;不存在的点&quot;的情况,所以可以这样写
+    if(val&lt;tzy[now].val) del(tzy[now].l,val);
+    else del(tzy[now].r,val);
+&#125;
+int getrank(int val)&#123;//查询第几大
+    int now = root,rank = 1;
+    while(now)&#123;
+        if(val&lt;=tzy[now].val) now = tzy[now].l;
+        else&#123;
+            rank+=tzy[now].exist+tzy[tzy[now].l].fact;//加上当前点和左子树
+            now = tzy[now].r;
+        &#125;
+    &#125;
+    return rank;
+&#125;
+int getnum(int rank)&#123;//查询第k小
+    int now = root;
+    while(now)&#123;
+        if(tzy[now].exist&amp;&amp;tzy[now].exist+tzy[tzy[now].l].fact==rank) break;//找到
+        else if(tzy[tzy[now].l].fact&gt;=rank)
+            now = tzy[now].l;
+        else&#123;
+            rank-=tzy[now].exist+tzy[tzy[now].l].fact;//左子树没有去边找
+            now = tzy[now].r;
+        &#125;
+    &#125;
+    return tzy[now].val;
+&#125;
+void solve()&#123;
+    int typ,hc;
+    cin&gt;&gt;typ;
+    if(typ==1)&#123;//插入
+        cin&gt;&gt;hc;
+        ins(root,hc);
+    &#125;
+    else if(typ==2)&#123;//删除
+        cin&gt;&gt;hc;
+        del(root,hc);
+    &#125;
+    else if(typ==3)&#123;//查询x的排名
+        cin&gt;&gt;hc;
+        cout&lt;&lt;getrank(hc)&lt;&lt;endl;
+    &#125;
+    else if(typ==4)&#123;//查询排名为x的数
+        cin&gt;&gt;hc;
+        cout&lt;&lt;getnum(hc)&lt;&lt;endl;
+    &#125;
+    else if(typ==5)&#123;//前驱
+        cin&gt;&gt;hc;
+        cout&lt;&lt;getnum(getrank(hc)-1)&lt;&lt;endl;
+        //注意前驱和后继查询的区别,理一下逻辑其实很简单
+    &#125;
+    else if(typ==6)&#123;//后继
+        cin&gt;&gt;hc;
+        cout&lt;&lt;getnum(getrank(hc+1))&lt;&lt;endl;
+        //我一开始写的是getnum(getrank(hc)+1)
+        //如果hc不在树里,就会出错
+    &#125;
+&#125;
+int main()&#123;
+    int t;
+    cin&gt;&gt;t;
+    while(t--) solve();
+&#125;
+//我之前的一个疑问,tzy树有0这个假的点作为根,如果从root=0这个点重构了,root没了该怎么办
+//后来想了想,在重构里now用的是引用,所以引用root的时候,重构时root会被改变
+//即一开始root是一个val=0的假点,在root子树重构之后,root会被替换成一个真点
+//洛谷 P3369 【模板】普通平衡树
+//https://www.luogu.com.cn/problem/P3369
+</code></pre>
+<h3 id="范浩强Treap"><a href="#范浩强Treap" class="headerlink" title="范浩强Treap"></a>范浩强Treap</h3><p>常数略大，因为有随机所以可以防毒瘤数据卡。数据结构同时对节点的val维护平衡树性质，对节点的key(一个随机数值)则是维护大根堆的性质。每次操作对树进行分裂，传入参数val，分出一颗x小于等于val，另一颗y大于等于val。合并时要兼顾平衡树和大根堆的性质</p>
+<p>范浩强Treap的期望深度是$O(log(size(T)))$的。</p>
+<p>2020.11.29</p>
+<pre><code class="lang-c++">#include&lt;iostream&gt;
+#include&lt;ctime&gt;
+#include&lt;random&gt;
+using namespace std;
+const int MAXN = 1e5+5;
+struct Node&#123;
+    int l,r;
+    int val,key;//val维护平衡树,key维护大根堆
+    int size;
+&#125;fhq[MAXN];
+int cnt,root;
+mt19937 rnd(233);//产生速度快,周期大的高质量随机数
+inline int newnode(int val)&#123;
+    fhq[++cnt].val = val;
+    fhq[cnt].key = rnd();
+    fhq[cnt].size = 1;
+    return cnt;//返回编号
+&#125;
+inline void update(int now)&#123;//更新大小
+    fhq[now].size = fhq[fhq[now].l].size+fhq[fhq[now].r].size+1;
+&#125;
+void split(int now,int val,int &amp;x,int &amp;y)&#123;//树分裂,通过传引用告诉函数应该接在哪里
+//x是x树的&quot;接口&quot;,y是y树的&quot;接口&quot; : 分裂后x树的值&lt;=val,y树&gt;val
+    if(!now)&#123;x=y=0;return;&#125;
+    if(fhq[now].val&lt;=val)&#123;
+        x = now;
+        //左子树都比val小,直接把当前节点连带左子树接到x上,下一步继续去右子树找
+        split(fhq[now].r,val,fhq[now].r,y);//x的接口变成r位置,y的接口不变
+    &#125;
+    else&#123;
+        y = now;
+        split(fhq[now].l,val,x,fhq[now].l);
+    &#125;
+    update(now);
+&#125;
+int merge(int x,int y)&#123;//传入时保证x树中的val全部小于y树!
+    if(!x||!y) return x+y;//如果有一方为0,返回另一方
+    if(fhq[x].key&gt;fhq[y].key)&#123;//维护key大根堆的性质,根一定比儿子大
+        fhq[x].r = merge(fhq[x].r,y);//y的val比x大,所以放右边
+        update(x);
+        return x;//返回值是和上一层接起来
+    &#125;
+    else&#123;
+        fhq[y].l = merge(x,fhq[y].l);
+        update(y);
+        return y;
+    &#125;
+&#125;
+int x,y,z;//因为之后会经常用到所以这里先定义
+inline void ins(int val)&#123;
+//按val分xz树,新节点y,合并xy,再和z合并
+    split(root,val,x,y);
+    root = merge(merge(x,newnode(val)),y);//第一次插入的点也会在这里被变成root,所以不用担心
+&#125;
+inline void del(int val)&#123;
+//1.按val分成xz,按val-1把x分成xy 2.删掉y树的根(只删去一个val) 3.合并xyz
+    split(root,val,x,z);
+    split(x,val-1,x,y);
+    y = merge(fhq[y].l,fhq[y].r);
+    root = merge(merge(x,y),z);
+&#125;
+inline int getrank(int val)&#123;
+//按照val-1分xy,x的大小+1即val排名
+    split(root,val-1,x,y);
+    int res = fhq[x].size+1;
+    root = merge(x,y); 
+    return res;
+&#125;
+inline int getnum(int rank)&#123;//普普通通找数字
+    int now = root;
+    while(now)&#123;//询问rank有可能大于总结点数量,这时候会返回0
+        if(fhq[fhq[now].l].size+1==rank)break;
+        else if(fhq[fhq[now].l].size&gt;=rank) now=fhq[now].l;
+        else&#123;
+            rank-=fhq[fhq[now].l].size+1;
+            now = fhq[now].r;
+        &#125;
+    &#125;
+    return fhq[now].val;
+&#125;
+inline int pre(int val)&#123;
+//按val-1分xy,找x中最大的点
+    split(root,val-1,x,y);
+    int now = x;
+    while(fhq[now].r) now = fhq[now].r;//一直往右边找
+    int res = fhq[now].val;
+    merge(x,y);
+    return res;
+&#125;
+inline int nxt(int val)&#123;
+    split(root,val,x,y);
+    int now = y;
+    while(fhq[now].l) now = fhq[now].l;
+    int res = fhq[now].val;
+    merge(x,y);
+    return res;
+&#125;
+int main()&#123;
+    int t,typ,x;
+    cin&gt;&gt;t;
+    while(t--)&#123;
+        cin&gt;&gt;typ&gt;&gt;x;
+        if(typ==1) ins(x);
+        else if(typ==2) del(x);
+        else if(typ==3) cout&lt;&lt;getrank(x)&lt;&lt;endl;
+        else if(typ==4) cout&lt;&lt;getnum(x)&lt;&lt;endl;
+        else if(typ==5) cout&lt;&lt;pre(x)&lt;&lt;endl;
+        else if(typ==6) cout&lt;&lt;nxt(x)&lt;&lt;endl;
+    &#125;
+&#125;
+//同样思考了一下root初始值的事情,一开始的root是无效值0,这时候是不会执行split的
+//在插入第一个数值后,root就变成了这个新的节点
+//洛谷 P3369 【模板】普通平衡树
+//https://www.luogu.com.cn/problem/P3369
+</code></pre>
+
+            <hr>
+          </div>
+          <br>
+          <div>
+            <p>
+            
+              <span>
+                <i class="iconfont icon-inbox"></i>
+                
+                  <a class="hover-with-bg" href="/categories/ACM">ACM</a>
+                  &nbsp;
+                
+              </span>&nbsp;&nbsp;
+            
+            
+              <span>
+                <i class="iconfont icon-tag"></i>
+                
+                  <a class="hover-with-bg" href="/tags/ACM%E6%A8%A1%E6%9D%BF">ACM模板</a>
+                
+                  <a class="hover-with-bg" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84">数据结构</a>
+                
+              </span>
+            
+            </p>
+            
+              <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="d-none d-lg-block col-lg-2 toc-container">
+      
+  <div id="toc">
+    <p class="h4"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+    <div id="tocbot"></div>
+  </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- custom -->
+
+
+<!-- Comments -->
+<div class="col-lg-7 mx-auto nopadding-md">
+  <div class="container comments mx-auto" id="comments">
+    
+  </div>
+</div>
+
+    
+  </main>
+
+  
+    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
+      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+    <i class="iconfont icon-love"></i>
+    <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
+    <br>
+
+    
+  
+    <!-- 不蒜子统计PV -->
+    
+    &nbsp;<span id="busuanzi_container_site_pv"></span>总访问量 
+          <span id="busuanzi_value_site_pv"></span> 次&nbsp;
+  
+  
+    <!-- 不蒜子统计UV -->
+    
+    &nbsp;<span id="busuanzi_container_site_uv"></span>总访客数 
+            <span id="busuanzi_value_site_uv"></span> 人&nbsp;
+  
+  <br>
+
+
+
+    
+
+
+    <!-- cnzz Analytics icon -->
+    
+
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script src="/lib/jquery/jquery.min.js" ></script>
+<script src="/lib/popper/popper.min.js" ></script>
+<script src="/lib/bootstrap/js/bootstrap.min.js" ></script>
+<script src="/lib/mdbootstrap/js/mdb.min.js" ></script>
+<script src="/js/main.js" ></script>
+
+
+  <script src="/js/lazyload.js" ></script>
+
+
+
+  
+    <script src="/lib/tocbot/tocbot.min.js" ></script>
+  
+  <script src="/js/post.js" ></script>
+
+
+
+  <script src="/lib/smooth-scroll/smooth-scroll.min.js" ></script>
+
+
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+<!-- Plugins -->
+
+
+  
+
+  
+
+  
+
+  
+
+  <!-- cnzz Analytics -->
+  
+
+
+
+  <script src="/lib/prettify/prettify.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      $('pre').addClass('prettyprint  linenums');
+      prettyPrint();
+    })
+  </script>
+
+
+
+  <script src="/lib/typed/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "模板整理--数据结构(持续更新)&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 70,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script src="/lib/anchor/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "false",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script src="/js/local-search.js" ></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      getSearchFile(path);
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script src="/lib/fancybox/jquery.fancybox.min.js" ></script>
+  <script>
+    $("#post img:not(.no-zoom img, img[no-zoom])").each(
+      function () {
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "images");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+  
+
+  
+    <!-- MathJax -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+          tex2jax: {
+              inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+              processEscapes: true,
+              skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+          }
+      });
+
+      MathJax.Hub.Queue(function() {
+          var all = MathJax.Hub.getAllJax(), i;
+          for(i=0; i < all.length; i += 1) {
+              all[i].SourceElement().parentNode.className += ' has-jax';
+          }
+      });
+
+    </script>
+
+    <script src="https://cdn.staticfile.org/mathjax/2.7.6/MathJax.js?config=TeX-MML-AM_CHTML" ></script>
+
+  
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
