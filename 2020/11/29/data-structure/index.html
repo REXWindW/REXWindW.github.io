@@ -131,7 +131,7 @@
                   
                   &nbsp;<i class="far fa-chart-bar"></i>
                   <span class="post-count">
-                    2.4k 字
+                    3.3k 字
                   </span>&nbsp;
                 
 
@@ -139,7 +139,7 @@
                   
                   &nbsp;<i class="far fa-clock"></i>
                   <span class="post-count">
-                      11 分钟
+                      16 分钟
                   </span>&nbsp;
                 
 
@@ -461,6 +461,109 @@ int main()&#123;
 //在插入第一个数值后,root就变成了这个新的节点
 //洛谷 P3369 【模板】普通平衡树
 //https://www.luogu.com.cn/problem/P3369
+</code></pre>
+<h3 id="文艺平衡树"><a href="#文艺平衡树" class="headerlink" title="文艺平衡树"></a>文艺平衡树</h3><p>文艺平衡树是fhq_treap处理序列上问题(区间操作)的一个例子,进行区间操作一般是用这种通过节点个数进行分裂的split,这里与其他平衡树查询第k大的操作类似。而通过懒惰标记处理旋转区间的操作又与线段树比较相似。</p>
+<p>洛谷的这道板子题是保证了是123456这样的的序列，第一是无需ins直接用merge(root,i)来插入,因为i一定比之前出现的数值都大,如果没有这种条件,应该也可以另外建一个数组通过下标来映射数值,或者给Node多加一个参数存实际值。</p>
+<pre><code class="lang-c++">#include&lt;iostream&gt;
+#include&lt;ctime&gt;
+#include&lt;vector&gt;
+#include&lt;random&gt;
+using namespace std;
+int cansel_sync=(ios::sync_with_stdio(0),cin.tie(0),0);
+#define rep(i,a,b) for(int i=(a);i&lt;=(b);i++)
+const int MAXN = 1e5+5;
+struct Node&#123;
+    int l,r;
+    int val,key;
+    int size;
+    bool reverse;//旋转的懒惰标记
+&#125;fhq[MAXN];
+int cnt,root;
+mt19937 rnd(233);
+vector&lt;int&gt;res;//因为行的末尾不能有空格所以我先用一个vector存着
+inline int newnode(int val)&#123;
+    fhq[++cnt].val = val;
+    fhq[cnt].key = rnd();
+    fhq[cnt].size=1;
+    return cnt;
+&#125;
+inline void update(int now)&#123;
+    fhq[now].size = fhq[fhq[now].l].size + fhq[fhq[now].r].size+1;
+&#125;
+inline void pushdown(int now)&#123;
+//如果当前节点的儿子有可能之后被动到,就需要向下传递reverse
+    swap(fhq[now].l,fhq[now].r);
+    fhq[fhq[now].l].reverse^=1;//儿子的懒惰标记0变1,1变0
+    fhq[fhq[now].r].reverse^=1;
+    fhq[now].reverse = 0;//之前疑惑这里为什么不用取反^1的
+    //其实是因为如果now没有标记reverse,就不用执行pushdown
+&#125;
+void split(int now,int siz,int &amp;x,int &amp;y)&#123;//按照大小分裂
+//有点类似取第k大getnum的操作
+    if(!now)&#123;x=y=0;return;&#125;
+    if(fhq[now].reverse) pushdown(now);//之后分裂操作可能碰到儿子,所以要pushdown
+    if(fhq[fhq[now].l].size&lt;siz)&#123;
+        x = now;
+        split(fhq[now].r,siz-fhq[fhq[now].l].size-1,fhq[now].r,y);
+    &#125;
+    else&#123;
+        y = now;
+        split(fhq[now].l,siz,x,fhq[now].l);
+    &#125;
+    update(now);
+&#125;
+int merge(int x,int y)&#123;
+    if(!x||!y) return x+y;
+    if(fhq[x].key&lt;fhq[y].key)&#123;//这里其实用什么符号都行
+        if(fhq[x].reverse) pushdown(x);
+        fhq[x].r = merge(fhq[x].r,y);
+        update(x);
+        return x;
+    &#125;
+    else&#123;
+        if(fhq[y].reverse) pushdown(y);
+        fhq[y].l = merge(x,fhq[y].l);
+        update(y);
+        return y;
+    &#125;
+&#125;
+void reverse(int l,int r)&#123;//区间反转
+//拆成三段,(1,l-1),(l,r),(r+1,n);
+    int x,y,z;
+    split(root,l-1,x,y);
+    split(y,r-l+1,y,z);
+    fhq[y].reverse^=1;
+    root=merge(merge(x,y),z);    
+&#125;
+void ldr(int now)&#123;//最后用中序遍历找到结果
+    if(!now) return;
+    if(fhq[now].reverse) pushdown(now);
+    ldr(fhq[now].l);
+    res.push_back(fhq[now].val);//推入结果的序列
+    ldr(fhq[now].r);
+&#125;
+int main()&#123;
+    int n,m;
+    cin&gt;&gt;n&gt;&gt;m;
+    rep(i,1,n) root = merge(root,newnode(i));//因为i一定比之前出现的都大才可以这样
+    int l,r;
+    while(m--)&#123;
+        cin&gt;&gt;l&gt;&gt;r;
+        reverse(l,r);
+    &#125;
+    res.clear();
+    ldr(root);
+    int siz = res.size();
+    rep(i,0,siz-1)&#123;
+        cout&lt;&lt;res[i];
+        if(i!=siz-1) cout&lt;&lt;&#39; &#39;;
+    &#125;
+    cout&lt;&lt;endl;
+&#125;
+//AgOH说,平衡树也是可以处理序列(区间操作)问题的,一般使用的split都是这种按个数siz分裂的split
+//这题里面有点线段树的味道,通过一个懒惰标记节省了很多没有必要的反转消耗的时间
+//洛谷P3391 【模板】文艺平衡树
+//https://www.luogu.com.cn/problem/P3391
 </code></pre>
 
             <hr>
