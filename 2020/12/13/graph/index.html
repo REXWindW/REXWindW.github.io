@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/icon_fgo.jpg">
+  <link rel="icon" type="image/png" href="/img/icon_fgo.jpg">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="description" content="">
+  <meta name="author" content="REXWind">
+  <meta name="keywords" content="">
+  <title>模板整理--图论(持续更新) ~ REXWind&#39;s Blog WELCOME!</title>
+
+  <link rel="stylesheet" href="/lib/font-awesome/css/all.min.css"  >
+<link rel="stylesheet" href="/lib/bootstrap/css/bootstrap.min.css"  >
+<link rel="stylesheet" href="/lib/mdbootstrap/css/mdb.min.css"  >
+<link rel="stylesheet" href="/lib/github-markdown/github-markdown.min.css"  >
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+
+
+
+  <link rel="stylesheet" href="/lib/prettify/tomorrow-night-eighties.min.css"  >
+
+<link rel="stylesheet" href="/css/main.css"  >
+
+
+  <link rel="stylesheet" href="/lib/fancybox/jquery.fancybox.min.css"  >
+
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>REXWind's Blog WELCOME!</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/">首页</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/archives/">归档</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/categories/">分类</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/tags/">标签</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/about/">关于</a>
+          </li>
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background"
+         style="background: url('/img/erciyuan/mila2.jpg')no-repeat center center;
+           background-size: cover;
+           background-attachment: fixed;">
+      <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              <br>
+              
+                <p class="mt-3">
+                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>&nbsp;
+                  星期日, 十二月 13日 2020, 3:33 下午
+                </p>
+              
+
+              <p>
+                
+                  
+                  &nbsp;<i class="far fa-chart-bar"></i>
+                  <span class="post-count">
+                    1.4k 字
+                  </span>&nbsp;
+                
+
+                
+                  
+                  &nbsp;<i class="far fa-clock"></i>
+                  <span class="post-count">
+                      7 分钟
+                  </span>&nbsp;
+                
+
+                
+                  <!-- 不蒜子统计文章PV -->
+                  
+                  &nbsp;<i class="far fa-eye" aria-hidden="true"></i>&nbsp;
+                  <span id="busuanzi_container_page_pv">
+                    <span id="busuanzi_value_page_pv"></span> 次
+                  </span>&nbsp;
+                
+              </p>
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="py-5 z-depth-3" id="board">
+        <div class="post-content mx-auto" id="post">
+          <div class="markdown-body">
+            <h2 id="连通性相关"><a href="#连通性相关" class="headerlink" title="连通性相关"></a>连通性相关</h2><h3 id="Tarjan求强连通分量"><a href="#Tarjan求强连通分量" class="headerlink" title="Tarjan求强连通分量"></a>Tarjan求强连通分量</h3><p>可以用于有向图问题的缩点。</p>
+<p>$dfn[u]$记录当前节点u是第几个访问到的；</p>
+<p>$low[u]$定义为$Subtree(u)$中$dfn(u)$最小的，或者$Subtree(u)$中的点通过<strong>不在子树上的边</strong>（返祖边或者比$rt$还高的边？）$low[u]$初始值定u，如果通过边连到$rt$之上的点可更新，又递归通过儿子$low[v]$来更新。</p>
+<p>连通图中有且仅有一个$dfn[u]=low[u]$,这个点是根节点。通过一个栈按照dfs的顺序入栈，回溯的时候判断如果一个点的$dfn[u]=low[u]$，则从这个点到栈顶的所有节点归入一个强连通分量。</p>
+<pre><code class="lang-c++">#include&lt;iostream&gt;
+#include&lt;cstring&gt;
+#include&lt;cstdio&gt;
+#include&lt;algorithm&gt;
+#include&lt;vector&gt;
+#include&lt;map&gt;
+#include&lt;queue&gt;
+#include&lt;cmath&gt;
+using namespace std;
+
+template&lt;class T&gt;inline void read(T &amp;x)&#123;x=0;char o,f=1;while(o=getchar(),o&lt;48)if(o==45)f=-f;do x=(x&lt;&lt;3)+(x&lt;&lt;1)+(o^48);while(o=getchar(),o&gt;47);x*=f;&#125;
+int cansel_sync=(ios::sync_with_stdio(0),cin.tie(0),0);
+#define ll long long
+#define rep(i,a,b) for(int i=(a);i&lt;=(b);i++)
+#define repb(i,a,b) for(int i=(a);i&gt;=b;i--)
+#define INF 0x3f3f3f3f
+#define cendl printf(&quot;\n&quot;)
+ll gcd(ll a,ll b)&#123; while(b^=a^=b^=a%=b); return a; &#125;
+//#define INF 0x7fffffff
+
+const int MAXN = 2e6+5;
+
+int n;
+vector&lt;int&gt; e[MAXN];//存图 
+int dfn[MAXN],low[MAXN];
+int dfncnt;//dfn自增下标 
+int s[MAXN],tp;//数组模拟栈,tp记录大小 
+bool in[MAXN];//记录该点是否在栈中 
+int scc[MAXN],sc;//节点i所在scc的编号,sc记录有几个强连通 
+int sz[MAXN];//强连通i的大小 
+int indg[MAXN];//记录缩点后的入度（这题才有的 
+
+void tarjan(int u)&#123;
+    low[u]=dfn[u]=++dfncnt;//low初始值为自身dfn
+    s[++tp]=u;//推u入栈，从1开始 
+    in[u]=1;//记录u点在栈中 
+    for(auto v:e[u])&#123;//访问到新点的情况 
+        if(!dfn[v])&#123;
+            tarjan(v);
+            low[u] = min(low[u],low[v]);//用low[v&#125;更新low[u] 
+        &#125;
+        else if(in[v])//v被访问过，但是在栈中 
+            low[u] = min(low[u],dfn[v]);
+    &#125;
+    if(dfn[u]==low[u])&#123;//u是连通分量的根节点
+        sc++;//强连通数量++
+        sz[sc] = 0; 
+        while(s[tp]!=u)&#123;//u和u之后的点全部出栈 
+            scc[s[tp]] = sc;//这个点包含于第几个强连通
+            sz[sc]++;//u为根的这个强连通的大小 
+            in[s[tp]] = 0;//出栈 
+            tp--; 
+        &#125;
+        scc[u] = sc;//给根节点标，属于第sc个强连通 
+        sz[sc]++;
+        in[u] = 0;
+        tp--;
+    &#125;
+&#125; 
+
+void reset()&#123;
+    tp = sc = dfncnt =0;
+    rep(i,1,n)&#123;
+        in[i] = dfn[i] = 0;//low不用清空，sz在之后用到再清空 
+        e[i].clear();
+    &#125;
+&#125;
+
+int main()&#123;
+    cin&gt;&gt;n;
+    reset();
+    int v;
+    rep(u,1,n)&#123;
+        while(cin&gt;&gt;v&amp;&amp;v!=0) e[u].push_back(v);
+    &#125; 
+    rep(u,1,n)
+        if(!dfn[u]) tarjan(u);
+    rep(i,1,sc) indg[i] = 0;//这个不包含在tarjan里面，是这题记录入度的 
+    rep(u,1,n)&#123;
+        for(auto v:e[u])&#123;
+            if(scc[u]!=scc[v]) indg[scc[v]]++;
+        &#125;
+    &#125;
+    int res = 0;
+    rep(i,1,sc)&#123;
+        if(indg[i]==0) res++;
+    &#125;
+    cout&lt;&lt;res&lt;&lt;endl;
+&#125;
+//洛谷P2835 刻录光盘 https://www.luogu.com.cn/problem/P2835#submit
+</code></pre>
+<h3 id="Tarjan求割点"><a href="#Tarjan求割点" class="headerlink" title="Tarjan求割点"></a>Tarjan求割点</h3><p>定义：去掉这个点，连通分量数量+1</p>
+<p>无向图的$low[u]$在这里表述成：点$u$在<strong>不经过其父亲的情况下能达到的最小时间戳</strong>(最小的$dfn$)</p>
+<p>对于某个顶点$u$，如果$u$的儿子$v$中，存在至少一个$low[v]\ge dfn[u]$，即v子树中无法回到祖先（即最高也只能回到父亲u），则u是割点。</p>
+<p>如果是$dfn[u]=1$即祖先的点，满足儿子数量$\ge 2$即可。</p>
+<pre><code class="lang-c++">#include&lt;iostream&gt;
+#include&lt;vector&gt;
+#include&lt;algorithm&gt;
+#define rep(i,a,b) for(int i=(a);i&lt;=(b);i++)
+using namespace std;
+const int MAXN = 114514;
+int n,m;
+vector&lt;int&gt;e[MAXN];
+bool vis[MAXN];
+bool flag[MAXN];//标记割点
+int res;//记录割点数量
+int low[MAXN],dfn[MAXN],dfncnt;//老tarjan了
+
+void Tarjan(int u,int pre)&#123;//pre=-1时代表是祖先
+    vis[u] = 1;
+    low[u] = dfn[u] = ++dfncnt;
+    int cntchild=0;//儿子数量
+    for(auto v:e[u])&#123;
+        if(!vis[v])&#123;
+            cntchild++;
+            Tarjan(v,u);
+            low[u] = min(low[u],low[v]);
+            if(pre!=-1&amp;&amp;low[v]&gt;=dfn[u]&amp;&amp;!flag[u])&#123;//算法核心
+                flag[u]=1;
+                res++;
+            &#125;
+        &#125;
+        else if(v!=pre)//往上的边,更新当前节点的low
+            low[u] = min(low[u],dfn[v]);
+    &#125;
+    if(pre==-1&amp;&amp;cntchild&gt;=2&amp;&amp;!flag[u])&#123;//u为祖先要另外讨论
+        flag[u]=1;
+        res++;
+    &#125;
+&#125;
+
+void solve()&#123;
+    cin&gt;&gt;n&gt;&gt;m;
+    //初始化
+    rep(i,1,n)&#123;vis[i]=flag[i]=0;e[i].clear();&#125;
+    res=dfncnt=0;
+    int u,v;
+    rep(i,1,m)&#123;
+        cin&gt;&gt;u&gt;&gt;v;
+        e[u].push_back(v);
+        e[v].push_back(u);
+    &#125;
+    rep(i,1,n) if(!vis[i]) Tarjan(i,-1);//也可在这重置dfncnt
+    cout&lt;&lt;res&lt;&lt;endl;
+    rep(i,1,n)&#123;
+        if(flag[i]) cout&lt;&lt;i&lt;&lt;&#39; &#39;;
+    &#125;
+    cout&lt;&lt;endl;
+&#125;
+int main()&#123;
+    solve();
+&#125;
+//P3388 【模板】割点（割顶）
+//https://www.luogu.com.cn/problem/P3388
+</code></pre>
+<h3 id="Tarjan求桥-割边"><a href="#Tarjan求桥-割边" class="headerlink" title="Tarjan求桥(割边)"></a>Tarjan求桥(割边)</h3><p>类似求割点，和割点差不多，只要改一处：$low[v]&gt;dfn[u]$ 就可以了，因为从”&gt;=”变成了”=”，所以不需要考虑祖先节点的问题。</p>
+<pre><code class="lang-c++">int low[MAXN], dfn[MAXN], iscut[MAXN], dfs_clock;
+bool isbridge[MAXN];
+vector&lt;int&gt; G[MAXN];
+int cnt_bridge;
+int father[MAXN];
+
+void tarjan(int u, int fa) &#123;
+    father[u] = fa;
+    low[u] = dfn[u] = ++dfs_clock;
+    for (int i = 0; i &lt; G[u].size(); i++) &#123;
+        int v = G[u][i];
+        if (!dfn[v]) &#123;
+            tarjan(v, u);
+            low[u] = min(low[u], low[v]);
+            if (low[v] &gt; dfn[u]) &#123;//算法核心
+                isbridge[v] = true;
+                ++cnt_bridge;
+            &#125;
+        &#125; 
+        else if (dfn[v] &lt; dfn[u] &amp;&amp; v != fa) &#123;
+            low[u] = min(low[u], dfn[v]);
+        &#125;
+    &#125;
+&#125;
+//摘自OIWIKI
+//https://oi-wiki.org/graph/cut/
+</code></pre>
+<h3 id="Tarjan求双连通分量"><a href="#Tarjan求双连通分量" class="headerlink" title="Tarjan求双连通分量"></a>Tarjan求双连通分量</h3>
+            <hr>
+          </div>
+          <br>
+          <div>
+            <p>
+            
+              <span>
+                <i class="iconfont icon-inbox"></i>
+                
+                  <a class="hover-with-bg" href="/categories/ACM">ACM</a>
+                  &nbsp;
+                
+              </span>&nbsp;&nbsp;
+            
+            
+              <span>
+                <i class="iconfont icon-tag"></i>
+                
+                  <a class="hover-with-bg" href="/tags/ACM%E6%A8%A1%E6%9D%BF">ACM模板</a>
+                
+                  <a class="hover-with-bg" href="/tags/%E5%9B%BE%E8%AE%BA">图论</a>
+                
+              </span>
+            
+            </p>
+            
+              <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="d-none d-lg-block col-lg-2 toc-container">
+      
+  <div id="toc">
+    <p class="h4"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+    <div id="tocbot"></div>
+  </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- custom -->
+
+
+<!-- Comments -->
+<div class="col-lg-7 mx-auto nopadding-md">
+  <div class="container comments mx-auto" id="comments">
+    
+  </div>
+</div>
+
+    
+  </main>
+
+  
+    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
+      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+    <i class="iconfont icon-love"></i>
+    <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
+    <br>
+
+    
+  
+    <!-- 不蒜子统计PV -->
+    
+    &nbsp;<span id="busuanzi_container_site_pv"></span>总访问量 
+          <span id="busuanzi_value_site_pv"></span> 次&nbsp;
+  
+  
+    <!-- 不蒜子统计UV -->
+    
+    &nbsp;<span id="busuanzi_container_site_uv"></span>总访客数 
+            <span id="busuanzi_value_site_uv"></span> 人&nbsp;
+  
+  <br>
+
+
+
+    
+
+
+    <!-- cnzz Analytics icon -->
+    
+
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script src="/lib/jquery/jquery.min.js" ></script>
+<script src="/lib/popper/popper.min.js" ></script>
+<script src="/lib/bootstrap/js/bootstrap.min.js" ></script>
+<script src="/lib/mdbootstrap/js/mdb.min.js" ></script>
+<script src="/js/main.js" ></script>
+
+
+  <script src="/js/lazyload.js" ></script>
+
+
+
+  
+    <script src="/lib/tocbot/tocbot.min.js" ></script>
+  
+  <script src="/js/post.js" ></script>
+
+
+
+  <script src="/lib/smooth-scroll/smooth-scroll.min.js" ></script>
+
+
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+<!-- Plugins -->
+
+
+  
+
+  
+
+  
+
+  
+
+  <!-- cnzz Analytics -->
+  
+
+
+
+  <script src="/lib/prettify/prettify.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      $('pre').addClass('prettyprint  linenums');
+      prettyPrint();
+    })
+  </script>
+
+
+
+  <script src="/lib/typed/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "模板整理--图论(持续更新)&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 70,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script src="/lib/anchor/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "false",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script src="/js/local-search.js" ></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      getSearchFile(path);
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script src="/lib/fancybox/jquery.fancybox.min.js" ></script>
+  <script>
+    $("#post img:not(.no-zoom img, img[no-zoom])").each(
+      function () {
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "images");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+  
+
+  
+    <!-- MathJax -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+          tex2jax: {
+              inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+              processEscapes: true,
+              skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+          }
+      });
+
+      MathJax.Hub.Queue(function() {
+          var all = MathJax.Hub.getAllJax(), i;
+          for(i=0; i < all.length; i += 1) {
+              all[i].SourceElement().parentNode.className += ' has-jax';
+          }
+      });
+
+    </script>
+
+    <script src="https://cdn.staticfile.org/mathjax/2.7.6/MathJax.js?config=TeX-MML-AM_CHTML" ></script>
+
+  
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
