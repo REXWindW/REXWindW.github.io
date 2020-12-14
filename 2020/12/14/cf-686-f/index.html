@@ -16,7 +16,7 @@
   <meta name="description" content="">
   <meta name="author" content="REXWind">
   <meta name="keywords" content="">
-  <title>模板整理--图论(持续更新) ~ REXWind&#39;s Blog WELCOME!</title>
+  <title>Codeforces Round /#686 (Div. 3) F. Array Partition(ST,二分) ~ REXWind&#39;s Blog WELCOME!</title>
 
   <link rel="stylesheet" href="/lib/font-awesome/css/all.min.css"  >
 <link rel="stylesheet" href="/lib/bootstrap/css/bootstrap.min.css"  >
@@ -107,7 +107,7 @@
 </nav>
 
     <div class="view intro-2" id="background"
-         style="background: url('/img/erciyuan/mila2.jpg')no-repeat center center;
+         style="background: url('/img/zhouji1/mila3.jpg')no-repeat center center;
            background-size: cover;
            background-attachment: fixed;">
       <div class="full-bg-img">
@@ -122,7 +122,7 @@
               
                 <p class="mt-3">
                   <i class="fas fa-calendar-alt" aria-hidden="true"></i>&nbsp;
-                  星期日, 十二月 13日 2020, 3:33 下午
+                  星期一, 十二月 14日 2020, 2:56 下午
                 </p>
               
 
@@ -131,7 +131,7 @@
                   
                   &nbsp;<i class="far fa-chart-bar"></i>
                   <span class="post-count">
-                    1.4k 字
+                    1k 字
                   </span>&nbsp;
                 
 
@@ -139,7 +139,7 @@
                   
                   &nbsp;<i class="far fa-clock"></i>
                   <span class="post-count">
-                      7 分钟
+                      5 分钟
                   </span>&nbsp;
                 
 
@@ -172,192 +172,120 @@
       <div class="py-5 z-depth-3" id="board">
         <div class="post-content mx-auto" id="post">
           <div class="markdown-body">
-            <h2 id="连通性相关"><a href="#连通性相关" class="headerlink" title="连通性相关"></a>连通性相关</h2><h3 id="Tarjan求强连通分量"><a href="#Tarjan求强连通分量" class="headerlink" title="Tarjan求强连通分量"></a>Tarjan求强连通分量</h3><p>可以用于有向图问题的缩点。</p>
-<p>$dfn[u]$记录当前节点u是第几个访问到的；</p>
-<p>$low[u]$定义为$Subtree(u)$中$dfn(u)$最小的，或者$Subtree(u)$中的点通过<strong>非树边(不在子树上的边)</strong>（返祖边或者比$rt$还高的边？）$low[u]$初始值定u，如果通过边连到$rt$之上的点可更新，又递归通过儿子$low[v]$来更新。</p>
-<p>连通图中有且仅有一个$dfn[u]=low[u]$,这个点是根节点。通过一个栈按照dfs的顺序入栈，回溯的时候判断如果一个点的$dfn[u]=low[u]$，则从这个点到栈顶的所有节点归入一个强连通分量。</p>
-<pre><code class="lang-c++">#include&lt;iostream&gt;
+            <h1 id="题目地址"><a href="#题目地址" class="headerlink" title="题目地址"></a>题目地址</h1><p><a target="_blank" rel="noopener" href="https://codeforces.com/contest/1454/problem/F">https://codeforces.com/contest/1454/problem/F</a></p>
+<h1 id="题目大意"><a href="#题目大意" class="headerlink" title="题目大意"></a>题目大意</h1><p>给一串序列，是否能有一种方案把序列划分成连续的三段$d1,d2,d3$，使得$max(d1)=min(d2)=max(d3)$。</p>
+<p>比如序列$[1,2,3,3,3,4,4,3,4,2,1]$可以划分成$[1,2,3,3,3,4],[4],[3,4,2,1]$</p>
+<h1 id="解法"><a href="#解法" class="headerlink" title="解法"></a>解法</h1><p>这题我是根本想不到要二分。这题的二分比较奇妙。</p>
+<p>首先预处理两个$max$,从头开始的$max$值从结尾开始的$max$值（用于快速查询$d1$和$d3$)。再<strong>维护一个st表</strong>查询区间最小值$min$（用于快速查询$d2$）</p>
+<p>设$d2$左右端点分别为$l,r$。</p>
+<p>我们<strong>枚举</strong>$l$再<strong>二分</strong>寻找$r$,复杂度$O(n^2)$</p>
+<ul>
+<li><p>如果$min(d2)&gt;max(d1)$，说明<strong>d2太长</strong>或者d1太短，这时候<strong>l已经固定</strong>，所以只能<strong>让d2变短</strong>，即mid向左移动。</p>
+</li>
+<li><p>如果$max(d1)&gt;max(d3)$，说明<strong>d1太长</strong>或者d3太短，这时候<strong>l已经固定</strong>，所以只能<strong>让d3变长</strong>，即$mid$向左移动。</p>
+</li>
+</ul>
+<p>再看看这句对不对？</p>
+<ul>
+<li>如果$min(d2)&gt;max(d3)$，说明$d2$太长或者$d3$太短，所以应该向左移动$mid$?</li>
+</ul>
+<p>不对，因为在向左移动$mid$的时候，$max(d3)$增大的同时$min(d2)$也在增大，并不是在向更接近的地方行进，所以不行！</p>
+<pre><code class="lang-c++">while(l&lt;r)&#123;
+    mid = (l+r)&gt;&gt;1;
+    tmp = qry(i,mid);
+    //这里我一开始多写了个条件就是max2和tmp比较的,这个不能有
+    //因为扩的时候max2和tmp都可能下降，并不是往更接近的方向走
+    if(tmp&gt;max1[i-1]||max1[i-1]&lt;max2[mid+1])
+        l = mid+1;
+    else if(tmp&lt;max1[i-1]||max1[i-1]&gt;max2[mid+1])
+        r = mid-1;
+    else break;
+&#125;
+</code></pre>
+<h1 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h1><pre><code class="lang-c++">#include&lt;iostream&gt;
+#include&lt;algorithm&gt;
 #include&lt;cstring&gt;
 #include&lt;cstdio&gt;
-#include&lt;algorithm&gt;
 #include&lt;vector&gt;
-#include&lt;map&gt;
 #include&lt;queue&gt;
 #include&lt;cmath&gt;
 using namespace std;
-
-template&lt;class T&gt;inline void read(T &amp;x)&#123;x=0;char o,f=1;while(o=getchar(),o&lt;48)if(o==45)f=-f;do x=(x&lt;&lt;3)+(x&lt;&lt;1)+(o^48);while(o=getchar(),o&gt;47);x*=f;&#125;
-int cansel_sync=(ios::sync_with_stdio(0),cin.tie(0),0);
+#define rep(i,a,b) for(int i=(a);i&lt;=(b);i++)
+#define repb(i,a,b) for(int i=(a);i&gt;=(b);i--)
 #define ll long long
-#define rep(i,a,b) for(int i=(a);i&lt;=(b);i++)
-#define repb(i,a,b) for(int i=(a);i&gt;=b;i--)
-#define INF 0x3f3f3f3f
-#define cendl printf(&quot;\n&quot;)
-ll gcd(ll a,ll b)&#123; while(b^=a^=b^=a%=b); return a; &#125;
-//#define INF 0x7fffffff
+#define log(x) (31-__builtin_clz(x))//谢谢hjt
+const int MAXN = 2e5+5;
+int cansel_sync=(ios::sync_with_stdio(0),cin.tie(0),0);
+const int LOGN = log(MAXN)/log(2); 
+int M[MAXN][LOGN+3]; 
+int a[MAXN];
+int z,m,n;
+int max1[MAXN];
+int max2[MAXN];
 
-const int MAXN = 2e6+5;
-
-int n;
-vector&lt;int&gt; e[MAXN];//存图 
-int dfn[MAXN],low[MAXN];
-int dfncnt;//dfn自增下标 
-int s[MAXN],tp;//数组模拟栈,tp记录大小 
-bool in[MAXN];//记录该点是否在栈中 
-int scc[MAXN],sc;//节点i所在scc的编号,sc记录有几个强连通 
-int sz[MAXN];//强连通i的大小 
-int indg[MAXN];//记录缩点后的入度（这题才有的 
-
-void tarjan(int u)&#123;
-    low[u]=dfn[u]=++dfncnt;//low初始值为自身dfn
-    s[++tp]=u;//推u入栈，从1开始 
-    in[u]=1;//记录u点在栈中 
-    for(auto v:e[u])&#123;//访问到新点的情况 
-        if(!dfn[v])&#123;
-            tarjan(v);
-            low[u] = min(low[u],low[v]);//用low[v&#125;更新low[u] 
+void init()&#123;//初始化，复杂度O(nlogn) 
+    for(int i=1;i&lt;=n;i++) M[i][0]=i;//长度为1的区间最值是自己 
+    for(int j=1;j&lt;=LOGN;j++)&#123;
+        for(int i=1;i&lt;=n-(1&lt;&lt;j)+1;i++)&#123;
+            if(a[M[i][j-1]]&lt;a[M[i+(1&lt;&lt;(j-1))][j-1]]) M[i][j] = M[i][j-1];//这里以最小值为例 
+            else M[i][j] = M[i+(1&lt;&lt;j-1)][j-1];
         &#125;
-        else if(in[v])//v被访问过，但是在栈中 
-            low[u] = min(low[u],dfn[v]);
-    &#125;
-    if(dfn[u]==low[u])&#123;//u是连通分量的根节点
-        sc++;//强连通数量++
-        sz[sc] = 0; 
-        while(s[tp]!=u)&#123;//u和u之后的点全部出栈 
-            scc[s[tp]] = sc;//这个点包含于第几个强连通
-            sz[sc]++;//u为根的这个强连通的大小 
-            in[s[tp]] = 0;//出栈 
-            tp--; 
-        &#125;
-        scc[u] = sc;//给根节点标，属于第sc个强连通 
-        sz[sc]++;
-        in[u] = 0;
-        tp--;
-    &#125;
-&#125; 
-
-void reset()&#123;
-    tp = sc = dfncnt =0;
-    rep(i,1,n)&#123;
-        in[i] = dfn[i] = 0;//low不用清空，sz在之后用到再清空 
-        e[i].clear();
-    &#125;
-&#125;
-
-int main()&#123;
-    cin&gt;&gt;n;
-    reset();
-    int v;
-    rep(u,1,n)&#123;
-        while(cin&gt;&gt;v&amp;&amp;v!=0) e[u].push_back(v);
     &#125; 
-    rep(u,1,n)
-        if(!dfn[u]) tarjan(u);
-    rep(i,1,sc) indg[i] = 0;//这个不包含在tarjan里面，是这题记录入度的 
-    rep(u,1,n)&#123;
-        for(auto v:e[u])&#123;
-            if(scc[u]!=scc[v]) indg[scc[v]]++;
-        &#125;
-    &#125;
-    int res = 0;
-    rep(i,1,sc)&#123;
-        if(indg[i]==0) res++;
-    &#125;
-    cout&lt;&lt;res&lt;&lt;endl;
 &#125;
-//洛谷P2835 刻录光盘 https://www.luogu.com.cn/problem/P2835#submit
-</code></pre>
-<h3 id="Tarjan求割点"><a href="#Tarjan求割点" class="headerlink" title="Tarjan求割点"></a>Tarjan求割点</h3><p>定义：去掉这个点，连通分量数量+1</p>
-<p>无向图的$low[u]$在这里表述成：点$u$在<strong>不经过其父亲的情况下能达到的最小时间戳/过一条非树边达到的最小时间戳</strong>(最小的$dfn$)</p>
-<p>对于某个顶点$u$，如果$u$的儿子$v$中，存在至少一个$low[v]\ge dfn[u]$，即v子树中无法回到祖先（即最高也只能回到父亲u），则u是割点。</p>
-<p>如果是$dfn[u]=1$即祖先的点，满足儿子数量$\ge 2$即可。</p>
-<pre><code class="lang-c++">#include&lt;iostream&gt;
-#include&lt;vector&gt;
-#include&lt;algorithm&gt;
-#define rep(i,a,b) for(int i=(a);i&lt;=(b);i++)
-using namespace std;
-const int MAXN = 114514;
-int n,m;
-vector&lt;int&gt;e[MAXN];
-bool vis[MAXN];
-bool flag[MAXN];//标记割点
-int res;//记录割点数量
-int low[MAXN],dfn[MAXN],dfncnt;//老tarjan了
-
-void Tarjan(int u,int pre)&#123;//pre=-1时代表是祖先
-    vis[u] = 1;
-    low[u] = dfn[u] = ++dfncnt;
-    int cntchild=0;//儿子数量
-    for(auto v:e[u])&#123;
-        if(!vis[v])&#123;
-            cntchild++;
-            Tarjan(v,u);
-            low[u] = min(low[u],low[v]);
-            if(pre!=-1&amp;&amp;low[v]&gt;=dfn[u]&amp;&amp;!flag[u])&#123;//算法核心
-                flag[u]=1;
-                res++;
-            &#125;
-        &#125;
-        else if(v!=pre)//往上的边,更新当前节点的low
-            low[u] = min(low[u],dfn[v]);
-    &#125;
-    if(pre==-1&amp;&amp;cntchild&gt;=2&amp;&amp;!flag[u])&#123;//u为祖先要另外讨论
-        flag[u]=1;
-        res++;
-    &#125;
+inline int query(int l,int r)&#123;
+    int k = log(r-l+1)/log(2);//向下取整
+    if(a[M[l][k]]&lt;a[M[r-(1&lt;&lt;k)+1][k]]) return M[l][k];
+    else return M[r-(1&lt;&lt;k)+1][k];
 &#125;
-
+inline int qry(int l,int r)&#123;
+    return a[query(l,r)];//直接返回数值
+&#125;
+bool flag;
 void solve()&#123;
-    cin&gt;&gt;n&gt;&gt;m;
-    //初始化
-    rep(i,1,n)&#123;vis[i]=flag[i]=0;e[i].clear();&#125;
-    res=dfncnt=0;
-    int u,v;
-    rep(i,1,m)&#123;
-        cin&gt;&gt;u&gt;&gt;v;
-        e[u].push_back(v);
-        e[v].push_back(u);
-    &#125;
-    rep(i,1,n) if(!vis[i]) Tarjan(i,-1);//也可在这重置dfncnt
-    cout&lt;&lt;res&lt;&lt;endl;
-    rep(i,1,n)&#123;
-        if(flag[i]) cout&lt;&lt;i&lt;&lt;&#39; &#39;;
-    &#125;
-    cout&lt;&lt;endl;
-&#125;
-int main()&#123;
-    solve();
-&#125;
-//P3388 【模板】割点（割顶）
-//https://www.luogu.com.cn/problem/P3388
-</code></pre>
-<h3 id="Tarjan求桥-割边"><a href="#Tarjan求桥-割边" class="headerlink" title="Tarjan求桥(割边)"></a>Tarjan求桥(割边)</h3><p>类似求割点，和割点差不多，只要改一处：$low[v]&gt;dfn[u]$ 就可以了，因为从”&gt;=”变成了”=”，所以不需要考虑祖先节点的问题。</p>
-<pre><code class="lang-c++">int low[MAXN], dfn[MAXN], iscut[MAXN], dfs_clock;
-bool isbridge[MAXN];
-vector&lt;int&gt; G[MAXN];
-int cnt_bridge;
-int father[MAXN];
-
-void tarjan(int u, int fa) &#123;
-    father[u] = fa;
-    low[u] = dfn[u] = ++dfs_clock;
-    for (int i = 0; i &lt; G[u].size(); i++) &#123;
-        int v = G[u][i];
-        if (!dfn[v]) &#123;
-            tarjan(v, u);
-            low[u] = min(low[u], low[v]);
-            if (low[v] &gt; dfn[u]) &#123;//算法核心
-                isbridge[v] = true;
-                ++cnt_bridge;
+    int la,lb,lc;
+    flag = 0;
+    cin&gt;&gt;n;
+    rep(i,1,n) cin&gt;&gt;a[i];
+    init();
+    max1[0]=max2[n+1] = 0;
+    rep(i,1,n) max1[i] = max(max1[i-1],a[i]);//前缀最大值
+    repb(i,n,1) max2[i] = max(max2[i+1],a[i]);
+    int l,r,mid,tmp;
+    rep(i,2,n-1)&#123;//枚举中间段的开头
+        l = i,r = n-1;//二分
+        while(l&lt;r)&#123;
+            mid = (l+r)&gt;&gt;1;
+            tmp = qry(i,mid);
+            //这里我一开始多写了个条件就是max2和tmp比较的,这个不能有
+            //因为扩的时候max2和tmp都可能下降，并不是往更接近的方向走
+            if(tmp&gt;max1[i-1]||max1[i-1]&lt;max2[mid+1])
+                l = mid+1;
+            else if(tmp&lt;max1[i-1]||max1[i-1]&gt;max2[mid+1])
+                r = mid-1;
+            else break;
+        &#125;
+        mid = (l+r)&gt;&gt;1;
+        if(mid&gt;=i&amp;&amp;mid&lt;=n-1)&#123;
+            tmp = qry(i,mid);
+            if(tmp==max1[i-1]&amp;&amp;tmp==max2[mid+1])&#123;
+                flag = 1;
+                la = i-1,lb = mid-i+1,lc = n-mid;
+                break;
             &#125;
-        &#125; 
-        else if (dfn[v] &lt; dfn[u] &amp;&amp; v != fa) &#123;
-            low[u] = min(low[u], dfn[v]);
         &#125;
     &#125;
+    if(!flag) cout&lt;&lt;&quot;NO&quot;&lt;&lt;endl;
+    else&#123;
+        cout&lt;&lt;&quot;YES&quot;&lt;&lt;endl;
+        cout&lt;&lt;la&lt;&lt;&#39; &#39;&lt;&lt;lb&lt;&lt;&#39; &#39;&lt;&lt;lc&lt;&lt;endl;
+    &#125;
 &#125;
-//摘自OIWIKI
-//https://oi-wiki.org/graph/cut/
+signed main()&#123;
+    int z;
+    cin&gt;&gt;z;
+    while(z--) solve();
+&#125;
+//二分yyds
 </code></pre>
 
             <hr>
@@ -378,9 +306,13 @@ void tarjan(int u, int fa) &#123;
               <span>
                 <i class="iconfont icon-tag"></i>
                 
-                  <a class="hover-with-bg" href="/tags/ACM%E6%A8%A1%E6%9D%BF">ACM模板</a>
+                  <a class="hover-with-bg" href="/tags/%E9%A2%98%E8%A7%A3">题解</a>
                 
-                  <a class="hover-with-bg" href="/tags/%E5%9B%BE%E8%AE%BA">图论</a>
+                  <a class="hover-with-bg" href="/tags/Codeforces">Codeforces</a>
+                
+                  <a class="hover-with-bg" href="/tags/%E4%BA%8C%E5%88%86">二分</a>
+                
+                  <a class="hover-with-bg" href="/tags/ST">ST</a>
                 
               </span>
             
@@ -536,7 +468,7 @@ void tarjan(int u, int fa) &#123;
     var typed = new Typed('#subtitle', {
       strings: [
         '  ',
-        "模板整理--图论(持续更新)&nbsp;",
+        "Codeforces Round /#686 (Div. 3) F. Array Partition(ST,二分)&nbsp;",
       ],
       cursorChar: "_",
       typeSpeed: 70,
