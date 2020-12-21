@@ -16,7 +16,7 @@
   <meta name="description" content="">
   <meta name="author" content="REXWind">
   <meta name="keywords" content="">
-  <title>Codeforces Round /#683 (Div. 1) B.Catching Cheaters(DP最大子段和+LCS) ~ REXWind&#39;s Blog WELCOME!</title>
+  <title>Codeforces Round /#691 (Div. 2) D. Glass Half Spilled(DP,背包) 含两种写法 ~ REXWind&#39;s Blog WELCOME!</title>
 
   <link rel="stylesheet" href="/lib/font-awesome/css/all.min.css"  >
 <link rel="stylesheet" href="/lib/bootstrap/css/bootstrap.min.css"  >
@@ -107,7 +107,7 @@
 </nav>
 
     <div class="view intro-2" id="background"
-         style="background: url('/img/erciyuan/water.png')no-repeat center center;
+         style="background: url('/img/erciyuan/runyu.png')no-repeat center center;
            background-size: cover;
            background-attachment: fixed;">
       <div class="full-bg-img">
@@ -122,7 +122,7 @@
               
                 <p class="mt-3">
                   <i class="fas fa-calendar-alt" aria-hidden="true"></i>&nbsp;
-                  星期二, 十一月 17日 2020, 9:25 晚上
+                  星期一, 十二月 21日 2020, 10:40 晚上
                 </p>
               
 
@@ -131,7 +131,7 @@
                   
                   &nbsp;<i class="far fa-chart-bar"></i>
                   <span class="post-count">
-                    447 字
+                    971 字
                   </span>&nbsp;
                 
 
@@ -139,7 +139,7 @@
                   
                   &nbsp;<i class="far fa-clock"></i>
                   <span class="post-count">
-                      2 分钟
+                      4 分钟
                   </span>&nbsp;
                 
 
@@ -172,42 +172,102 @@
       <div class="py-5 z-depth-3" id="board">
         <div class="post-content mx-auto" id="post">
           <div class="markdown-body">
-            <h1 id="题目地址"><a href="#题目地址" class="headerlink" title="题目地址"></a>题目地址</h1><p><a target="_blank" rel="noopener" href="https://codeforces.com/problemset/problem/1446/B">https://codeforces.com/problemset/problem/1446/B</a></p>
-<h1 id="题目大意"><a href="#题目大意" class="headerlink" title="题目大意"></a>题目大意</h1><p>定义$S(A,B)=4\cdot LCS(A,B)-\left|A\right|-\left|B\right|$</p>
-<p>给两个串串A和B，求AB的两个的子串CD（substring，要求连续），使$S(C,D)$最大。</p>
-<h1 id="解法"><a href="#解法" class="headerlink" title="解法"></a>解法</h1><p>一开始我想的是先求出lcs数组</p>
-<p>再用$res_{i,j}=4\cdot lcs_{i,j}-i-j$记录类似lcs的前缀和。但是后来发现很容易就能推翻，lcs是不能使用这样前缀和的思想的。比如字符串aaa和aaaa，算C为[1,3],D为空结果的就立马会出现问题。</p>
-<p>所以不能这样搞。</p>
-<p>我们先思考如果这些<strong>子串必须都从头开始</strong>，即只能从末尾删去字符，该怎么写：</p>
-<p>可以得到<strong>递推式</strong>$dp_{i,j}=dp_{i-1,j-1}+2$如果ai=bi,(增加了长度1,$1\cdot 4-2=2$)</p>
-<p>$dp_{i,j}=max(dp_{i-1,j},dp_{i,j-1})-1$如果ai!=bi.</p>
-<p>这时候增加一个:也可以从头删去字符，想到怎么写了吗？</p>
-<p>就是利用了<strong>最大连续子段和</strong>的思想：如果在一个位置的$dp_{i,j}&lt;0$则把它归零。</p>
-<p>完了。</p>
-<h1 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h1><pre><code class="lang-c++">#include&lt;iostream&gt;
+            <h1 id="题目地址"><a href="#题目地址" class="headerlink" title="题目地址"></a>题目地址</h1><p><a target="_blank" rel="noopener" href="https://codeforces.com/contest/1459/problem/D">https://codeforces.com/contest/1459/problem/D</a></p>
+<h1 id="题目大意"><a href="#题目大意" class="headerlink" title="题目大意"></a>题目大意</h1><p>$n\leq 100$</p>
+<p>有$n$个玻璃杯，有$a[i]$和$b[i]$两个属性，分别代表容量和里面已经有的水，转移水的时候会损失一半的水被撒到地上。</p>
+<p>问把水集中到$k$个杯子里的时候，最多总共可以有多少水？$k=1,2,3,4\dots n$</p>
+<h1 id="解法"><a href="#解法" class="headerlink" title="解法"></a>解法</h1><p>这题居然是一个几乎是裸的<strong>01背包</strong>！</p>
+<p>有两种写法，先讲我一开始写的一种：</p>
+<p>是两个限制条件的01背包$dp[i][j][k]$,第一维是“当只考虑前i个杯子时”，第二维是“取了几个杯子”，第三维是这些杯子里的初始水量$b[i]$之和。</p>
+<p>这时候就可以开始按照裸01背包写了，$dp[i][j][k]$维护这个条件下最大的容量！为什么是最大的容量呢？因为选中的$k$个杯子中初始水量和相等的情况下，肯定是容量越大最后的结果也会越大(或者相等，但肯定不会小)。</p>
+<p>考虑到空间复杂度，$dp$数组需要把第一维变成滚动的来节省空间。</p>
+<p>在处理完$dp[j][k]$数组之后，只需要按照题意列出实际值，比较后得出结果即可</p>
+<p>实际值也就是 除去k个杯子外的总水量$\sum_{i=1}^{n} b[i]-k$除以2之后再加上k，即$k+(sum-k)/2$,这个值还要跟$dp[j][k]$取$min$,因为杯子的容量有限，最后就是$max(min(dp[j][k],k+(sum-k)/2))$。</p>
+<p>———————————————分割线—————————————————</p>
+<p>第二种方法就是k改成k个杯子的总容量</p>
+<p>这个时候的结果就是$max(res,min(k,dp[j][k]+(sum-dp[j][k])/2))$</p>
+<h1 id="两个值得注意的点"><a href="#两个值得注意的点" class="headerlink" title="两个值得注意的点"></a>两个值得注意的点</h1><p>1.因为有的杯子的初始水量为0，所以一开始开始$O(n^3)$求$dp[j][k]$的时候$k$也要从0开始。</p>
+<p>2.因为有的杯子的初始水量为0，所以最后结果的循环要从0开始。</p>
+<h1 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h1><h2 id="解法1"><a href="#解法1" class="headerlink" title="解法1"></a>解法1</h2><pre><code class="lang-c++">#include&lt;iostream&gt;
+#include&lt;cstring&gt;
+#include&lt;algorithm&gt;
 using namespace std;
 #define rep(i,a,b) for(int i=(a);i&lt;=(b);i++)
-#define ll long long
+#define repb(i,a,b) for(int i=(a);i&gt;=(b);i--)
+const int MAXN = 114;
+#define INF 0x3f3f3f3f
 int cansel_sync=(ios::sync_with_stdio(0),cin.tie(0),0);
-ll gcd(ll a,ll b)&#123; while(b^=a^=b^=a%=b); return a;&#125;
-string a,b;
-int n,m;
-const int MAXN = 5005;
-int dp[MAXN][MAXN];
-int res;
+int dp[MAXN][10010];
+int a[MAXN],b[MAXN];
+int n,tot;
 void solve()&#123;
-    res = 0;
-    cin&gt;&gt;n&gt;&gt;m;
-    cin&gt;&gt;a&gt;&gt;b;
+    cin&gt;&gt;n;
+    tot = 0;
     rep(i,1,n)&#123;
-        rep(j,1,m)&#123;
-            if(a[i-1]==b[j-1]) dp[i][j] = dp[i-1][j-1]+2;
-            else dp[i][j] = max(dp[i-1][j],dp[i][j-1])-1;
-            dp[i][j] = max(dp[i][j],0);
-            res = max(res,dp[i][j]);
+        cin&gt;&gt;a[i]&gt;&gt;b[i];
+        tot+=b[i];
+    &#125;
+    memset(dp,-INF,sizeof(dp));
+    dp[0][0]=0;
+    rep(i,1,n)&#123;
+        repb(j,i,1)&#123;
+            repb(k,tot,0)&#123;//错在这里，因为可能有bi=0的情况
+                if(k&gt;=b[i]&amp;&amp;j) dp[j][k] = max(dp[j][k],dp[j-1][k-b[i]]+a[i]);
+            &#125;
         &#125;
     &#125;
-    cout&lt;&lt;res&lt;&lt;endl;
+    rep(j,1,n)&#123;
+        double res = 0;
+        rep(k,0,tot)&#123;//第二处错在这里，应该从0开始，因为k是水量不是容量，所以也可能为0
+            res = max(res,min((double)dp[j][k],k+(double)(tot-k)/2));
+        &#125;
+        cout&lt;&lt;res&lt;&lt;&#39; &#39;;
+    &#125;
+    cout&lt;&lt;endl;
+&#125;
+int main()&#123;
+    solve();
+&#125;
+</code></pre>
+<h2 id="解法2"><a href="#解法2" class="headerlink" title="解法2"></a>解法2</h2><pre><code class="lang-c++">#include&lt;iostream&gt;
+#include&lt;cstring&gt;
+#include&lt;algorithm&gt;
+using namespace std;
+#define rep(i,a,b) for(int i=(a);i&lt;=(b);i++)
+#define repb(i,a,b) for(int i=(a);i&gt;=(b);i--)
+const int MAXN = 114;
+#define INF 0x3f3f3f3f
+int cansel_sync=(ios::sync_with_stdio(0),cin.tie(0),0);
+int dp[MAXN][10010];
+int a[MAXN],b[MAXN];
+int n,tota,totb;
+void solve()&#123;
+    cin&gt;&gt;n;
+    tota = totb = 0;
+    rep(i,1,n)&#123;
+        cin&gt;&gt;a[i]&gt;&gt;b[i];
+        tota+=a[i];
+        totb+=b[i];
+    &#125;
+    memset(dp,-INF,sizeof(dp));
+    dp[0][0]=0;
+    rep(i,1,n)&#123;
+        repb(j,i,1)&#123;
+            repb(k,tota,0)&#123;
+                if(k&gt;=a[i]&amp;&amp;j) dp[j][k] = max(dp[j][k],dp[j-1][k-a[i]]+b[i]);
+            &#125;
+        &#125;
+    &#125;
+    rep(j,1,n)&#123;
+        double res = 0;
+        rep(k,0,tota)&#123;
+            if(dp[j][k]&gt;=0)&#123;
+                res = max(res,min((double)k,(double)dp[j][k]+(double)(totb-dp[j][k])/2));
+            &#125;
+        &#125;
+        cout&lt;&lt;res&lt;&lt;&#39; &#39;;
+    &#125;
+    cout&lt;&lt;endl;
 &#125;
 int main()&#123;
     solve();
@@ -238,7 +298,7 @@ int main()&#123;
                 
                   <a class="hover-with-bg" href="/tags/DP">DP</a>
                 
-                  <a class="hover-with-bg" href="/tags/%E5%AD%97%E7%AC%A6%E4%B8%B2">字符串</a>
+                  <a class="hover-with-bg" href="/tags/%E8%83%8C%E5%8C%85">背包</a>
                 
               </span>
             
@@ -394,7 +454,7 @@ int main()&#123;
     var typed = new Typed('#subtitle', {
       strings: [
         '  ',
-        "Codeforces Round /#683 (Div. 1) B.Catching Cheaters(DP最大子段和+LCS)&nbsp;",
+        "Codeforces Round /#691 (Div. 2) D. Glass Half Spilled(DP,背包) 含两种写法&nbsp;",
       ],
       cursorChar: "_",
       typeSpeed: 70,

@@ -4,6 +4,37 @@
   
   
   <entry>
+    <title>Codeforces Round /#691 (Div. 2) D. Glass Half Spilled(DP,背包) 含两种写法</title>
+    <link href="/2020/12/21/cf-691-d/"/>
+    <url>/2020/12/21/cf-691-d/</url>
+    
+    <content type="html"><![CDATA[<h1 id="题目地址"><a href="#题目地址" class="headerlink" title="题目地址"></a>题目地址</h1><p><a href="https://codeforces.com/contest/1459/problem/D">https://codeforces.com/contest/1459/problem/D</a></p><h1 id="题目大意"><a href="#题目大意" class="headerlink" title="题目大意"></a>题目大意</h1><p>$n\leq 100$</p><p>有$n$个玻璃杯，有$a[i]$和$b[i]$两个属性，分别代表容量和里面已经有的水，转移水的时候会损失一半的水被撒到地上。</p><p>问把水集中到$k$个杯子里的时候，最多总共可以有多少水？$k=1,2,3,4\dots n$</p><h1 id="解法"><a href="#解法" class="headerlink" title="解法"></a>解法</h1><p>这题居然是一个几乎是裸的<strong>01背包</strong>！</p><p>有两种写法，先讲我一开始写的一种：</p><p>是两个限制条件的01背包$dp[i][j][k]$,第一维是“当只考虑前i个杯子时”，第二维是“取了几个杯子”，第三维是这些杯子里的初始水量$b[i]$之和。</p><p>这时候就可以开始按照裸01背包写了，$dp[i][j][k]$维护这个条件下最大的容量！为什么是最大的容量呢？因为选中的$k$个杯子中初始水量和相等的情况下，肯定是容量越大最后的结果也会越大(或者相等，但肯定不会小)。</p><p>考虑到空间复杂度，$dp$数组需要把第一维变成滚动的来节省空间。</p><p>在处理完$dp[j][k]$数组之后，只需要按照题意列出实际值，比较后得出结果即可</p><p>实际值也就是 除去k个杯子外的总水量$\sum_{i=1}^{n} b[i]-k$除以2之后再加上k，即$k+(sum-k)/2$,这个值还要跟$dp[j][k]$取$min$,因为杯子的容量有限，最后就是$max(min(dp[j][k],k+(sum-k)/2))$。</p><p>———————————————分割线—————————————————</p><p>第二种方法就是k改成k个杯子的总容量</p><p>这个时候的结果就是$max(res,min(k,dp[j][k]+(sum-dp[j][k])/2))$</p><h1 id="两个值得注意的点"><a href="#两个值得注意的点" class="headerlink" title="两个值得注意的点"></a>两个值得注意的点</h1><p>1.因为有的杯子的初始水量为0，所以一开始开始$O(n^3)$求$dp[j][k]$的时候$k$也要从0开始。</p><p>2.因为有的杯子的初始水量为0，所以最后结果的循环要从0开始。</p><h1 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h1><h2 id="解法1"><a href="#解法1" class="headerlink" title="解法1"></a>解法1</h2><pre><code class="lang-c++">#include&lt;iostream&gt;#include&lt;cstring&gt;#include&lt;algorithm&gt;using namespace std;#define rep(i,a,b) for(int i=(a);i&lt;=(b);i++)#define repb(i,a,b) for(int i=(a);i&gt;=(b);i--)const int MAXN = 114;#define INF 0x3f3f3f3fint cansel_sync=(ios::sync_with_stdio(0),cin.tie(0),0);int dp[MAXN][10010];int a[MAXN],b[MAXN];int n,tot;void solve()&#123;    cin&gt;&gt;n;    tot = 0;    rep(i,1,n)&#123;        cin&gt;&gt;a[i]&gt;&gt;b[i];        tot+=b[i];    &#125;    memset(dp,-INF,sizeof(dp));    dp[0][0]=0;    rep(i,1,n)&#123;        repb(j,i,1)&#123;            repb(k,tot,0)&#123;//错在这里，因为可能有bi=0的情况                if(k&gt;=b[i]&amp;&amp;j) dp[j][k] = max(dp[j][k],dp[j-1][k-b[i]]+a[i]);            &#125;        &#125;    &#125;    rep(j,1,n)&#123;        double res = 0;        rep(k,0,tot)&#123;//第二处错在这里，应该从0开始，因为k是水量不是容量，所以也可能为0            res = max(res,min((double)dp[j][k],k+(double)(tot-k)/2));        &#125;        cout&lt;&lt;res&lt;&lt;&#39; &#39;;    &#125;    cout&lt;&lt;endl;&#125;int main()&#123;    solve();&#125;</code></pre><h2 id="解法2"><a href="#解法2" class="headerlink" title="解法2"></a>解法2</h2><pre><code class="lang-c++">#include&lt;iostream&gt;#include&lt;cstring&gt;#include&lt;algorithm&gt;using namespace std;#define rep(i,a,b) for(int i=(a);i&lt;=(b);i++)#define repb(i,a,b) for(int i=(a);i&gt;=(b);i--)const int MAXN = 114;#define INF 0x3f3f3f3fint cansel_sync=(ios::sync_with_stdio(0),cin.tie(0),0);int dp[MAXN][10010];int a[MAXN],b[MAXN];int n,tota,totb;void solve()&#123;    cin&gt;&gt;n;    tota = totb = 0;    rep(i,1,n)&#123;        cin&gt;&gt;a[i]&gt;&gt;b[i];        tota+=a[i];        totb+=b[i];    &#125;    memset(dp,-INF,sizeof(dp));    dp[0][0]=0;    rep(i,1,n)&#123;        repb(j,i,1)&#123;            repb(k,tota,0)&#123;                if(k&gt;=a[i]&amp;&amp;j) dp[j][k] = max(dp[j][k],dp[j-1][k-a[i]]+b[i]);            &#125;        &#125;    &#125;    rep(j,1,n)&#123;        double res = 0;        rep(k,0,tota)&#123;            if(dp[j][k]&gt;=0)&#123;                res = max(res,min((double)k,(double)dp[j][k]+(double)(totb-dp[j][k])/2));            &#125;        &#125;        cout&lt;&lt;res&lt;&lt;&#39; &#39;;    &#125;    cout&lt;&lt;endl;&#125;int main()&#123;    solve();&#125;</code></pre>]]></content>
+    
+    
+    <categories>
+      
+      <category>ACM</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>题解</tag>
+      
+      <tag>Codeforces</tag>
+      
+      <tag>DP</tag>
+      
+      <tag>背包</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>Codeforces Round /#688 (Div. 2) D. Checkpoints(期望,概率,贪心)</title>
     <link href="/2020/12/14/cf-688-d/"/>
     <url>/2020/12/14/cf-688-d/</url>
