@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/icon_fgo.jpg">
+  <link rel="icon" type="image/png" href="/img/icon_fgo.jpg">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="description" content="">
+  <meta name="author" content="REXWind">
+  <meta name="keywords" content="">
+  <title>Codeforces Round /#697 (Div. 3) 全题解 ~ REXWind&#39;s Blog WELCOME!</title>
+
+  <link rel="stylesheet" href="/lib/font-awesome/css/all.min.css"  >
+<link rel="stylesheet" href="/lib/bootstrap/css/bootstrap.min.css"  >
+<link rel="stylesheet" href="/lib/mdbootstrap/css/mdb.min.css"  >
+<link rel="stylesheet" href="/lib/github-markdown/github-markdown.min.css"  >
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+
+
+
+  <link rel="stylesheet" href="/lib/prettify/tomorrow-night-eighties.min.css"  >
+
+<link rel="stylesheet" href="/css/main.css"  >
+
+
+  <link rel="stylesheet" href="/lib/fancybox/jquery.fancybox.min.css"  >
+
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>REXWind's Blog WELCOME!</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/">首页</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/archives/">归档</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/categories/">分类</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/tags/">标签</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/about/">关于</a>
+          </li>
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background"
+         style="background: url('/img/erciyuan/bmx.jpg')no-repeat center center;
+           background-size: cover;
+           background-attachment: fixed;">
+      <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              <br>
+              
+                <p class="mt-3">
+                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>&nbsp;
+                  星期二, 一月 26日 2021, 10:32 上午
+                </p>
+              
+
+              <p>
+                
+                  
+                  &nbsp;<i class="far fa-chart-bar"></i>
+                  <span class="post-count">
+                    3.4k 字
+                  </span>&nbsp;
+                
+
+                
+                  
+                  &nbsp;<i class="far fa-clock"></i>
+                  <span class="post-count">
+                      16 分钟
+                  </span>&nbsp;
+                
+
+                
+                  <!-- 不蒜子统计文章PV -->
+                  
+                  &nbsp;<i class="far fa-eye" aria-hidden="true"></i>&nbsp;
+                  <span id="busuanzi_container_page_pv">
+                    <span id="busuanzi_value_page_pv"></span> 次
+                  </span>&nbsp;
+                
+              </p>
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="py-5 z-depth-3" id="board">
+        <div class="post-content mx-auto" id="post">
+          <div class="markdown-body">
+            <h1 id="A-Odd-Divisor"><a href="#A-Odd-Divisor" class="headerlink" title="A. Odd Divisor"></a>A. Odd Divisor</h1><h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>读题可知，只有这个数字可用$2^x$表示时不存在奇数除数。</p>
+<p>这题比赛的时候没怎么想就开始写了，赛后才想到可以用lowbit判断是否是形如$2^x$的数，如果lowbit(x)==x，则这个数字可以用$2^x$表示。</p>
+<p>我的方法是预处理出$2^x(x\in[0,60])$这样的一个数组，之后遇到一个数字，使用lowerbound进行二分，找到对应的位置之后，比较两个数字是否相同即可。</p>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><pre><code class="lang-C++">#include&lt;iostream&gt;
+#include&lt;cstring&gt;
+#include&lt;cstdio&gt;
+#include&lt;algorithm&gt;
+using namespace std;
+
+int cansel_sync=(ios::sync_with_stdio(0),cin.tie(0),0);
+#define ll long long
+#define rep(i,a,b) for(int i=(a);i&lt;=(b);i++)
+#define repb(i,a,b) for(int i=(a);i&gt;=(b);i--)
+#define INF 0x3f3f3f3f
+ll p[114514];
+void init()&#123;
+    p[0] = 1;
+    rep(i,1,60)&#123;
+        p[i] = p[i-1]*2;
+    &#125;
+&#125;
+void solve()&#123;
+    ll n;  
+    cin&gt;&gt;n;
+    if(*lower_bound(p+1,p+1+60,n)==n||n==1)&#123;
+        cout&lt;&lt;&quot;NO&quot;&lt;&lt;endl;
+    &#125;
+    else cout&lt;&lt;&quot;YES&quot;&lt;&lt;endl;
+&#125;
+
+int main()&#123;
+    init();
+    int z;
+    cin&gt;&gt;z;
+    while(z--) solve();
+&#125;
+</code></pre>
+<h1 id="B-New-Year’s-Number"><a href="#B-New-Year’s-Number" class="headerlink" title="B. New Year’s Number"></a>B. New Year’s Number</h1><h2 id="思路-1"><a href="#思路-1" class="headerlink" title="思路"></a>思路</h2><p>已知2021比2020多1，如果一共有n个数供我们选择求和，全选2020会比全选2021少n。</p>
+<p>因此，我们如果要判断一个数能不能被2020和2021表示，直接先把这个数整除2020得到t,知道这个数最多可以被t个数求和来表示。再把这个数对2020取余得到y，得知我们至少需要把y个2020改成2021来弥补这些差距。</p>
+<p>之后只要检查t是否比y小，即是否有至少y个2020可以被改成2021的。</p>
+<h2 id="代码-1"><a href="#代码-1" class="headerlink" title="代码"></a>代码</h2><pre><code class="lang-C++">#include&lt;iostream&gt;
+#include&lt;cstring&gt;
+#include&lt;cstdio&gt;
+#include&lt;algorithm&gt;
+using namespace std;
+
+int cansel_sync=(ios::sync_with_stdio(0),cin.tie(0),0);
+#define ll long long
+#define rep(i,a,b) for(int i=(a);i&lt;=(b);i++)
+#define repb(i,a,b) for(int i=(a);i&gt;=(b);i--)
+#define INF 0x3f3f3f3f
+int n;
+void solve()&#123;
+    cin&gt;&gt;n;
+    int t = n/2020;
+    int y = n%2020;
+    //cout&lt;&lt;t&lt;&lt;&#39; &#39;&lt;&lt;y&lt;&lt;endl;
+    if(y&lt;=t) cout&lt;&lt;&quot;YES&quot;&lt;&lt;endl;
+    else cout&lt;&lt;&quot;NO&quot;&lt;&lt;endl;
+&#125;
+
+int main()&#123;
+    int z;
+    cin&gt;&gt;z;
+    while(z--) solve();
+&#125;
+</code></pre>
+<h1 id="C-Ball-in-Berland"><a href="#C-Ball-in-Berland" class="headerlink" title="C. Ball in Berland"></a>C. Ball in Berland</h1><h2 id="思路-2"><a href="#思路-2" class="headerlink" title="思路"></a>思路</h2><p>首先从最暴力的方法想，我们枚举第一个组合$(x,y)$,那么组合$(x,i)，i\in[1,a]$是不能被选择的，组合$(x,j)，j\in[1,b]$也是不能被选择的。</p>
+<p>我们如果把$(x,y)$放在坐标轴上看，可以发现上面不能被选择的那些组合，就是x行和j列的这些数字。</p>
+<p>如这张图中，我们选中了(4,6)则直接从总数k上减去第四行的总和以及第六列的总和，又因为(4,6)被减去了两次，所以要+1.</p>
+<p><img src="\img\cf-697\bg.png" srcset="/img/loading.gif" alt="bg"></p>
+<h2 id="代码-2"><a href="#代码-2" class="headerlink" title="代码"></a>代码</h2><pre><code class="lang-C++">#include&lt;iostream&gt;
+#include&lt;cstring&gt;
+#include&lt;cstdio&gt;
+#include&lt;algorithm&gt;
+using namespace std;
+
+int cansel_sync=(ios::sync_with_stdio(0),cin.tie(0),0);
+#define ll long long
+#define rep(i,a,b) for(int i=(a);i&lt;=(b);i++)
+#define repb(i,a,b) for(int i=(a);i&gt;=(b);i--)
+#define INF 0x3f3f3f3f
+int a,b,k;
+const int MAXN = 114514*2;
+int aa[MAXN],bb[MAXN];//读入a,b
+int cnta[MAXN],cntb[MAXN];//记录行列的和
+ll res;
+void solve()&#123;
+    res = 0;
+    cin&gt;&gt;a&gt;&gt;b&gt;&gt;k;
+    rep(i,1,a) cnta[i] = 0;//计数的清空
+    rep(i,1,b) cntb[i] = 0;
+    rep(i,1,k)&#123;
+        cin&gt;&gt;aa[i];
+        cnta[aa[i]]++;//aa[i]行的总和增加
+    &#125;
+    rep(i,1,k)&#123;
+        cin&gt;&gt;bb[i];
+        cntb[bb[i]]++;//bb[i]列的总和增加
+    &#125;
+    rep(i,1,k)&#123;
+        res += k-cnta[aa[i]]-cntb[bb[i]]+1;
+    &#125;
+    cout&lt;&lt;res/2&lt;&lt;endl;//因为两个组合前后顺序无关,所以要除2
+&#125;
+
+int main()&#123;
+    int z;
+    cin&gt;&gt;z;
+    while(z--) solve();
+&#125;
+</code></pre>
+<h1 id="D-Cleaning-the-Phone"><a href="#D-Cleaning-the-Phone" class="headerlink" title="D. Cleaning the Phone"></a>D. Cleaning the Phone</h1><h2 id="思路-3"><a href="#思路-3" class="headerlink" title="思路"></a>思路</h2><p>先按照”性价比“(即$\frac{a[i]}{b[i]}$)对所有app进行排序.</p>
+<p>从开头往后遍历数组，优先取性价比高的放入要删掉的集合中。</p>
+<p>我们维护pre1(上一个取得消耗为1的app)和pre2(上一个取得消耗为1的app)有两种情况需要讨论。</p>
+<ul>
+<li>如果此时删掉的集合的内存总和$nowm&lt;m$,且$b[i]=2$,把当前app加进来能满足$nowm\geq m$，这时候pre1可能是不必要的，我们要讨论pre1移除后是否能满足条件。</li>
+<li>如果此时删掉的集合内存总和$nowm\geq m$,且$b[i]=1$,这时候pre2可能是不必要的，即用当前第i个app代替之前的pre2可能仍旧能满足$nowm\geq m$的条件。</li>
+</ul>
+<p>我们只需要贪心地先把nowm补足，并且用上面两条判断特殊情况即可。</p>
+<p>另一种方法是，也可以用两个数组分别存放消耗为1和消耗为2的app，用两个指针表示每边的进度。</p>
+<h2 id="代码-3"><a href="#代码-3" class="headerlink" title="代码"></a>代码</h2><pre><code class="lang-C++">#include&lt;iostream&gt;
+#include&lt;cstring&gt;
+#include&lt;cstdio&gt;
+#include&lt;algorithm&gt;
+using namespace std;
+
+int cansel_sync=(ios::sync_with_stdio(0),cin.tie(0),0);
+#define ll long long
+#define rep(i,a,b) for(int i=(a);i&lt;=(b);i++)
+#define repb(i,a,b) for(int i=(a);i&gt;=(b);i--)
+#define INF 0x3f3f3f3f
+typedef pair&lt;int,int&gt; pii;//用pair来存app的信息,first存a,second存b
+#define ft first
+#define sd second
+const int MAXN = 114514*2;
+pii a[MAXN];
+bool cmp(pii a,pii b)&#123;//自定义地比较函数，性价比高地排在前面
+    if((double)a.ft/a.sd&gt;(double)b.ft/b.sd) return 1;
+    else if((double)a.ft/a.sd==(double)b.ft/b.sd)
+        return a.sd&lt;b.sd;
+    return 0;
+&#125;
+int n,m;
+void solve()&#123;
+    cin&gt;&gt;n&gt;&gt;m;
+    rep(i,1,n)
+        cin&gt;&gt;a[i].ft;
+    rep(i,1,n)
+        cin&gt;&gt;a[i].sd;
+    sort(a+1,a+1+n,cmp);
+    int nowm = 0;
+    int cost = 0;
+    int pre1=0,pre2=0;//上次选择的
+    rep(i,1,n)&#123;
+        if(nowm&gt;=m&amp;&amp;pre2&amp;&amp;nowm-a[pre2].ft+a[i].ft&gt;=m&amp;&amp;a[i].sd==1)&#123;
+            cost--;
+            nowm=INF;
+            break;//处理完这种特殊情况后可以直接退出了,因为消耗不可能更小了
+        &#125;//第二种特殊情况
+        else if(nowm&lt;m&amp;&amp;pre1&amp;&amp;nowm-a[pre1].ft+a[i].ft&gt;=m)&#123;
+            cost++;
+            nowm=INF;
+            break;
+        &#125;//第一种特殊情况
+        else if(nowm&lt;m)&#123;
+            if(a[i].sd==1)pre1 = i;
+            else if(a[i].sd==2) pre2 = i;
+            cost+=a[i].sd;
+            nowm+=a[i].ft;
+        &#125;
+    &#125;
+    if(nowm&lt;m) cout&lt;&lt;-1&lt;&lt;endl;
+    else cout&lt;&lt;cost&lt;&lt;endl;
+&#125;
+int main()&#123;
+    int z;
+    cin&gt;&gt;z;
+    while(z--) solve();
+&#125;
+</code></pre>
+<h1 id="E-Advertising-Agency"><a href="#E-Advertising-Agency" class="headerlink" title="E. Advertising Agency"></a>E. Advertising Agency</h1><h2 id="思路-4"><a href="#思路-4" class="headerlink" title="思路"></a>思路</h2><p>这题其实比较简单。</p>
+<p>举一组例子来说明：假如$k=7,n=12,$主播数组有$[5,5,4,4,4,3,3,3,3,3,2,1]$</p>
+<p>如果要使粉丝数总和最大，选出7人，那么5和4粉丝的必须全部选择，不然不可能达到最大，且1和2的也必不可能取。只需要讨论3有几种情况即可。</p>
+<p>选完5和4后还有$7-2-3=2$个名额，一共有5个3粉丝的主播，所以方数为$C^2_5$.</p>
+<p>所以我们用一个cnt[1001]的数组统计每个数字一共出现几次。再从1000往1循环，找到需要在哪个数字上讨论(例子中是对3进行讨论)，now来统计当前消耗了几个名额，当$k-now\leq cnt[x]$时，说明需要对当前数字进行讨论。</p>
+<h2 id="代码-4"><a href="#代码-4" class="headerlink" title="代码"></a>代码</h2><pre><code class="lang-C++">#include&lt;iostream&gt;
+#include&lt;cstring&gt;
+#include&lt;cstdio&gt;
+#include&lt;algorithm&gt;
+using namespace std;
+
+int cansel_sync=(ios::sync_with_stdio(0),cin.tie(0),0);
+#define ll long long
+#define rep(i,a,b) for(int i=(a);i&lt;=(b);i++)
+#define repb(i,a,b) for(int i=(a);i&gt;=(b);i--)
+#define INF 0x3f3f3f3f
+//组合数板子
+const int MAXN = 3e5+5;
+const int med = 1e9+7;
+ll jc[MAXN];
+ll qpow(ll d,ll c)&#123;//快速幂
+    ll res = 1;
+    while(c)&#123;
+        if(c&amp;1) res=res*d%med;
+        d=d*d%med;c&gt;&gt;=1;
+    &#125;return res;
+&#125;
+inline ll niyuan(ll x)&#123;return qpow(x,med-2);&#125;
+void initjc()&#123;//记得要初始化阶乘
+    jc[0] = 1;
+    rep(i,1,MAXN-1) jc[i] = jc[i-1]*i%med;
+&#125;
+inline int C(int n,int m)&#123;//n是下面的
+    if(n&lt;m) return 0;
+    return jc[n]*niyuan(jc[n-m])%med*niyuan(jc[m])%med;
+&#125;
+//组合数板子
+const int MAXX = 114514;
+int a[MAXX],cnt[MAXX];
+int n,k;//选k个人
+
+void solve()&#123;
+    cin&gt;&gt;n&gt;&gt;k;
+    rep(i,1,1000) cnt[i]=0;
+    int hc;
+    rep(i,1,n)&#123;
+        cin&gt;&gt;hc;
+        cnt[hc]++;//统计每个数字出现几次
+    &#125;
+    int now=0;
+    repb(i,1000,1)&#123;//找到需要对哪个数字进行讨论
+        if(now+cnt[i]&gt;=k)&#123;
+            cout&lt;&lt;C(cnt[i],cnt[i]+now-k)&lt;&lt;endl;//计算排列组合
+            return;
+        &#125;
+        now+=cnt[i];
+    &#125;
+&#125;
+
+int main()&#123;
+    initjc();
+    int z;
+    cin&gt;&gt;z;
+    while(z--) solve();
+&#125;
+</code></pre>
+<h1 id="F-Unusual-Matrix"><a href="#F-Unusual-Matrix" class="headerlink" title="F. Unusual Matrix"></a>F. Unusual Matrix</h1><h2 id="思路-5"><a href="#思路-5" class="headerlink" title="思路"></a>思路</h2><p>每次操作影响了一整行/一整列，我们只需要设每行和每列操作了几次(只需要考虑是奇数次还是偶数次)，之后检验每个格子操作了几次(也只需要考虑奇数次还是偶数次即可)是否和之前所设的行和列的操作数匹配即可。</p>
+<p>$jiou[i][j]$即$(i,j)$上的操作数即$(a[i][j])xor(b[i][j])$,从$a[i][j]$变成$b[i][j]$进行了奇数次还是偶数次操作。</p>
+<p>$x[i]$表示第i行进行了几次操作，$y[i]$表示第y列进行了几次操作。</p>
+<ul>
+<li><p>我们先设$x[1]=0$即第一行进行偶数次操作，那么就可以通过$x[1]$和$jiou[1][i]$推得第i列($i\in[1,n]$)的操作数.</p>
+</li>
+<li><p>然后通过$y[1]$和$jiou[i][1]$，可以推得第i行($i\in[2,n]$)的操作数.</p>
+</li>
+</ul>
+<p>当得到了每行每列的操作数后，我们通过judge()函数对每个格子进行检查，是否符合<strong>“每个格子的操作数是所处行和所处列的操作数总和”</strong>这一条件，即<code>jiou[i][j] = b[i][j]^a[i][j]</code>;。</p>
+<p>之后再设$x[1]=1$，重复上述操作即可。</p>
+<h2 id="代码-5"><a href="#代码-5" class="headerlink" title="代码"></a>代码</h2><pre><code class="lang-c++">#include&lt;iostream&gt;
+#include&lt;cstring&gt;
+#include&lt;cstdio&gt;
+#include&lt;algorithm&gt;
+using namespace std;
+
+int cansel_sync=(ios::sync_with_stdio(0),cin.tie(0),0);
+#define ll long long
+#define rep(i,a,b) for(int i=(a);i&lt;=(b);i++)
+#define repb(i,a,b) for(int i=(a);i&gt;=(b);i--)
+#define INF 0x3f3f3f3f
+
+const int MAXN = 1145;
+int a[MAXN][MAXN],b[MAXN][MAXN];
+int jiou[MAXN][MAXN];//记录每个格子上操作了几次
+int x[MAXN],y[MAXN];//分别记录行和列上操作了几次
+int n;
+bool judge()&#123;//判断行列操作数和格子操作数是否匹配
+    rep(i,1,n)
+        rep(j,1,n)
+            if(jiou[i][j]!=(x[i]^y[j])) return 0;
+    return 1;
+&#125;
+void solve()&#123;
+    cin&gt;&gt;n;
+    char hc;
+    rep(i,1,n)&#123;
+        rep(j,1,n)&#123;
+            cin&gt;&gt;hc;
+            a[i][j]=hc-&#39;0&#39;;
+        &#125;
+    &#125;
+    rep(i,1,n)&#123;
+        rep(j,1,n)&#123;
+            cin&gt;&gt;hc;
+            b[i][j]=hc-&#39;0&#39;;
+            jiou[i][j] = b[i][j]^a[i][j];
+        &#125;
+    &#125;
+    bool flag = 0;
+    x[1] = 0;//先假设第一行是偶数
+    rep(j,1,n) y[j] = jiou[1][j];
+    rep(i,2,n) x[i] = jiou[i][1]^y[1];
+    if(judge()) flag = 1;
+    x[1] = 1;//再设第一行是奇数
+    rep(j,1,n) y[j] = jiou[1][j]^1;
+    rep(i,2,n) x[i] = jiou[i][1]^y[1];
+    if(judge()) flag = 1;
+    if(flag) cout&lt;&lt;&quot;YES&quot;&lt;&lt;endl;
+    else cout&lt;&lt;&quot;NO&quot;&lt;&lt;endl;
+&#125;
+
+int main()&#123;
+    int z;
+    cin&gt;&gt;z;
+    while(z--) solve();
+&#125;
+</code></pre>
+<h1 id="G-Strange-Beauty"><a href="#G-Strange-Beauty" class="headerlink" title="G. Strange Beauty"></a>G. Strange Beauty</h1><h2 id="思路-6"><a href="#思路-6" class="headerlink" title="思路"></a>思路</h2><p>已知如果要满足$a[i]\mod a[j]=0$即aj为ai的除数，那么肯定满足$a[i]\leq a[j]$。所以如果我们对数组从小到大排序，则一定满足$a[i-1]\leq a[i]$,只需要考虑前面的数字是否是后面的数字即可。</p>
+<p>用动态规划写，如果是最暴力的方法：</p>
+<ul>
+<li>dp[i]统计到第i个数字最多可以保留几个。</li>
+<li>统计到第i个数字时，j从头1到i-1扫一遍，如果a[i]%a[j]==0,那么dp[i]就可以是dp[j]+1</li>
+<li>在这些dp[j]+1中取最大值赋给dp[i]即可。</li>
+</ul>
+<p>这样的复杂度是$O(n^2)$的</p>
+<p>之后考虑怎么优化：</p>
+<p>因为要求a[i]%a[j]==0，所以只需要考虑a[j]为a[i]因子的情况，我们枚举a[i]的因子，再检查之前是否有符合条件的a[j]即可。</p>
+<ul>
+<li>用一个map[x]来存当前等于x的最大下标，即上一个x出现在哪一位置。</li>
+<li>处理a[i]时，只需要枚举a[i]的所有因子y，检查map[y]，那么dp[i]就可以是dp[map[y]]+1</li>
+<li>这些dp[map[y]]+1中取最大值赋给dp[i]即可。</li>
+</ul>
+<p>因为数字x范围比较小，这个map可以用数组实现，而且会比stl的map更快,复杂度为$O(n\cdot sqrt(n))$。我图方便用stl的map写的，因此复杂度为$O(n\cdot sqrt(n)\cdot logn)$</p>
+<h2 id="代码-6"><a href="#代码-6" class="headerlink" title="代码"></a>代码</h2><pre><code class="lang-C++">#include&lt;iostream&gt;
+#include&lt;cmath&gt;
+#include&lt;map&gt;
+#include&lt;algorithm&gt;
+using namespace std;
+
+int cansel_sync=(ios::sync_with_stdio(0),cin.tie(0),0);
+#define ll long long
+#define rep(i,a,b) for(int i=(a);i&lt;=(b);i++)
+#define repb(i,a,b) for(int i=(a);i&gt;=(b);i--)
+#define INF 0x3f3f3f3f
+
+const int MAXN = 114514*2;
+int a[MAXN];
+int dp[MAXN];//存最大长度
+map&lt;int,int&gt; mp;//从数字到下标的映射
+int n;
+
+
+void solve()&#123;
+    mp.clear();
+    cin&gt;&gt;n;
+    rep(i,1,n) cin&gt;&gt;a[i];
+    sort(a+1,a+1+n);//小的排在前面
+    dp[0]=0;
+    int res=0;
+    rep(i,1,n)&#123;
+        dp[i] = 0;
+        int sqr = sqrt(a[i]);
+        rep(k,1,sqr)&#123;//细节是1和a[i]也需要去map找,因为可能有重复数字
+            if(a[i]%k==0)&#123;
+                dp[i]=max(dp[i],dp[mp[k]]+1);//dp[i]要取最大值！
+                dp[i]=max(dp[i],dp[mp[a[i]/k]]+1);
+            &#125;
+        &#125;
+        mp[a[i]]=i;//更新map
+        res = max(res,dp[i]);
+    &#125;
+    cout&lt;&lt;n-res&lt;&lt;endl;
+&#125;
+
+int main()&#123;
+    int z;
+    cin&gt;&gt;z;
+    while(z--) solve();
+&#125;
+</code></pre>
+<h1 id="PS"><a href="#PS" class="headerlink" title="PS"></a>PS</h1><p>以后想尽量每次都写个题解出来，我水平比较菜，所以主要还是给零基础学弟学妹看的QAQ</p>
+
+            <hr>
+          </div>
+          <br>
+          <div>
+            <p>
+            
+              <span>
+                <i class="iconfont icon-inbox"></i>
+                
+                  <a class="hover-with-bg" href="/categories/ACM">ACM</a>
+                  &nbsp;
+                
+              </span>&nbsp;&nbsp;
+            
+            
+              <span>
+                <i class="iconfont icon-tag"></i>
+                
+                  <a class="hover-with-bg" href="/tags/%E9%A2%98%E8%A7%A3">题解</a>
+                
+                  <a class="hover-with-bg" href="/tags/Codeforces">Codeforces</a>
+                
+              </span>
+            
+            </p>
+            
+              <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="d-none d-lg-block col-lg-2 toc-container">
+      
+  <div id="toc">
+    <p class="h4"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+    <div id="tocbot"></div>
+  </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- custom -->
+
+
+<!-- Comments -->
+<div class="col-lg-7 mx-auto nopadding-md">
+  <div class="container comments mx-auto" id="comments">
+    
+  </div>
+</div>
+
+    
+  </main>
+
+  
+    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
+      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+    <i class="iconfont icon-love"></i>
+    <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
+    <br>
+
+    
+  
+    <!-- 不蒜子统计PV -->
+    
+    &nbsp;<span id="busuanzi_container_site_pv"></span>总访问量 
+          <span id="busuanzi_value_site_pv"></span> 次&nbsp;
+  
+  
+    <!-- 不蒜子统计UV -->
+    
+    &nbsp;<span id="busuanzi_container_site_uv"></span>总访客数 
+            <span id="busuanzi_value_site_uv"></span> 人&nbsp;
+  
+  <br>
+
+
+
+    
+
+
+    <!-- cnzz Analytics icon -->
+    
+
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script src="/lib/jquery/jquery.min.js" ></script>
+<script src="/lib/popper/popper.min.js" ></script>
+<script src="/lib/bootstrap/js/bootstrap.min.js" ></script>
+<script src="/lib/mdbootstrap/js/mdb.min.js" ></script>
+<script src="/js/main.js" ></script>
+
+
+  <script src="/js/lazyload.js" ></script>
+
+
+
+  
+    <script src="/lib/tocbot/tocbot.min.js" ></script>
+  
+  <script src="/js/post.js" ></script>
+
+
+
+  <script src="/lib/smooth-scroll/smooth-scroll.min.js" ></script>
+
+
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+<!-- Plugins -->
+
+
+  
+
+  
+
+  
+
+  
+
+  <!-- cnzz Analytics -->
+  
+
+
+
+  <script src="/lib/prettify/prettify.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      $('pre').addClass('prettyprint  linenums');
+      prettyPrint();
+    })
+  </script>
+
+
+
+  <script src="/lib/typed/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "Codeforces Round /#697 (Div. 3) 全题解&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 70,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script src="/lib/anchor/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "false",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script src="/js/local-search.js" ></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      getSearchFile(path);
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script src="/lib/fancybox/jquery.fancybox.min.js" ></script>
+  <script>
+    $("#post img:not(.no-zoom img, img[no-zoom])").each(
+      function () {
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "images");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+  
+
+  
+    <!-- MathJax -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+          tex2jax: {
+              inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+              processEscapes: true,
+              skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+          }
+      });
+
+      MathJax.Hub.Queue(function() {
+          var all = MathJax.Hub.getAllJax(), i;
+          for(i=0; i < all.length; i += 1) {
+              all[i].SourceElement().parentNode.className += ' has-jax';
+          }
+      });
+
+    </script>
+
+    <script src="https://cdn.staticfile.org/mathjax/2.7.6/MathJax.js?config=TeX-MML-AM_CHTML" ></script>
+
+  
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
