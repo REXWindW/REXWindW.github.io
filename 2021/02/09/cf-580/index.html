@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/icon_fgo.jpg">
+  <link rel="icon" type="image/png" href="/img/icon_fgo.jpg">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="description" content="">
+  <meta name="author" content="REXWind">
+  <meta name="keywords" content="">
+  <title>Codeforces Round /#580 (Div. 2) D. Shortest Cycle(Floyd求最小环) ~ REXWind&#39;s Blog WELCOME!</title>
+
+  <link rel="stylesheet" href="/lib/font-awesome/css/all.min.css"  >
+<link rel="stylesheet" href="/lib/bootstrap/css/bootstrap.min.css"  >
+<link rel="stylesheet" href="/lib/mdbootstrap/css/mdb.min.css"  >
+<link rel="stylesheet" href="/lib/github-markdown/github-markdown.min.css"  >
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+
+
+
+  <link rel="stylesheet" href="/lib/prettify/tomorrow-night-eighties.min.css"  >
+
+<link rel="stylesheet" href="/css/main.css"  >
+
+
+  <link rel="stylesheet" href="/lib/fancybox/jquery.fancybox.min.css"  >
+
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>REXWind's Blog WELCOME!</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/">首页</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/archives/">归档</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/categories/">分类</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/tags/">标签</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/about/">关于</a>
+          </li>
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background"
+         style="background: url('/img/erciyuan/miku.png')no-repeat center center;
+           background-size: cover;
+           background-attachment: fixed;">
+      <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              <br>
+              
+                <p class="mt-3">
+                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>&nbsp;
+                  星期二, 二月 9日 2021, 12:44 凌晨
+                </p>
+              
+
+              <p>
+                
+                  
+                  &nbsp;<i class="far fa-chart-bar"></i>
+                  <span class="post-count">
+                    1k 字
+                  </span>&nbsp;
+                
+
+                
+                  
+                  &nbsp;<i class="far fa-clock"></i>
+                  <span class="post-count">
+                      4 分钟
+                  </span>&nbsp;
+                
+
+                
+                  <!-- 不蒜子统计文章PV -->
+                  
+                  &nbsp;<i class="far fa-eye" aria-hidden="true"></i>&nbsp;
+                  <span id="busuanzi_container_page_pv">
+                    <span id="busuanzi_value_page_pv"></span> 次
+                  </span>&nbsp;
+                
+              </p>
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="py-5 z-depth-3" id="board">
+        <div class="post-content mx-auto" id="post">
+          <div class="markdown-body">
+            <h1 id="题目地址"><a href="#题目地址" class="headerlink" title="题目地址"></a>题目地址</h1><p><a target="_blank" rel="noopener" href="https://codeforces.com/contest/1206/problem/D">https://codeforces.com/contest/1206/problem/D</a></p>
+<h1 id="题目大意"><a href="#题目大意" class="headerlink" title="题目大意"></a>题目大意</h1><p>给n个数字(n是1e5级),如果a[i]&amp;a[j]!=0，则i点到j点有连边，问最短的环长度是多少。</p>
+<h1 id="解法"><a href="#解法" class="headerlink" title="解法"></a>解法</h1><p>先按位扫数组，如果一个位在数字上出现的次数超过了三次，那么这三个数字可以直接成环，输出答案3.</p>
+<p>接下来讨论每个位最多两个数字的情况，这种情况最多只有2*64个数字，因此算法的复杂度可以比较大。但要记得筛除a[i]=0的情况。</p>
+<p>那么floyd是怎么求最小环的呢？</p>
+<pre><code class="lang-C++">    rep(i,1,n)
+        rep(j,1,n)
+            mp[i][j]=e[i][j];//把一开始的e复制一遍给mp
+    rep(k,1,n)&#123;
+        //当循环到k的时候,可以保证之前的e[i][j]路径中都不会包含k
+        rep(i,1,k-1)&#123;
+            rep(j,i+1,k-1)&#123;
+                minn = min(minn,e[i][j]+mp[i][k]+mp[j][k]);//i-&gt;j-&gt;k-&gt;i这个环长度
+                //这句后面两个一定要是mp！一开始错在这里
+                //想明白了是因为圈上会有边被经过两次,类似丫字型,原本不能成环,但如果不是mp会被误判成环
+            &#125;
+        &#125;
+        rep(i,1,n)&#123;
+            rep(j,1,n)&#123;
+                e[i][j]=min(e[i][j],e[i][k]+e[k][j]);//这样处理之后,路径可以包含k
+            &#125;
+        &#125;
+    &#125;
+</code></pre>
+<p>可以比较直观地看到，第一层枚举k，内层的i和j都不会大于k，这样就保证了新加入的点k不在任何的eij路径中。那么这样一来，i-&gt;j是i到j的一条路径,i-&gt;k-&gt;j是第二条路径，这样一来就是一个环。在这些解里面找最小值即可。</p>
+<p>！之前比较疑惑的点就是，为什么要保留最初的邻接矩阵e在mp中呢？</p>
+<p>因为如果都使用数组e，即<code>minn = min(minn,e[i][j]+mp[i][k]+mp[j][k])</code>，在这种情况下会出错：</p>
+<p><img src="\img\cf-580\tu1.png" srcset="/img/loading.gif" alt="tu1"></p>
+<p>显然原本是不能成环的，但是$e_{i,k}$和$e_{j,k}$都有值，这样在<code>minn = min(minn,e[i][j]+mp[i][k]+mp[j][k])</code>下是有解的，实际上这条路径用了重复的路，所以没环，就出错了。</p>
+<h1 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h1><pre><code class="lang-C++">#include&lt;iostream&gt;
+#include&lt;cstring&gt;
+#include&lt;cstdio&gt;
+#include&lt;algorithm&gt;
+#include&lt;vector&gt;
+using namespace std;
+
+int cansel_sync=(ios::sync_with_stdio(0),cin.tie(0),0);
+#define ll long long
+#define rep(i,a,b) for(int i=(a);i&lt;=(b);i++)
+#define repb(i,a,b) for(int i=(a);i&gt;=(b);i--)
+#define INF 0x3f3f3f3f
+
+const int MAXN = 114514;
+ll a[MAXN];
+int e[666][666],mp[666][666];
+int n;
+vector&lt;ll&gt; vec;
+void solve()&#123;
+    cin&gt;&gt;n;
+    rep(i,1,n) cin&gt;&gt;a[i];
+    ll tmp;
+    rep(i,0,63)&#123;
+        tmp = 1ll&lt;&lt;i;
+        int cnt = 0;
+        rep(i,1,n)
+            if(a[i]&amp;tmp) cnt++;
+        if(cnt&gt;=3)&#123;
+            cout&lt;&lt;3&lt;&lt;endl;
+            return;
+        &#125;
+    &#125;
+    vec.push_back(-1);//填个空
+    rep(i,1,n)
+        if(a[i]!=0) vec.push_back(a[i]);//防止0的情况
+    n = vec.size()-1;
+    //最多2*64个数，floyd找最小环
+    int minn = INF;
+    rep(i,1,n)&#123;
+        rep(j,1,n)&#123;
+            e[i][j] = INF/3;//INF的话会越界
+            if(i==j) e[i][j]=0;
+            else if(vec[i]&amp;vec[j]) e[i][j]=1;
+        &#125;
+    &#125;
+    //floyd
+    rep(i,1,n)
+        rep(j,1,n)
+            mp[i][j]=e[i][j];//把一开始的e复制一遍给mp
+    rep(k,1,n)&#123;
+        //当循环到k的时候,可以保证之前的e[i][j]路径中都不会包含k
+        rep(i,1,k-1)&#123;
+            rep(j,i+1,k-1)&#123;
+                minn = min(minn,e[i][j]+mp[i][k]+mp[j][k]);//i-&gt;j-&gt;k-&gt;i这个环长度
+                //这句后面两个一定要是mp！一开始错在这里
+                //想明白了是因为圈上会有边被经过两次,类似丫字型,原本不能成环,但如果不是mp会被误判成环
+            &#125;
+        &#125;
+        rep(i,1,n)&#123;
+            rep(j,1,n)&#123;
+                e[i][j]=min(e[i][j],e[i][k]+e[k][j]);//这样处理之后,路径可以包含k
+            &#125;
+        &#125;
+    &#125;
+    if(minn&gt;n) cout&lt;&lt;-1&lt;&lt;endl;
+    else cout&lt;&lt;minn&lt;&lt;endl;
+&#125;
+
+int main()&#123;
+    solve();
+&#125;
+</code></pre>
+
+            <hr>
+          </div>
+          <br>
+          <div>
+            <p>
+            
+              <span>
+                <i class="iconfont icon-inbox"></i>
+                
+                  <a class="hover-with-bg" href="/categories/ACM">ACM</a>
+                  &nbsp;
+                
+              </span>&nbsp;&nbsp;
+            
+            
+              <span>
+                <i class="iconfont icon-tag"></i>
+                
+                  <a class="hover-with-bg" href="/tags/%E9%A2%98%E8%A7%A3">题解</a>
+                
+                  <a class="hover-with-bg" href="/tags/Codeforces">Codeforces</a>
+                
+                  <a class="hover-with-bg" href="/tags/%E5%9B%BE%E8%AE%BA">图论</a>
+                
+              </span>
+            
+            </p>
+            
+              <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="d-none d-lg-block col-lg-2 toc-container">
+      
+  <div id="toc">
+    <p class="h4"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+    <div id="tocbot"></div>
+  </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- custom -->
+
+
+<!-- Comments -->
+<div class="col-lg-7 mx-auto nopadding-md">
+  <div class="container comments mx-auto" id="comments">
+    
+  </div>
+</div>
+
+    
+  </main>
+
+  
+    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
+      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+    <i class="iconfont icon-love"></i>
+    <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
+    <br>
+
+    
+  
+    <!-- 不蒜子统计PV -->
+    
+    &nbsp;<span id="busuanzi_container_site_pv"></span>总访问量 
+          <span id="busuanzi_value_site_pv"></span> 次&nbsp;
+  
+  
+    <!-- 不蒜子统计UV -->
+    
+    &nbsp;<span id="busuanzi_container_site_uv"></span>总访客数 
+            <span id="busuanzi_value_site_uv"></span> 人&nbsp;
+  
+  <br>
+
+
+
+    
+
+
+    <!-- cnzz Analytics icon -->
+    
+
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script src="/lib/jquery/jquery.min.js" ></script>
+<script src="/lib/popper/popper.min.js" ></script>
+<script src="/lib/bootstrap/js/bootstrap.min.js" ></script>
+<script src="/lib/mdbootstrap/js/mdb.min.js" ></script>
+<script src="/js/main.js" ></script>
+
+
+  <script src="/js/lazyload.js" ></script>
+
+
+
+  
+    <script src="/lib/tocbot/tocbot.min.js" ></script>
+  
+  <script src="/js/post.js" ></script>
+
+
+
+  <script src="/lib/smooth-scroll/smooth-scroll.min.js" ></script>
+
+
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+<!-- Plugins -->
+
+
+  
+
+  
+
+  
+
+  
+
+  <!-- cnzz Analytics -->
+  
+
+
+
+  <script src="/lib/prettify/prettify.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      $('pre').addClass('prettyprint  linenums');
+      prettyPrint();
+    })
+  </script>
+
+
+
+  <script src="/lib/typed/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "Codeforces Round /#580 (Div. 2) D. Shortest Cycle(Floyd求最小环)&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 70,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script src="/lib/anchor/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "false",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script src="/js/local-search.js" ></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      getSearchFile(path);
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script src="/lib/fancybox/jquery.fancybox.min.js" ></script>
+  <script>
+    $("#post img:not(.no-zoom img, img[no-zoom])").each(
+      function () {
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "images");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+  
+
+  
+    <!-- MathJax -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+          tex2jax: {
+              inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+              processEscapes: true,
+              skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+          }
+      });
+
+      MathJax.Hub.Queue(function() {
+          var all = MathJax.Hub.getAllJax(), i;
+          for(i=0; i < all.length; i += 1) {
+              all[i].SourceElement().parentNode.className += ' has-jax';
+          }
+      });
+
+    </script>
+
+    <script src="https://cdn.staticfile.org/mathjax/2.7.6/MathJax.js?config=TeX-MML-AM_CHTML" ></script>
+
+  
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

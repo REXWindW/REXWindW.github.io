@@ -4,6 +4,35 @@
   
   
   <entry>
+    <title>Codeforces Round /#580 (Div. 2) D. Shortest Cycle(Floyd求最小环)</title>
+    <link href="/2021/02/09/cf-580/"/>
+    <url>/2021/02/09/cf-580/</url>
+    
+    <content type="html"><![CDATA[<h1 id="题目地址"><a href="#题目地址" class="headerlink" title="题目地址"></a>题目地址</h1><p><a href="https://codeforces.com/contest/1206/problem/D">https://codeforces.com/contest/1206/problem/D</a></p><h1 id="题目大意"><a href="#题目大意" class="headerlink" title="题目大意"></a>题目大意</h1><p>给n个数字(n是1e5级),如果a[i]&amp;a[j]!=0，则i点到j点有连边，问最短的环长度是多少。</p><h1 id="解法"><a href="#解法" class="headerlink" title="解法"></a>解法</h1><p>先按位扫数组，如果一个位在数字上出现的次数超过了三次，那么这三个数字可以直接成环，输出答案3.</p><p>接下来讨论每个位最多两个数字的情况，这种情况最多只有2*64个数字，因此算法的复杂度可以比较大。但要记得筛除a[i]=0的情况。</p><p>那么floyd是怎么求最小环的呢？</p><pre><code class="lang-C++">    rep(i,1,n)        rep(j,1,n)            mp[i][j]=e[i][j];//把一开始的e复制一遍给mp    rep(k,1,n)&#123;        //当循环到k的时候,可以保证之前的e[i][j]路径中都不会包含k        rep(i,1,k-1)&#123;            rep(j,i+1,k-1)&#123;                minn = min(minn,e[i][j]+mp[i][k]+mp[j][k]);//i-&gt;j-&gt;k-&gt;i这个环长度                //这句后面两个一定要是mp！一开始错在这里                //想明白了是因为圈上会有边被经过两次,类似丫字型,原本不能成环,但如果不是mp会被误判成环            &#125;        &#125;        rep(i,1,n)&#123;            rep(j,1,n)&#123;                e[i][j]=min(e[i][j],e[i][k]+e[k][j]);//这样处理之后,路径可以包含k            &#125;        &#125;    &#125;</code></pre><p>可以比较直观地看到，第一层枚举k，内层的i和j都不会大于k，这样就保证了新加入的点k不在任何的eij路径中。那么这样一来，i-&gt;j是i到j的一条路径,i-&gt;k-&gt;j是第二条路径，这样一来就是一个环。在这些解里面找最小值即可。</p><p>！之前比较疑惑的点就是，为什么要保留最初的邻接矩阵e在mp中呢？</p><p>因为如果都使用数组e，即<code>minn = min(minn,e[i][j]+mp[i][k]+mp[j][k])</code>，在这种情况下会出错：</p><p><img src="\img\cf-580\tu1.png" alt="tu1"></p><p>显然原本是不能成环的，但是$e_{i,k}$和$e_{j,k}$都有值，这样在<code>minn = min(minn,e[i][j]+mp[i][k]+mp[j][k])</code>下是有解的，实际上这条路径用了重复的路，所以没环，就出错了。</p><h1 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h1><pre><code class="lang-C++">#include&lt;iostream&gt;#include&lt;cstring&gt;#include&lt;cstdio&gt;#include&lt;algorithm&gt;#include&lt;vector&gt;using namespace std;int cansel_sync=(ios::sync_with_stdio(0),cin.tie(0),0);#define ll long long#define rep(i,a,b) for(int i=(a);i&lt;=(b);i++)#define repb(i,a,b) for(int i=(a);i&gt;=(b);i--)#define INF 0x3f3f3f3fconst int MAXN = 114514;ll a[MAXN];int e[666][666],mp[666][666];int n;vector&lt;ll&gt; vec;void solve()&#123;    cin&gt;&gt;n;    rep(i,1,n) cin&gt;&gt;a[i];    ll tmp;    rep(i,0,63)&#123;        tmp = 1ll&lt;&lt;i;        int cnt = 0;        rep(i,1,n)            if(a[i]&amp;tmp) cnt++;        if(cnt&gt;=3)&#123;            cout&lt;&lt;3&lt;&lt;endl;            return;        &#125;    &#125;    vec.push_back(-1);//填个空    rep(i,1,n)        if(a[i]!=0) vec.push_back(a[i]);//防止0的情况    n = vec.size()-1;    //最多2*64个数，floyd找最小环    int minn = INF;    rep(i,1,n)&#123;        rep(j,1,n)&#123;            e[i][j] = INF/3;//INF的话会越界            if(i==j) e[i][j]=0;            else if(vec[i]&amp;vec[j]) e[i][j]=1;        &#125;    &#125;    //floyd    rep(i,1,n)        rep(j,1,n)            mp[i][j]=e[i][j];//把一开始的e复制一遍给mp    rep(k,1,n)&#123;        //当循环到k的时候,可以保证之前的e[i][j]路径中都不会包含k        rep(i,1,k-1)&#123;            rep(j,i+1,k-1)&#123;                minn = min(minn,e[i][j]+mp[i][k]+mp[j][k]);//i-&gt;j-&gt;k-&gt;i这个环长度                //这句后面两个一定要是mp！一开始错在这里                //想明白了是因为圈上会有边被经过两次,类似丫字型,原本不能成环,但如果不是mp会被误判成环            &#125;        &#125;        rep(i,1,n)&#123;            rep(j,1,n)&#123;                e[i][j]=min(e[i][j],e[i][k]+e[k][j]);//这样处理之后,路径可以包含k            &#125;        &#125;    &#125;    if(minn&gt;n) cout&lt;&lt;-1&lt;&lt;endl;    else cout&lt;&lt;minn&lt;&lt;endl;&#125;int main()&#123;    solve();&#125;</code></pre>]]></content>
+    
+    
+    <categories>
+      
+      <category>ACM</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>题解</tag>
+      
+      <tag>Codeforces</tag>
+      
+      <tag>图论</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>Codeforces Round /#697 (Div. 3) 全题解</title>
     <link href="/2021/01/26/cf-697/"/>
     <url>/2021/01/26/cf-697/</url>
