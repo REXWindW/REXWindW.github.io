@@ -4,6 +4,35 @@
   
   
   <entry>
+    <title>Codeforces Round /#700 D1. Painting the Array I</title>
+    <link href="/2021/02/16/cf-700d/"/>
+    <url>/2021/02/16/cf-700d/</url>
+    
+    <content type="html"><![CDATA[<h1 id="题外话"><a href="#题外话" class="headerlink" title="题外话"></a>题外话</h1><p>心碎的一场，一开始40分钟秒掉三题，结果后来fst掉两题（一题是忘了赋INF，另一题是&gt;0写成&gt;=0，这次pretest数据真的比以往弱太多！），掉了一百二十分差点下蓝，一朝回到解放前，心态都崩了。哭哭，近期都没心情打了</p><h1 id="题目地址"><a href="#题目地址" class="headerlink" title="题目地址"></a>题目地址</h1><p><a href="https://codeforces.com/contest/1480/problem/D1">https://codeforces.com/contest/1480/problem/D1</a></p><h1 id="题目大意"><a href="#题目大意" class="headerlink" title="题目大意"></a>题目大意</h1><p>给一个长n的序列，可以按顺序分成两组（要保留先后顺序的），求怎么样使两个序列的段数和最大？</p><p>说明：连续的同种数字算同一段，比如$[1,2,3]$有3段，$[1,1,2,2,3,3,3,3]$同样也是3段。</p><h1 id="解法"><a href="#解法" class="headerlink" title="解法"></a>解法</h1><h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>我一开始也想到了用贪心，但是其实可以发现这题有很多需要讨论的地方。</p><ul><li>首先，当前数字放在特定的一组中，可以<strong>隔开</strong>之后来的数字使得段数增加，比如对序列$[1,2,3,2,2]$</li></ul><p>当前$A:[1]$和$B:[2]$，下一个来的为$3$。这个$3$一定要放在第二组才能使结果最大化即$A:[1,2]$和$B:[2,3,2]$</p><p>这里的重点在于：之后出现了连续的一段$[2,2]$对于连续的一段我们<strong>没得选</strong>,如果A或者B的尾部同样也有2，那么就<strong>会使答案损失1</strong>。</p><ul><li>因此，如果现在有一个数字要选择插入A还是B，我们需要依据A和B尾端的数字以及之后<strong>“连着的两个相同数字”</strong>进行讨论</li></ul><h2 id="解"><a href="#解" class="headerlink" title="解"></a>解</h2><p>预处理一个nxt数组,表示离当前位置i最近的<strong>“连续两个相同数字”</strong>是什么。</p><ul><li><p>如果两个序列其中一个的尾部和a[i]相同，那么肯定是要放到另一个序列中去的。</p></li><li><p>如果两个序列的尾部都不同于当前a[i]，那么就要依据nxt[i]和两个尾部进行讨论，如果序列A的尾部和nxt[i]相同，那么就放在序列A上，反之则放在B上。</p></li></ul><h1 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h1><p>有些细节上还需要讨论以下，比如a中一段长段的末尾和单个数字是一样讨论的等等。</p><pre><code class="lang-C++">#include&lt;iostream&gt;#include&lt;cstring&gt;#include&lt;cstdio&gt;#include&lt;algorithm&gt;using namespace std;int cansel_sync=(ios::sync_with_stdio(0),cin.tie(0),0);#define ll long long#define rep(i,a,b) for(int i=(a);i&lt;=(b);i++)#define repb(i,a,b) for(int i=(a);i&gt;=(b);i--)#define INF 0x3f3f3f3fint n;const int MAXN = 114514;int a[MAXN],nxt[MAXN];void solve()&#123;    cin&gt;&gt;n;    rep(i,1,n) cin&gt;&gt;a[i];    nxt[n]=-1;//记录之后最近一次出现两次以上的数字    repb(i,n-1,1)&#123;        if(a[i]==a[i+1]) nxt[i]=a[i];        else nxt[i]=nxt[i+1];    &#125;    int top[2];//两个栈的栈顶元素    top[0]=top[1]=-1;    int res=0;    rep(i,1,n)&#123;        if(a[i]==a[i+1])&#123;//重复长段,放哪儿都一样            if(top[0]!=a[i]) res++;            top[0]=a[i];        &#125;        else&#123;//重复长段末尾或单个字符            if(top[0]==a[i]) res+=(top[1]!=a[i]),top[1]=a[i];            else if(top[1]==a[i]) res+=(top[0]!=a[i]),top[0]=a[i];            else&#123;                if(top[0]==nxt[i]) res++,top[0]=a[i];                else res++,top[1]=a[i];            &#125;        &#125;    &#125;    cout&lt;&lt;res&lt;&lt;endl;&#125;int main()&#123;    solve();&#125;</code></pre>]]></content>
+    
+    
+    <categories>
+      
+      <category>ACM</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>题解</tag>
+      
+      <tag>Codeforces</tag>
+      
+      <tag>贪心</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>Codeforces Round /#580 (Div. 2) D. Shortest Cycle(Floyd求最小环)</title>
     <link href="/2021/02/09/cf-580/"/>
     <url>/2021/02/09/cf-580/</url>
@@ -25,35 +54,6 @@
       <tag>Codeforces</tag>
       
       <tag>图论</tag>
-      
-    </tags>
-    
-  </entry>
-  
-  
-  
-  <entry>
-    <title>Codeforces Round /#700 D1. Painting the Array I</title>
-    <link href="/2021/02/09/cf-700d/"/>
-    <url>/2021/02/09/cf-700d/</url>
-    
-    <content type="html"><![CDATA[<h1 id="题外话"><a href="#题外话" class="headerlink" title="题外话"></a>题外话</h1><p>心碎的一场，一开始40分钟秒掉三题，结果后来fst掉两题（一题是忘了赋INF，另一题是&gt;0写成&gt;=0，这次pretest数据真的比以往弱太多！），掉了一百二十分差点下蓝，一朝回到解放前，心态都崩了。哭哭，近期都没心情打了</p><h1 id="题目地址"><a href="#题目地址" class="headerlink" title="题目地址"></a>题目地址</h1><p><a href="https://codeforces.com/contest/1480/problem/D1">https://codeforces.com/contest/1480/problem/D1</a></p><h1 id="题目大意"><a href="#题目大意" class="headerlink" title="题目大意"></a>题目大意</h1><p>给一个长n的序列，可以按顺序分成两组（要保留先后顺序的），求怎么样使两个序列的段数和最大？</p><p>说明：连续的同种数字算同一段，比如$[1,2,3]$有3段，$[1,1,2,2,3,3,3,3]$同样也是3段。</p><h1 id="解法"><a href="#解法" class="headerlink" title="解法"></a>解法</h1><h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>我一开始也想到了用贪心，但是其实可以发现这题有很多需要讨论的地方。</p><ul><li>首先，当前数字放在特定的一组中，可以<strong>隔开</strong>之后来的数字使得段数增加，比如对序列$[1,2,3,2,2]$</li></ul><p>当前$A:[1]$和$B:[2]$，下一个来的为$3$。这个$3$一定要放在第二组才能使结果最大化即$A:[1,2]$和$B:[2,3,2]$</p><p>这里的重点在于：之后出现了连续的一段$[2,2]$对于连续的一段我们<strong>没得选</strong>,如果A或者B的尾部同样也有2，那么就<strong>会使答案损失1</strong>。</p><ul><li>因此，如果现在有一个数字要选择插入A还是B，我们需要依据A和B尾端的数字以及之后<strong>“连着的两个相同数字”</strong>进行讨论</li></ul><h2 id="解"><a href="#解" class="headerlink" title="解"></a>解</h2><p>预处理一个nxt数组,表示离当前位置i最近的<strong>“连续两个相同数字”</strong>是什么。</p><ul><li><p>如果两个序列其中一个的尾部和a[i]相同，那么肯定是要放到另一个序列中去的。</p></li><li><p>如果两个序列的尾部都不同于当前a[i]，那么就要依据nxt[i]和两个尾部进行讨论，如果序列A的尾部和nxt[i]相同，那么就放在序列A上，反之则放在B上。</p></li></ul><h1 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h1><p>有些细节上还需要讨论以下，比如a中一段长段的末尾和单个数字是一样讨论的等等。</p><pre><code class="lang-C++">#include&lt;iostream&gt;#include&lt;cstring&gt;#include&lt;cstdio&gt;#include&lt;algorithm&gt;using namespace std;int cansel_sync=(ios::sync_with_stdio(0),cin.tie(0),0);#define ll long long#define rep(i,a,b) for(int i=(a);i&lt;=(b);i++)#define repb(i,a,b) for(int i=(a);i&gt;=(b);i--)#define INF 0x3f3f3f3fint n;const int MAXN = 114514;int a[MAXN],nxt[MAXN];void solve()&#123;    cin&gt;&gt;n;    rep(i,1,n) cin&gt;&gt;a[i];    nxt[n]=-1;//记录之后最近一次出现两次以上的数字    repb(i,n-1,1)&#123;        if(a[i]==a[i+1]) nxt[i]=a[i];        else nxt[i]=nxt[i+1];    &#125;    int top[2];//两个栈的栈顶元素    top[0]=top[1]=-1;    int res=0;    rep(i,1,n)&#123;        if(a[i]==a[i+1])&#123;//重复长段,放哪儿都一样            if(top[0]!=a[i]) res++;            top[0]=a[i];        &#125;        else&#123;//重复长段末尾或单个字符            if(top[0]==a[i]) res+=(top[1]!=a[i]),top[1]=a[i];            else if(top[1]==a[i]) res+=(top[0]!=a[i]),top[0]=a[i];            else&#123;                if(top[0]==nxt[i]) res++,top[0]=a[i];                else res++,top[1]=a[i];            &#125;        &#125;    &#125;    cout&lt;&lt;res&lt;&lt;endl;&#125;int main()&#123;    solve();&#125;</code></pre>]]></content>
-    
-    
-    <categories>
-      
-      <category>ACM</category>
-      
-    </categories>
-    
-    
-    <tags>
-      
-      <tag>题解</tag>
-      
-      <tag>Codeforces</tag>
-      
-      <tag>贪心</tag>
       
     </tags>
     
