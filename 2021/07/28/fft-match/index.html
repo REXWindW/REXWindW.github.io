@@ -1,0 +1,1702 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="FFT处理字符串匹配问题, REXWind&#39;s Blog">
+    <meta name="description" content="">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+    <title>FFT处理字符串匹配问题 | REXWind&#39;s Blog</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+
+    <script src="/libs/jquery/jquery.min.js"></script>
+
+<meta name="generator" content="Hexo 5.4.0">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+</head>
+
+
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">REXWind&#39;s Blog</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>首页</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>标签</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>分类</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>归档</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>关于</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/contact" class="waves-effect waves-light">
+      
+      <i class="fas fa-comments" style="zoom: 0.6;"></i>
+      
+      <span>留言板</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/friends" class="waves-effect waves-light">
+      
+      <i class="fas fa-address-book" style="zoom: 0.6;"></i>
+      
+      <span>友情链接</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="搜索" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">REXWind&#39;s Blog</div>
+        <div class="logo-desc">
+            
+            Never really desperate, only the lost of the soul.
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			首页
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			标签
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			分类
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			归档
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			关于
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/contact" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-comments"></i>
+			
+			留言板
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/friends" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-address-book"></i>
+			
+			友情链接
+		</a>
+          
+        </li>
+        
+        
+        <li><div class="divider"></div></li>
+        <li>
+            <a href="https://github.com/REXWindW" class="waves-effect waves-light" target="_blank">
+                <i class="fab fa-github-square fa-fw"></i>Fork Me
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+
+        </div>
+
+        
+            <style>
+    .nav-transparent .github-corner {
+        display: none !important;
+    }
+
+    .github-corner {
+        position: absolute;
+        z-index: 10;
+        top: 0;
+        right: 0;
+        border: 0;
+        transform: scale(1.1);
+    }
+
+    .github-corner svg {
+        color: #0f9d58;
+        fill: #fff;
+        height: 64px;
+        width: 64px;
+    }
+
+    .github-corner:hover .octo-arm {
+        animation: a 0.56s ease-in-out;
+    }
+
+    .github-corner .octo-arm {
+        animation: none;
+    }
+
+    @keyframes a {
+        0%,
+        to {
+            transform: rotate(0);
+        }
+        20%,
+        60% {
+            transform: rotate(-25deg);
+        }
+        40%,
+        80% {
+            transform: rotate(10deg);
+        }
+    }
+</style>
+
+<a href="https://github.com/REXWindW" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
+   data-tooltip="Fork Me" data-position="left" data-delay="50">
+    <svg viewBox="0 0 250 250" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
+              fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
+              fill="currentColor" class="octo-body"></path>
+    </svg>
+</a>
+        
+    </nav>
+
+</header>
+
+    
+<script src="/libs/cryptojs/crypto-js.min.js"></script>
+<script>
+    (function() {
+        let pwd = '';
+        if (pwd && pwd.length > 0) {
+            if (pwd !== CryptoJS.SHA256(prompt('输入密码才给你看！')).toString(CryptoJS.enc.Hex)) {
+                alert('密码错啦，再试试看');
+                location.href = '/';
+            }
+        }
+    })();
+</script>
+
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/img/erciyuan/chuyinheisi.png')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">FFT处理字符串匹配问题</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        width: 345px;
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        padding: 35px 0 15px 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content {
+        padding-bottom: 30px;
+        overflow: auto;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+
+        position: absolute;
+        right: 23.5vw;
+        display: block;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 15px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/FFT/">
+                                <span class="chip bg-color">FFT</span>
+                            </a>
+                        
+                            <a href="/tags/%E5%AD%97%E7%AC%A6%E4%B8%B2/">
+                                <span class="chip bg-color">字符串</span>
+                            </a>
+                        
+                            <a href="/tags/%E7%AE%97%E6%B3%95%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
+                                <span class="chip bg-color">算法学习笔记</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/ACM/" class="post-category">
+                                ACM
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2021-07-28
+                </div>
+                
+
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
+                    3.9k
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
+                    19 分
+                </div>
+                
+
+                
+                    <div id="busuanzi_container_page_pv" class="info-break-policy">
+                        <i class="far fa-eye fa-fw"></i>阅读次数:&nbsp;&nbsp;
+                        <span id="busuanzi_value_page_pv"></span>
+                    </div>
+				
+            </div>
+        </div>
+        <hr class="clearfix">
+
+        
+        <!-- 是否加载使用自带的 prismjs. -->
+        <link rel="stylesheet" href="/libs/prism/prism.css">
+        
+
+        
+
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <h1 id="FFT处理字符串匹配类问题"><a href="#FFT处理字符串匹配类问题" class="headerlink" title="FFT处理字符串匹配类问题"></a>FFT处理字符串匹配类问题</h1><h2 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h2><p>hdu多校3遇到了一题带通配符*的字符串匹配题，赛中想用KMP写，但是发现是假算法，赛后用Bitset补了一发，优化常数后也T，题解是用FFT写的字符串匹配问题。</p>
+<h2 id="问题1-普通字符串匹配-可用KMP做的那种"><a href="#问题1-普通字符串匹配-可用KMP做的那种" class="headerlink" title="问题1:普通字符串匹配,可用KMP做的那种"></a>问题1:普通字符串匹配,可用KMP做的那种</h2><p>参考：</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/CCCCTong/article/details/104565258">(27条消息) FFT处理字符串匹配问题_CCCCTong的博客-CSDN博客</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.luogu.com.cn/blog/Ebola-Emperor/solution-p4173">题解 P4173 【残缺的字符串】 - Ebola 的博客 - 洛谷博客 (luogu.com.cn)</a></p>
+<h3 id="数学原理"><a href="#数学原理" class="headerlink" title="数学原理"></a>数学原理</h3><ul>
+<li><p>定义匹配函数$C(x,y)=A_x-B_y$，如果两个字符相同，则满足$C(x,y)=0$，要推广到字符串上：</p>
+</li>
+<li><p>再定义完全匹配函数$P = \sum^n_{i=1}C(i,i)=\sum^n_{i=1}(A_i-B_i)$，即每一位上的匹配函数求和。</p>
+</li>
+</ul>
+<p>故设A为文本串，B为模式串，取A串的子串A[k,k+m-1]（与B等长），与模式串B进行匹配，定义得到的$P(x) = \sum^{m-1}_{i=0}C(i,k+i)$=$\sum^{m-1}_{i=0} (A\_i-B\_{k+i})$</p>
+<ul>
+<li><strong>如果B的子串B[k~k+m-1]和A完全匹配，则他们的全匹配函数为0</strong></li>
+</ul>
+<p><strong>但其实离上面的还差一步</strong>，考虑串A=ab和B=ba，在第一个位置有$C(1,1)=1-2=-1$;在第二个位置上$C(2,2)=2-1=1$;这样以来，虽然每个位上的匹配函数C不为0，但全匹配函数P为0，所以不行。</p>
+<ul>
+<li>这里很容易就能想到使用<strong>绝对值</strong>来定义匹配函数，但是绝对值需要分类讨论，所以我们使用<strong>平方</strong>，即定义$C(i,i)=(A_i-B_i)^2$。</li>
+</ul>
+<p>这样一来，$P(k) = \sum^{m-1}_{i=0} C(i,k+i)=\sum^{m-1}_{i=0} (A_i-B_{k+i})^2$</p>
+<p>再拆括号：$\sum^{m-1}_{i=0} (A_i-B_{k+i})^2=\sum_{i=0}^{m-1}(A_i^2+B_{k+i}^2-2A_iB_{k+i})$</p>
+<ul>
+<li><p>分开来求和就有$P(x)=\sum_{i=0}^{m-1}A_i^2+\sum_{i=0}^{m-1}B_{k+i}^2-2\sum_{i=0}^{m-1}A_iB_{k+i}$</p>
+</li>
+<li><p>因为是匹配问题，要求出所有k的P(k),第一项与k无关，即对$P(k)$为常数</p>
+</li>
+<li><p>第二项通过前缀和可以$O(n)$得到。</p>
+</li>
+<li><p>第三项则因为要枚举k和i，需要$O(n^2)$,可以怎么样优化？</p>
+</li>
+</ul>
+<p>我们可以观察$A_iB_{k+i}$，可以发现$(k+i)-i=k$。但是FFT在x的次数上是+，这里要-才能满足规律，咋办？</p>
+<ul>
+<li><strong>reverse(A,A+m)反转B串</strong>，记为S串，则有$A_i=S_{m-1-i}$，则第三项$\sum_{i=0}^{m-1}A_iB_{k+i}$变为了$\sum_{i=0}^{m-1}S_{m-1-i}B_{k+i}$。两个下标之和刚好为$m-1+k$</li>
+</ul>
+<p>这里k是左端点，为了符合字符串匹配类问题记右端点的习惯，我们用$x=k+m-1$即<strong>k开头子串的右端点</strong>来代换k：$k=x-m+1$</p>
+<p>我们发现$x=k+m-1$正好是<strong>卷积结果中以k为左端点的结果的位置</strong>。</p>
+<h3 id="实现细节"><a href="#实现细节" class="headerlink" title="实现细节"></a>实现细节</h3><p>注意右端点x代换左端点k有$k=x-m+1$</p>
+<ul>
+<li><p>设第一项为$T=\sum_{i=0}^{m-1}A_i^2$</p>
+</li>
+<li><p>第二项为$\sum_{i=0}^{m-1}B_{(x-m+1)+i}^2$，我们预处理f[x]数组$f(x)=\sum_{j=0}^{j=x}B_j^2$（f为前缀和），即第二项为f[x]-f[x-m]</p>
+</li>
+<li><p>对于第三项，A和B在进行FFT之后得到G数组，有第三项$\sum_{i=0}^{m-1}A_iB_{k+i}=G_{m-1+k}=G_{x}$刚刚好就是x!</p>
+</li>
+</ul>
+<h3 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h3><pre class="line-numbers language-C++" data-language="C++"><code class="language-C++">#include&lt;iostream&gt;
+#include&lt;algorithm&gt;
+#include&lt;cmath&gt;
+using namespace std;
+
+int cansel_sync=(ios::sync_with_stdio(0),cin.tie(0),0);
+#define ll long long
+#define rep(i,a,b) for(int i=(a);i&lt;=(b);i++)
+#define INF 0x3f3f3f3f
+//FFT板子
+const int MAXN = 214514;
+const double Pi=acos(-1.0);
+struct complex{
+    double x,y;
+    complex (double xx=0,double yy=0){x=xx,y=yy;}
+}a[MAXN],b[MAXN];
+complex operator + (complex a,complex b){ return complex(a.x+b.x , a.y+b.y);}
+complex operator - (complex a,complex b){ return complex(a.x-b.x , a.y-b.y);}
+complex operator * (complex a,complex b){ return complex(a.x*b.x-a.y*b.y , a.x*b.y+a.y*b.x);}//不懂的看复数的运算那部分 
+int l,r[MAXN];
+int limit=1;
+void FFT(complex *A,int type){
+    for(int i=0;i&lt;limit;i++) 
+        if(i&lt;r[i]) swap(A[i],A[r[i]]);//求出要迭代的序列 
+    for(int mid=1;mid&lt;limit;mid&lt;&lt;=1){//待合并区间的中点
+        complex Wn( cos(Pi/mid) , type*sin(Pi/mid) ); //单位根 
+        for(int R=mid&lt;&lt;1,j=0;j&lt;limit;j+=R){//R是区间的右端点，j表示前已经到哪个位置了 
+            complex w(1,0);//幂 
+            for(int k=0;k&lt;mid;k++,w=w*Wn){//枚举左半部分 
+                 complex x=A[j+k],y=w*A[j+mid+k];//蝴蝶效应 
+                A[j+k]=x+y;
+                A[j+mid+k]=x-y;
+            }
+        }
+    }
+}
+//FFT板子
+string s1,s2;
+int n,m;
+complex A[MAXN],B[MAXN];
+double f[MAXN];
+double g[MAXN];
+const double eps = 0.0001;
+void solve(){
+    limit = 1,l=0;
+    cin&gt;&gt;n&gt;&gt;m;
+    cin&gt;&gt;s1&gt;&gt;s2;
+    rep(i,0,n-1) B[i].x = s1[i]-'a'+1;
+    rep(i,0,m-1) A[i].x = s2[i]-'a'+1;
+    double T = 0;
+    //T = sigma A[i]^A[i] i=0~m-1
+    rep(i,0,m-1) T += A[i].x*A[i].x;
+    //f[x] = sigma B[i]^B[i] i=0~x
+    f[0] = B[0].x*B[0].x;
+    rep(i,1,n-1) f[i] = f[i-1]+B[i].x*B[i].x;
+    //g[x] = S[i]*B[j] i+j==x
+    reverse(A,A+m);//S = A.reverse
+    //FFT预处理
+    while(limit&lt;=n+m-2) limit&lt;&lt;=1,l++;
+    rep(i,0,limit-1)
+        r[i]= ( r[i&gt;&gt;1]&gt;&gt;1 )| ( (i&amp;1)&lt;&lt;(l-1) );
+    
+    FFT(A,1);FFT(B,1);
+    rep(i,0,limit) A[i]=A[i]*B[i];
+    FFT(A,-1);
+    rep(i,0,n-1) g[i] = (int)(A[i].x/limit+0.5);//四舍五入
+    
+    //T + f(x) - f(x-m) - 2g(x);
+    double tmp;
+    rep(x,m-1,n-1){
+        tmp = T+f[x]-2*g[x];
+        if(x!=m-1) tmp -= f[x-m];
+        //cout&lt;&lt;tmp&lt;&lt;' ';
+        if(fabs(tmp)&lt;eps) cout&lt;&lt;x-(m-1)+1&lt;&lt;endl;//输出匹配上的位置
+    }
+    cout&lt;&lt;endl;
+}
+int main(){
+    freopen("in.txt","r",stdin);
+    int z;
+    cin&gt;&gt;z;
+    while(z--) solve();
+}
+//洛谷P4173 残缺的字符串（带通配符的字符串匹配问题）
+//这题的简化问题：没有通配符的情况如何用FFT进行O(nlogn)的字符串匹配
+//https://www.luogu.com.cn/problem/P4173<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+
+<h2 id="问题2-带通配符字符串匹配"><a href="#问题2-带通配符字符串匹配" class="headerlink" title="问题2:带通配符字符串匹配"></a>问题2:带通配符字符串匹配</h2><p>题目:在普通字符串匹配的基础上，加上了可以匹配任何字符的通配符’*‘</p>
+<p><a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/P4173">P4173 残缺的字符串 - 洛谷 | 计算机科学教育新生态 (luogu.com.cn)</a></p>
+<p>参考:</p>
+<p><a target="_blank" rel="noopener" href="https://www.luogu.com.cn/blog/Ebola-Emperor/solution-p4173">题解 P4173 【残缺的字符串】 - Ebola 的博客 - 洛谷博客 (luogu.com.cn)</a></p>
+<h3 id="数学原理-1"><a href="#数学原理-1" class="headerlink" title="数学原理"></a>数学原理</h3><p>在普通的字符串匹配中，我们设字母a到z为1-26。</p>
+<ul>
+<li>我们设定通配符为0（原因之后会讲</li>
+</ul>
+<p>这样一来，先前的匹配函数$C(i,i)=(A_i-B_i)^2$在出现通配符时，不能满足$C(i,i)=0$</p>
+<ul>
+<li><p>故构造$C(i,i)=(A_i-B_i)^2A_iB_i$，<strong>这样只要Ai或者Bi中有一个通配符(值为0)，匹配函数的值都为0！非常奇妙！</strong></p>
+</li>
+<li><p>对应这个新的匹配函数$C$,有$P(k) = \sum^{m-1}_{i=0} C(i,k+i)=\sum^{m-1}_{i=0} (A_i-B_{k+i})^2A_iB_{k+i}$</p>
+</li>
+</ul>
+<p>考虑拆平方化简为:$\sum^{m-1}_{i=0} (A_i^3B_{k+i}+A_iB_{k+i}^3-2A_i^2B_{k+i}^2)$</p>
+<p>其实和没有通配符的情况非常类似，依旧可以<strong>拆分为三个项</strong>：</p>
+<p>$\sum^{m-1}_{i=0} (A_i^3B_{k+i})+\sum^{m-1}_{i=0}(A_iB_{k+i}^3)-2\sum^{m-1}_{i=0}(A_i^2B_{k+i}^2)$</p>
+<p>同样把A给reverse$\sum^{m-1}_{i=0} (S_{m-1-i}^3B_{k+i})+\sum^{m-1}_{i=0}(S_{m-1-i}B_{k+i}^3)-2\sum^{m-1}_{i=0}(S_{m-1-i}^2B_{k+i}^2)$</p>
+<p>在上一题中，前两项还可以用比较简单的方法去处理，第三项才需要FFT，这里三项都需要FFT来处理了<span class="github-emoji"><span>😅</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f605.png?v8" aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span><span class="github-emoji"><span>😅</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f605.png?v8" aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span><span class="github-emoji"><span>😅</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f605.png?v8" aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span></p>
+<p>可以进行6次FFT，把三项都加到P上，最后对P进行一次逆变换。</p>
+<h3 id="踩的坑"><a href="#踩的坑" class="headerlink" title="踩的坑"></a>踩的坑</h3><ul>
+<li>在进行完一次A和B的卷积之后，记得要把A和B<strong>全部清空</strong>，包括n和m之后的数据，因为在多项式转化为点值的时候，n和m往后的位置也会被填上。</li>
+</ul>
+<h3 id="代码-1"><a href="#代码-1" class="headerlink" title="代码"></a>代码</h3><pre class="line-numbers language-C++" data-language="C++"><code class="language-C++">
+#include&lt;iostream&gt;
+#include&lt;algorithm&gt;
+#include&lt;vector&gt;
+#include&lt;cmath&gt;
+using namespace std;
+
+int cansel_sync=(ios::sync_with_stdio(0),cin.tie(0),0);
+#define ll long long
+#define rep(i,a,b) for(int i=(a);i&lt;=(b);i++)
+#define INF 0x3f3f3f3f
+//FFT板子
+const int MAXN = 114514&lt;&lt;4;
+const double Pi=acos(-1.0);
+struct complex{
+    double x,y;
+    complex (double xx=0,double yy=0){x=xx,y=yy;}
+};
+complex operator + (complex a,complex b){ return complex(a.x+b.x , a.y+b.y);}
+complex operator - (complex a,complex b){ return complex(a.x-b.x , a.y-b.y);}
+complex operator * (complex a,complex b){ return complex(a.x*b.x-a.y*b.y , a.x*b.y+a.y*b.x);}//不懂的看复数的运算那部分 
+int l,r[MAXN];
+int limit=1;
+void FFT(complex *A,int type){
+    for(int i=0;i&lt;limit;i++) 
+        if(i&lt;r[i]) swap(A[i],A[r[i]]);//求出要迭代的序列 
+    for(int mid=1;mid&lt;limit;mid&lt;&lt;=1){//待合并区间的中点
+        complex Wn( cos(Pi/mid) , type*sin(Pi/mid) ); //单位根 
+        for(int R=mid&lt;&lt;1,j=0;j&lt;limit;j+=R){//R是区间的右端点，j表示前已经到哪个位置了 
+            complex w(1,0);//幂 
+            for(int k=0;k&lt;mid;k++,w=w*Wn){//枚举左半部分 
+                 complex x=A[j+k],y=w*A[j+mid+k];//蝴蝶效应 
+                A[j+k]=x+y;
+                A[j+mid+k]=x-y;
+            }
+        }
+    }
+}
+//FFT板子
+string s1,s2;
+int n,m;
+int Aa[MAXN],Bb[MAXN];
+complex A[MAXN],B[MAXN],P[MAXN];
+double f[MAXN];
+double g[MAXN];
+vector&lt;int&gt; vec;
+const double eps = 0.0001;
+inline int idx(char c){
+    if(c=='*') return 0;
+    else return c-'a'+1;
+}
+void solve(){
+    limit = 1,l=0;
+    cin&gt;&gt;m&gt;&gt;n;//注意读入顺序，这里是先读入模式串B
+    cin&gt;&gt;s2&gt;&gt;s1;
+    rep(i,0,n-1) Bb[i] = idx(s1[i]);
+    rep(i,0,m-1) Aa[i] = idx(s2[i]);
+    reverse(Aa,Aa+m);
+    //S = A.reverse,这里因为三项都要reverse,我直接把原数组给翻了
+    //FFT预处理
+    while(limit&lt;=n+m-2) limit&lt;&lt;=1,l++;
+    rep(i,0,limit-1)
+        r[i]= ( r[i&gt;&gt;1]&gt;&gt;1 )| ( (i&amp;1)&lt;&lt;(l-1) );
+
+    //第一项g1[x] = sigma S[i]^3*B[j] i+j=x
+    rep(i,0,limit-1) A[i]=B[i]=complex();//n和m之后的数据也要清空,之前wa这里
+    rep(i,0,m-1) A[i] = complex(Aa[i]*Aa[i]*Aa[i],0);
+    rep(i,0,n-1) B[i] = complex(Bb[i],0);
+    FFT(A,1);FFT(B,1);
+    rep(i,0,limit) P[i]=A[i]*B[i];
+
+    //第二项g2[x] = sigma S[i]*B[j]^3 i+j=x
+    rep(i,0,limit-1) A[i]=B[i]=complex();
+    rep(i,0,m-1) A[i] = complex(Aa[i],0);
+    rep(i,0,n-1) B[i] = complex(Bb[i]*Bb[i]*Bb[i],0);
+    FFT(A,1);FFT(B,1);
+    rep(i,0,limit) P[i]=P[i]+A[i]*B[i];
+
+    //第三项g3[x] = sigma S[i]^2*B[j]^2 i+j=x
+    rep(i,0,limit-1) A[i]=B[i]=complex();
+    rep(i,0,m-1) A[i] = complex(Aa[i]*Aa[i],0);
+    rep(i,0,n-1) B[i] = complex(Bb[i]*Bb[i],0);
+    FFT(A,1);FFT(B,1);
+    rep(i,0,limit) P[i]=P[i]-complex(2,0)*A[i]*B[i];
+    
+    FFT(P,-1);
+    vec.clear();
+    double tmp;
+    rep(x,m-1,n-1){
+        tmp = (int)(P[x].x/limit+0.5);
+        if(fabs(tmp)&lt;eps) vec.push_back(x-(m-1)+1);//存左端点位置
+    }
+    cout&lt;&lt;vec.size()&lt;&lt;endl;
+    for(auto x:vec) cout&lt;&lt;x&lt;&lt;' ';
+    cout&lt;&lt;endl;
+}
+int main(){
+    //freopen("in.txt","r",stdin);
+    solve();
+}
+//洛谷P4173 残缺的字符串（带通配符的字符串匹配问题）
+//https://www.luogu.com.cn/problem/P4173
+//洛谷开O2才能过<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+
+<h2 id="杭电多校2021（3）-1003-Forgiving-Matching"><a href="#杭电多校2021（3）-1003-Forgiving-Matching" class="headerlink" title="杭电多校2021（3） 1003.Forgiving Matching"></a>杭电多校2021（3） 1003.Forgiving Matching</h2><p><a target="_blank" rel="noopener" href="https://acm.dingbacode.com/showproblem.php?pid=6975">Problem - 6975 (dingbacode.com)</a></p>
+<h3 id="概要"><a href="#概要" class="headerlink" title="概要"></a>概要</h3><p>时间给8s，n和m的总和1e6，每组n和m为1e5。给长为n的字符串B和长为m的字符串A。串中包含通配符*，可以匹配任何符号。</p>
+<p>定义一个原谅数k，即允许有k位失配，问对[0,m]的不同k，A有多少个连续子串与B匹配。</p>
+<h3 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h3><p>这题其实比上面的题都简单。它对时间复杂度的要求很低。故可以分成0-9共10次FFT。</p>
+<ul>
+<li>分析题目，可以转化为：求位置x的子串$B[x-m-2,x]$与A的不匹配的数量$tmp$，加到差分数组$cf[m-tmp]$上去即可。</li>
+</ul>
+<p>我们维护10个数组$A[i][j]$，代表A串的j位置是否为数字i（*存在A[10]中）。</p>
+<ul>
+<li>我们定义匹配函数$C(i,j)=A_i\cdot B_i$，故全匹配函数为$P(x)=\sum C(i,x+i)$,同样通过反转后卷积来维护，卷积后的数组$G[i][j]$代表$A$和$B[j-m-2,j]$有多少个相同的位置(都是数字i)。</li>
+<li>通配符另外讨论，有<strong>匹配字符数 = 0-9匹配字符数 + A通配符数 + B子串通配符数 - AB位置重合通配符数量</strong></li>
+</ul>
+<p>A通配符数扫一遍可以得到，B子串通配符数通过前缀和得，AB位置重合的通配符数量，则和之前的其他字母一样，可以通过FFT维护后查询。</p>
+<h3 id="代码-2"><a href="#代码-2" class="headerlink" title="代码"></a>代码</h3><pre class="line-numbers language-C++" data-language="C++"><code class="language-C++">#include&lt;iostream&gt;
+#include&lt;algorithm&gt;
+#include&lt;cmath&gt;
+using namespace std;
+
+int cansel_sync=(ios::sync_with_stdio(0),cin.tie(0),0);
+#define ll long long
+#define rep(i,a,b) for(int i=(a);i&lt;=(b);i++)
+
+const int MAXN = 114514&lt;&lt;1;
+const double Pi=acos(-1.0);//FFT板子
+struct complex{
+    double x,y;
+    complex (double xx=0,double yy=0){x=xx,y=yy;}
+};
+complex operator + (complex a,complex b){ return complex(a.x+b.x , a.y+b.y);}
+complex operator - (complex a,complex b){ return complex(a.x-b.x , a.y-b.y);}
+complex operator * (complex a,complex b){ return complex(a.x*b.x-a.y*b.y , a.x*b.y+a.y*b.x);}//不懂的看复数的运算那部分 
+int l,r[MAXN&lt;&lt;2];
+int limit=1;
+void FFT(complex *A,int type){
+    for(int i=0;i&lt;limit;i++) 
+        if(i&lt;r[i]) swap(A[i],A[r[i]]);//求出要迭代的序列 
+    for(int mid=1;mid&lt;limit;mid&lt;&lt;=1){//待合并区间的中点
+        complex Wn( cos(Pi/mid) , type*sin(Pi/mid) ); //单位根 
+        for(int R=mid&lt;&lt;1,j=0;j&lt;limit;j+=R){//R是区间的右端点，j表示前已经到哪个位置了 
+            complex w(1,0);//幂 
+            for(int k=0;k&lt;mid;k++,w=w*Wn){//枚举左半部分 
+                 complex x=A[j+k],y=w*A[j+mid+k];//蝴蝶效应 
+                A[j+k]=x+y;
+                A[j+mid+k]=x-y;
+            }
+        }
+    }
+}//FFT板子
+string s1,s2;
+int n,m;
+inline int idx(char c){if(c=='*')return 10;return c-'0';}
+complex A[12][MAXN&lt;&lt;2],B[12][MAXN&lt;&lt;2];
+int cnt[MAXN];//记录数字相同位置数量
+int cnttp[MAXN];//通配符位置相同
+int sum1[MAXN],sum2;
+int cf[MAXN];//差分数组
+
+void solve(){
+    l=0;limit=1;
+    cin&gt;&gt;n&gt;&gt;m;
+    cin&gt;&gt;s1&gt;&gt;s2;
+    rep(i,0,m) cf[i]=0;//差分数组
+    while(limit&lt;=n+m-2) limit&lt;&lt;=1,l++;
+    rep(i,0,limit-1)
+        r[i]= ( r[i&gt;&gt;1]&gt;&gt;1 )| ( (i&amp;1)&lt;&lt;(l-1) );
+
+    rep(k,0,10){
+        rep(i,0,limit-1) A[k][i] = complex();
+        rep(i,0,limit-1) B[k][i] = complex();
+    }
+    rep(i,0,n-1){
+        B[idx(s1[i])][i]=complex(1);
+        cnt[i]=cnttp[i]=0;
+        if(i==0) sum1[i] = (s1[i]=='*');
+        else sum1[i]=sum1[i-1]+(s1[i]=='*');
+    }
+    sum2=0;
+    rep(i,0,m-1){
+        A[idx(s2[i])][i]=complex(1);
+        sum2 += (s2[i]=='*');
+    }
+    //cnt[x] = sigma A[i]*B[j] i+j=x
+    rep(i,0,10){//普通字符匹配的位置
+        reverse(A[i],A[i]+m);
+        FFT(A[i],1);FFT(B[i],1);
+        rep(j,0,limit-1) A[i][j] = A[i][j]*B[i][j];
+        FFT(A[i],-1);
+        if(i!=10) rep(j,m-1,n-1) cnt[j] += (int)(A[i][j].x/limit+0.5);
+        else rep(j,m-1,n-1) cnttp[j] += (int)(A[i][j].x/limit+0.5);
+    }
+    //匹配字符数 = cnt[j] + A通配 + B通配 - AB重合通配(FFT)
+    int tmp;
+    rep(i,m-1,n-1){
+        tmp = cnt[i] + sum2 + sum1[i] - cnttp[i];
+        if(i!=m-1) tmp -= sum1[i-m];//其实就是sum1[i]-sum1[i-m]，防止越界用
+        cf[m-tmp]++;//更新差分数组
+    }
+    int now = 0;
+    rep(i,0,m){
+        now += cf[i];
+        cout&lt;&lt;now&lt;&lt;endl;
+    }
+}  
+
+int main(){
+    int z;
+    cin&gt;&gt;z;
+    while(z--) solve();
+}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+                
+            </div>
+            <hr/>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        
+            <div class="reprint__author">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-user">
+                        文章作者:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="/about" rel="external nofollow noreferrer">REXWind</a>
+                </span>
+            </div>
+            <div class="reprint__type">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-link">
+                        文章链接:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="http://example.com/2021/07/28/fft-match/">http://example.com/2021/07/28/fft-match/</a>
+                </span>
+            </div>
+            <div class="reprint__notice">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-copyright">
+                        版权声明:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    本博客所有文章除特別声明外，均采用
+                    <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
+                    许可协议。转载请注明来源
+                    <a href="/about" target="_blank">REXWind</a>
+                    !
+                </span>
+            </div>
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>复制成功，请遵循本文的转载规则</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">查看</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/FFT/">
+                                    <span class="chip bg-color">FFT</span>
+                                </a>
+                            
+                                <a href="/tags/%E5%AD%97%E7%AC%A6%E4%B8%B2/">
+                                    <span class="chip bg-color">字符串</span>
+                                </a>
+                            
+                                <a href="/tags/%E7%AE%97%E6%B3%95%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
+                                    <span class="chip bg-color">算法学习笔记</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+<div id="article-share">
+
+    
+    <div class="social-share" data-sites="twitter,facebook,google,qq,qzone,wechat,weibo,douban,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="/libs/share/js/social-share.min.js"></script>
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+                <style>
+    #reward {
+        margin: 40px 0;
+        text-align: center;
+    }
+
+    #reward .reward-link {
+        font-size: 1.4rem;
+        line-height: 38px;
+    }
+
+    #reward .btn-floating:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    #rewardModal {
+        width: 320px;
+        height: 350px;
+    }
+
+    #rewardModal .reward-title {
+        margin: 15px auto;
+        padding-bottom: 5px;
+    }
+
+    #rewardModal .modal-content {
+        padding: 10px;
+    }
+
+    #rewardModal .close {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        color: rgba(0, 0, 0, 0.5);
+        font-size: 1.3rem;
+        line-height: 20px;
+        cursor: pointer;
+    }
+
+    #rewardModal .close:hover {
+        color: #ef5350;
+        transform: scale(1.3);
+        -moz-transform:scale(1.3);
+        -webkit-transform:scale(1.3);
+        -o-transform:scale(1.3);
+    }
+
+    #rewardModal .reward-tabs {
+        margin: 0 auto;
+        width: 210px;
+    }
+
+    .reward-tabs .tabs {
+        height: 38px;
+        margin: 10px auto;
+        padding-left: 0;
+    }
+
+    .reward-content ul {
+        padding-left: 0 !important;
+    }
+
+    .reward-tabs .tabs .tab {
+        height: 38px;
+        line-height: 38px;
+    }
+
+    .reward-tabs .tab a {
+        color: #fff;
+        background-color: #ccc;
+    }
+
+    .reward-tabs .tab a:hover {
+        background-color: #ccc;
+        color: #fff;
+    }
+
+    .reward-tabs .wechat-tab .active {
+        color: #fff !important;
+        background-color: #22AB38 !important;
+    }
+
+    .reward-tabs .alipay-tab .active {
+        color: #fff !important;
+        background-color: #019FE8 !important;
+    }
+
+    .reward-tabs .reward-img {
+        width: 210px;
+        height: 210px;
+    }
+</style>
+
+<div id="reward">
+    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-medium waves-effect waves-light red">赏</a>
+
+    <!-- Modal Structure -->
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <a class="close modal-close"><i class="fas fa-times"></i></a>
+            <h4 class="reward-title">要恰饭的嘛</h4>
+            <div class="reward-content">
+                <div class="reward-tabs">
+                    <ul class="tabs row">
+                        <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li>
+                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
+                    </ul>
+                    <div id="alipay">
+                        <img src="/medias/reward/alipay.jpg" class="reward-img" alt="支付宝打赏二维码">
+                    </div>
+                    <div id="wechat">
+                        <img src="/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.tabs').tabs();
+    });
+</script>
+
+            
+        </div>
+    </div>
+
+    
+        <link rel="stylesheet" href="/libs/gitalk/gitalk.css">
+<link rel="stylesheet" href="/css/my-gitalk.css">
+
+<div class="card gitalk-card" data-aos="fade-up">
+    <div class="comment_headling" style="font-size: 20px; font-weight: 700; position: relative; padding-left: 20px; top: 15px; padding-bottom: 5px;">
+        <i class="fas fa-comments fa-fw" aria-hidden="true"></i>
+        <span>评论</span>
+    </div>
+    <div id="gitalk-container" class="card-content"></div>
+</div>
+
+<script src="/libs/gitalk/gitalk.min.js"></script>
+<script>
+    let gitalk = new Gitalk({
+        clientID: 'bec4341381595d92c4ac',
+        clientSecret: 'ab90d7a821a71c6e4d0468e8fad3713614a46f6b',
+        repo: 'REXWindW.github.io',
+        owner: 'REXWindW',
+        admin: "REXWindW",
+        id: '2021-07-28T17-11-20',
+        distractionFreeMode: false  // Facebook-like distraction free mode
+    });
+
+    gitalk.render('gitalk-container');
+</script>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+            <div class="card">
+                <a href="/2021/08/06/sa/">
+                    <div class="card-image">
+                        
+                        <img src="/img/erciyuan/ganyu.png" class="responsive-img" alt="后缀数组SA">
+                        
+                        <span class="card-title">后缀数组SA</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            用后缀数组解决后缀排序，LCP最长公共前缀问题
+                        
+                    </div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2021-08-06
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/ACM/" class="post-category">
+                                    ACM
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/%E5%AD%97%E7%AC%A6%E4%B8%B2/">
+                        <span class="chip bg-color">字符串</span>
+                    </a>
+                    
+                    <a href="/tags/%E7%AE%97%E6%B3%95%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
+                        <span class="chip bg-color">算法学习笔记</span>
+                    </a>
+                    
+                    <a href="/tags/%E5%90%8E%E7%BC%80%E6%95%B0%E7%BB%84/">
+                        <span class="chip bg-color">后缀数组</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2021/07/21/fanhui-greedy/">
+                    <div class="card-image">
+                        
+                        <img src="/img/erciyuan/blhx.jpg" class="responsive-img" alt="关于反悔贪心">
+                        
+                        <span class="card-title">关于反悔贪心</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            两天一个算法!
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-07-21
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/ACM/" class="post-category">
+                                    ACM
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/%E7%AE%97%E6%B3%95%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
+                        <span class="chip bg-color">算法学习笔记</span>
+                    </a>
+                    
+                    <a href="/tags/%E8%B4%AA%E5%BF%83/">
+                        <span class="chip bg-color">贪心</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget card" style="background-color: white;">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('0'),
+            headingSelector: 'h1, h2, h3, h4'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h1, h2, h3, h4').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+<script src="https://cdn.bootcss.com/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script>
+    MathJax.Hub.Config({
+        tex2jax: {inlineMath: [['$', '$'], ['\(', '\)']]}
+    });
+</script>
+
+
+
+    <footer class="page-footer bg-color">
+    
+
+    <div class="container row center-align"
+         style="margin-bottom: 15px !important;">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            
+                <span id="year">2020-2023</span>
+            
+            <span id="year">2020</span>
+            <a href="/about" target="_blank">REXWind</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
+            <br>
+            
+                &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
+                        class="white-color">59.5k</span>
+            
+            
+            
+                
+            
+            
+                <span id="busuanzi_container_site_pv">
+                &nbsp;|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;
+                    <span id="busuanzi_value_site_pv" class="white-color"></span>
+            </span>
+            
+            
+                <span id="busuanzi_container_site_uv">
+                &nbsp;|&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;
+                    <span id="busuanzi_value_site_uv" class="white-color"></span>
+            </span>
+            
+            <br>
+
+            <!-- 运行天数提醒. -->
+            
+                <span id="sitetime"> Loading ...</span>
+                <script>
+                    var calcSiteTime = function () {
+                        var seconds = 1000;
+                        var minutes = seconds * 60;
+                        var hours = minutes * 60;
+                        var days = hours * 24;
+                        var years = days * 365;
+                        var today = new Date();
+                        var startYear = "2020";
+                        var startMonth = "10";
+                        var startDate = "20";
+                        var startHour = "0";
+                        var startMinute = "42";
+                        var startSecond = "13";
+                        var todayYear = today.getFullYear();
+                        var todayMonth = today.getMonth() + 1;
+                        var todayDate = today.getDate();
+                        var todayHour = today.getHours();
+                        var todayMinute = today.getMinutes();
+                        var todaySecond = today.getSeconds();
+                        var t1 = Date.UTC(startYear, startMonth, startDate, startHour, startMinute, startSecond);
+                        var t2 = Date.UTC(todayYear, todayMonth, todayDate, todayHour, todayMinute, todaySecond);
+                        var diff = t2 - t1;
+                        var diffYears = Math.floor(diff / years);
+                        var diffDays = Math.floor((diff / days) - diffYears * 365);
+
+                        // 区分是否有年份.
+                        var language = 'zh-CN';
+                        if (startYear === String(todayYear)) {
+                            document.getElementById("year").innerHTML = todayYear;
+                            var daysTip = 'This site has been running for ' + diffDays + ' days';
+                            if (language === 'zh-CN') {
+                                daysTip = '本站已运行 ' + diffDays + ' 天';
+                            } else if (language === 'zh-HK') {
+                                daysTip = '本站已運行 ' + diffDays + ' 天';
+                            }
+                            document.getElementById("sitetime").innerHTML = daysTip;
+                        } else {
+                            document.getElementById("year").innerHTML = startYear + " - " + todayYear;
+                            var yearsAndDaysTip = 'This site has been running for ' + diffYears + ' years and '
+                                + diffDays + ' days';
+                            if (language === 'zh-CN') {
+                                yearsAndDaysTip = '本站已运行 ' + diffYears + ' 年 ' + diffDays + ' 天';
+                            } else if (language === 'zh-HK') {
+                                yearsAndDaysTip = '本站已運行 ' + diffYears + ' 年 ' + diffDays + ' 天';
+                            }
+                            document.getElementById("sitetime").innerHTML = yearsAndDaysTip;
+                        }
+                    }
+
+                    calcSiteTime();
+                </script>
+            
+            <br>
+            
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+    <a href="https://github.com/REXWindW" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <i class="fab fa-github"></i>
+    </a>
+
+
+
+    <a href="mailto:114864532@qq.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fas fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=1114864532" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 1114864532" data-position="top" data-delay="50">
+        <i class="fab fa-qq"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+        <i class="fas fa-rss"></i>
+    </a>
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+$(function () {
+    var searchFunc = function (path, search_id, content_id) {
+        'use strict';
+        $.ajax({
+            url: path,
+            dataType: "xml",
+            success: function (xmlResponse) {
+                // get the contents from search data
+                var datas = $("entry", xmlResponse).map(function () {
+                    return {
+                        title: $("title", this).text(),
+                        content: $("content", this).text(),
+                        url: $("url", this).text()
+                    };
+                }).get();
+                var $input = document.getElementById(search_id);
+                var $resultContent = document.getElementById(content_id);
+                $input.addEventListener('input', function () {
+                    var str = '<ul class=\"search-result-list\">';
+                    var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                    $resultContent.innerHTML = "";
+                    if (this.value.trim().length <= 0) {
+                        return;
+                    }
+                    // perform local searching
+                    datas.forEach(function (data) {
+                        var isMatch = true;
+                        var data_title = data.title.trim().toLowerCase();
+                        var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
+                        var data_url = data.url;
+                        data_url = data_url.indexOf('/') === 0 ? data.url : '/' + data_url;
+                        var index_title = -1;
+                        var index_content = -1;
+                        var first_occur = -1;
+                        // only match artiles with not empty titles and contents
+                        if (data_title !== '' && data_content !== '') {
+                            keywords.forEach(function (keyword, i) {
+                                index_title = data_title.indexOf(keyword);
+                                index_content = data_content.indexOf(keyword);
+                                if (index_title < 0 && index_content < 0) {
+                                    isMatch = false;
+                                } else {
+                                    if (index_content < 0) {
+                                        index_content = 0;
+                                    }
+                                    if (i === 0) {
+                                        first_occur = index_content;
+                                    }
+                                }
+                            });
+                        }
+                        // show search results
+                        if (isMatch) {
+                            str += "<li><a href='" + data_url + "' class='search-result-title'>" + data_title + "</a>";
+                            var content = data.content.trim().replace(/<[^>]+>/g, "");
+                            if (first_occur >= 0) {
+                                // cut out 100 characters
+                                var start = first_occur - 20;
+                                var end = first_occur + 80;
+                                if (start < 0) {
+                                    start = 0;
+                                }
+                                if (start === 0) {
+                                    end = 100;
+                                }
+                                if (end > content.length) {
+                                    end = content.length;
+                                }
+                                var match_content = content.substr(start, end);
+                                // highlight all keywords
+                                keywords.forEach(function (keyword) {
+                                    var regS = new RegExp(keyword, "gi");
+                                    match_content = match_content.replace(regS, "<em class=\"search-keyword\">" + keyword + "</em>");
+                                });
+
+                                str += "<p class=\"search-result\">" + match_content + "...</p>"
+                            }
+                            str += "</li>";
+                        }
+                    });
+                    str += "</ul>";
+                    $resultContent.innerHTML = str;
+                });
+            }
+        });
+    };
+
+    searchFunc('/search.xml', 'searchInput', 'searchResult');
+});
+</script>
+
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    
+    <script src="/libs/others/clicklove.js" async="async"></script>
+    
+    
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+    <!--腾讯兔小巢-->
+    
+    
+
+    
+
+    
+
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>
