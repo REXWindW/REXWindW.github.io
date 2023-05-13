@@ -484,7 +484,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    446
+                    549
                 </div>
                 
 
@@ -586,7 +586,7 @@ torch.LongTensor
 #use dtype to check the datatype
 x.dtype<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<h3 id="Tensor-Device"><a href="#Tensor-Device" class="headerlink" title="Tensor - Device"></a>Tensor - Device</h3><p>Tensor will be computed with CPU by default.</p>
+<h4 id="Tensor-Device"><a href="#Tensor-Device" class="headerlink" title="Tensor - Device"></a>Tensor - Device</h4><p>Tensor will be computed with CPU by default.</p>
 <p>use to() to move tensor to appropriate device like:</p>
 <pre class="line-numbers language-python" data-language="python"><code class="language-python">x <span class="token operator">=</span> x<span class="token punctuation">.</span>to<span class="token punctuation">(</span><span class="token string">'cpu'</span><span class="token punctuation">)</span>
 
@@ -595,7 +595,17 @@ x <span class="token operator">=</span> x<span class="token punctuation">.</span
 <span class="token comment"># multi gpu</span>
 x <span class="token operator">=</span> x<span class="token punctuation">.</span>to<span class="token punctuation">(</span><span class="token string">'cuda:0'</span><span class="token punctuation">)</span> <span class="token comment">#cuda:1,cuda:2.....</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<h3 id="Tensor-Gradient"><a href="#Tensor-Gradient" class="headerlink" title="Tensor - Gradient"></a>Tensor - Gradient</h3>
+<h4 id="Tensor-Gradient"><a href="#Tensor-Gradient" class="headerlink" title="Tensor - Gradient"></a>Tensor - Gradient</h4><p>使用pytorch提供的函数求梯度</p>
+<p>z.backward求z微分，用x.grad看结果</p>
+<p><img src="/img/20235/gradient.png" alt="gradient.png"></p>
+<h3 id=""><a href="#" class="headerlink" title=""></a></h3><h3 id="Network-Layers"><a href="#Network-Layers" class="headerlink" title="Network Layers"></a>Network Layers</h3><h4 id="Linear-Layer（fully-connected-layer）"><a href="#Linear-Layer（fully-connected-layer）" class="headerlink" title="Linear Layer（fully connected layer）"></a>Linear Layer（fully connected layer）</h4><p>linear layer包含一组bias和一组weight</p>
+<p><img src="/img/20235/ll.png" alt="gradient.png"></p>
+<p>如图即让(?,32)大小的输入x乘上(32,64)的W，再加上b。先做一次矩阵乘法再做一次加法。$y = W\cdot x+b$</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">layer <span class="token operator">=</span> torch<span class="token punctuation">.</span>nn<span class="token punctuation">.</span>Linear<span class="token punctuation">(</span><span class="token number">32</span><span class="token punctuation">,</span><span class="token number">64</span><span class="token punctuation">)</span>
+layer<span class="token punctuation">.</span>weight<span class="token punctuation">.</span>shape
+layer<span class="token punctuation">.</span>bias<span class="token punctuation">.</span>shape
+<span class="token comment"># 可以用weight和bias.shape看linear层中w和b参数的大小</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
                 
             </div>
             <hr/>
@@ -1113,7 +1123,7 @@ x <span class="token operator">=</span> x<span class="token punctuation">.</span
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">59.5k</span>
+                        class="white-color">59.6k</span>
             
             
             
