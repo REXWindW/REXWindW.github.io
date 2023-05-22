@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="五月第二周-学习笔记, REXWind&#39;s Blog">
+    <meta name="keywords" content="五月-学习笔记, REXWind&#39;s Blog">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>五月第二周-学习笔记 | REXWind&#39;s Blog</title>
+    <title>五月-学习笔记 | REXWind&#39;s Blog</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -330,7 +330,7 @@
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">五月第二周-学习笔记</h1>
+                    <h1 class="description center-align post-title">五月-学习笔记</h1>
                 </div>
             </div>
         </div>
@@ -484,14 +484,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    1.2k
+                    2.2k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    5 分
+                    10 分
                 </div>
                 
 
@@ -551,6 +551,8 @@ x <span class="token operator">=</span> torch<span class="token punctuation">.</
 
 <span class="token comment"># zeros和ones</span>
 x <span class="token operator">=</span> torch<span class="token punctuation">.</span>zeros<span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">,</span><span class="token number">2</span><span class="token punctuation">,</span><span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token comment"># generate a 2*2*2 3dim tensor filled with 0</span>
+<span class="token comment"># rand</span>
+x <span class="token operator">=</span> torch<span class="token punctuation">.</span>rand<span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">,</span><span class="token number">2</span><span class="token punctuation">,</span><span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token comment"># generate a 2*2*2 random 3dim tensor</span>
 
 <span class="token comment"># 常见运算+-，sum(),mean(),pow()</span>
 y <span class="token operator">=</span> x<span class="token punctuation">.</span><span class="token builtin">pow</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">)</span>
@@ -573,7 +575,7 @@ z <span class="token operator">=</span> torch<span class="token punctuation">.</
 
 w <span class="token operator">=</span> torch<span class="token punctuation">.</span>cat<span class="token punctuation">(</span><span class="token punctuation">[</span>x<span class="token punctuation">,</span>y<span class="token punctuation">,</span>z<span class="token punctuation">]</span><span class="token punctuation">,</span>dim <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">)</span>
 <span class="token comment"># 沿dim1方向连接</span>
-<span class="token comment"># torch size [2,6,3]</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<span class="token comment"># torch size [2,6,3]</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <h4 id="Tensor-Datatype"><a href="#Tensor-Datatype" class="headerlink" title="Tensor - Datatype"></a>Tensor - Datatype</h4><pre class="line-numbers language-none"><code class="language-none"># 32bit float
 torch.float
@@ -692,6 +694,91 @@ preds <span class="token operator">=</span> <span class="token punctuation">[</s
     pred <span class="token operator">=</span> model<span class="token punctuation">(</span>x<span class="token punctuation">)</span>
     preds<span class="token punctuation">.</span>append<span class="token punctuation">(</span>pred<span class="token punctuation">.</span>cpu<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token comment"># 把预测值pred手机到preds中去</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
+<p>model的一些layers在testing和training的时候的行为时不一样的，比如dropout，所以需要开evalidation mode。</p>
+<p>在testing和validation的时候我们比希望model学习到这些资料，所以这时候用torch.no_grad把梯度关掉。</p>
+<h4 id="save-load-models"><a href="#save-load-models" class="headerlink" title="save/load models"></a>save/load models</h4><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token comment"># save model</span>
+torch<span class="token punctuation">.</span>save<span class="token punctuation">(</span>model<span class="token punctuation">.</span>state_dict<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">,</span> path<span class="token punctuation">)</span>
+
+<span class="token comment"># load model</span>
+ckpt <span class="token operator">=</span> torch<span class="token punctuation">.</span>load<span class="token punctuation">(</span>path<span class="token punctuation">)</span>
+model<span class="token punctuation">.</span>load_state_dict<span class="token punctuation">(</span>ckpt<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+
+<h3 id="官方文档"><a href="#官方文档" class="headerlink" title="官方文档"></a>官方文档</h3><p><a target="_blank" rel="noopener" href="https://pytorch.org/docs/stable/">PyTorch documentation — PyTorch 2.0 documentation</a></p>
+<p>常用套件</p>
+<p>torch.nn -&gt; neural network</p>
+<p>torch.optim -&gt; optimize function</p>
+<p>Torch.utils.data -&gt; dataset,dataloader</p>
+<h3 id="一些常见error"><a href="#一些常见error" class="headerlink" title="一些常见error"></a>一些常见error</h3><h4 id="Tensor-on-Different-Device-to-model"><a href="#Tensor-on-Different-Device-to-model" class="headerlink" title="Tensor on Different Device to model"></a>Tensor on Different Device to model</h4><p>model和input要放到一个设备上</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token comment"># 正确写法</span>
+model <span class="token operator">=</span> torch<span class="token punctuation">.</span>nn<span class="token punctuation">.</span>Linear<span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">.</span>to<span class="token punctuation">(</span><span class="token string">"cuda:0"</span><span class="token punctuation">)</span>
+x <span class="token operator">=</span> torch<span class="token punctuation">.</span>rand<span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">)</span><span class="token punctuation">.</span>to<span class="token punctuation">(</span><span class="token string">"cuda:0"</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+
+
+<h4 id="Mismatched-Dimensions"><a href="#Mismatched-Dimensions" class="headerlink" title="Mismatched Dimensions"></a>Mismatched Dimensions</h4><p>不同大小的矩阵相加，用transpose使大小相同</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">x <span class="token operator">=</span> torch<span class="token punctuation">.</span>randn<span class="token punctuation">(</span><span class="token number">4</span><span class="token punctuation">,</span><span class="token number">5</span><span class="token punctuation">)</span>
+y <span class="token operator">=</span> torch<span class="token punctuation">.</span>randn<span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">,</span><span class="token number">4</span><span class="token punctuation">)</span>
+
+<span class="token comment"># transpose</span>
+y <span class="token operator">=</span> y<span class="token punctuation">.</span>transpose<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">)</span> <span class="token comment"># transpose dim1 and dim0</span>
+z <span class="token operator">=</span> x <span class="token operator">+</span> y<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+
+<h4 id="Cuda-Out-of-Memory"><a href="#Cuda-Out-of-Memory" class="headerlink" title="Cuda Out of Memory"></a>Cuda Out of Memory</h4><p>batch size of data is too larch to fit in GPU，应当减少batch size。</p>
+<p>如果batch已经减少到1了，则可能是model太大，考虑减少model大小。</p>
+<h4 id="Mismatched-Tensor-Type"><a href="#Mismatched-Tensor-Type" class="headerlink" title="Mismatched Tensor Type"></a>Mismatched Tensor Type</h4><p>需要转换tensor的类型，如换成long，用<code>label = label.long()</code></p>
+<h2 id="Regression"><a href="#Regression" class="headerlink" title="Regression"></a>Regression</h2><p>老师课上的举例，回归问题就是找function，如最简单的可能就是$y = w\cdot x+b$,其中w为weight，b为bias。</p>
+<p><img src="/img/20235/reg.png" alt="reg.png"></p>
+<p>Liear model线性模型$y=b+\sum w_ix_i$</p>
+<h3 id="Loss-function"><a href="#Loss-function" class="headerlink" title="Loss function"></a>Loss function</h3><p>Input:a function</p>
+<p>Output:how bad it is</p>
+<p>衡量一组参数的好坏$L(f) = L(w,b)$</p>
+<p>使用估计值-实际值取平方相加并求和，即$L(w,b) = \sum_{n=1}^{10}(\hat{y}^n-(w\cdot x^n+b))^2$</p>
+<p>找loss最小的function，写作$f^* = arg \min_fL(f)$</p>
+<p>$w^*,b^* = arg\min_{w,b}L(w,b)$</p>
+<p>使用gradient descent梯度下降来找这个f</p>
+<h3 id="Gradient-Descent"><a href="#Gradient-Descent" class="headerlink" title="Gradient Descent"></a>Gradient Descent</h3><p>移动参数 $-\eta \frac{dL}{dw}|_{w=w_0}$，其中$\eta$是learning rate</p>
+<p>如果有两个参数w，b的情况，一样是计算$\frac{\partial L}{\partial w}|<em>{w=w^0}$和$\frac{\partial L}{\partial b}|</em>{b = b^0}$两个偏微分</p>
+<p>在二维上理解，梯度方向就是等高线的方向。</p>
+<p><img src="/img/20235/dgx.png" alt="reg.png"></p>
+<p>在Linear regression问题中不存在local optimal，所以不需要考虑找到的只是局部最优。</p>
+<p><img src="/img/20235/LR.png" alt="reg.png"></p>
+<p>In Linear Regression the loss function L is convex，故不用担心沿着gradient方向找到的只是局部最优解的情况了。即在Linear Regression问题中，Loss function关于w和b的图如上面的图，是形如一个椭圆形的。</p>
+<p><img src="/img/20235/pwf.png" alt="reg.png"></p>
+<p>用求偏导的方式计算Lossfunction对w和b的偏微分，过程如上。</p>
+<p>有时候这种wx+b的模型太简单，可以尝试引入二次项，如$y=b+w_1\cdot x+w_2\cdot x^2$</p>
+<p><img src="/img/20235/ec.png" alt="reg.png"></p>
+<p>效果比单纯一次的模型要更好，同理，可以再增加三次项、四次项$y=b+w_1\cdot x+w_2\cdot x^2 + w_3\cdot x^3$</p>
+<h3 id="over-fitting"><a href="#over-fitting" class="headerlink" title="over fitting"></a>over fitting</h3><p>老师在把模型增加到五次的时候，在trainning data的表现有继续变优，但是testing data反而效果变差了</p>
+<p><img src="/img/20235/overfit.png" alt="overfit"></p>
+<p>A more complex model does not always lead to better performance on testing data!This is called OverFitting.</p>
+<p>所以选择合适的model是一件重要的事情，比如图中的情况显然应当选择3次的model。</p>
+<p><img src="/img/20235/of.png" alt="of.png"></p>
+<h3 id="regularization"><a href="#regularization" class="headerlink" title="regularization"></a>regularization</h3><p>在现有Features不变情况下，降低部分不重要Features的影响力。这个方法有助于有很多Features且每个Features都有贡献的Neural Network避免Overfitting。</p>
+<p><img src="/img/20235/regu.png" alt="regu.png"></p>
+<p>老师的话是，regularization将w平方乘以$\lambda$加入损失函数，有利于让function更加平滑，在实际实验中，regularization能有效的避免overfitting，在训练集中的loss可能会变差，但是在testing中的效果会提升。</p>
+<p><img src="/img/20235/regul.png" alt="在trainning和testing的影响"></p>
+<h2 id="Colab-tutorial"><a href="#Colab-tutorial" class="headerlink" title="Colab tutorial"></a>Colab tutorial</h2><p><a target="_blank" rel="noopener" href="https://colab.research.google.com/drive/1Qi4-BRqZ3qI3x_Jtr5ci_oRvHDMQpdiW?usp=sharing&amp;pli=1#scrollTo=bGCELEd1Poea">Google Colab Tutorial 2023 - Colaboratory</a></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/386162610">Google Colab 快速上手 - 知乎 (zhihu.com)</a></p>
+<h2 id="作业1-新冠预测Regression"><a href="#作业1-新冠预测Regression" class="headerlink" title="作业1 : 新冠预测Regression"></a>作业1 : 新冠预测Regression</h2><p>给定1，2，3天的资料，每天的资料是survey和positive cases</p>
+<h4 id="input"><a href="#input" class="headerlink" title="input"></a>input</h4><ul>
+<li>输入包括一个35维度的one-hot vector表示州，后面还跟着一系列feature，其中第三天的test positive case是我们需要预测的</li>
+</ul>
+<p><img src="/img/20235/feature.png" alt="feature"></p>
+<p><img src="/img/20235/feature2.png" alt="feature2"></p>
+<ul>
+<li>one-hot vector就是一个向量里面只有一个元素为1，其余全是0。在作业中，所在州的编码就是一个onehot vector。</li>
+</ul>
+<p><img src="/img/20235/onehot.png" alt="onehot vector">使用MSE（mean squared error)均方误差</p>
+<h4 id="我做了什么"><a href="#我做了什么" class="headerlink" title="我做了什么"></a>我做了什么</h4><ul>
+<li>在colab上下载samplecode</li>
+<li></li>
+</ul>
+<h3 id="colab导入数据"><a href="#colab导入数据" class="headerlink" title="colab导入数据"></a>colab导入数据</h3><p>通过google drive导入数据集</p>
+<p><img src="/img/20235/colab.png" alt="colab"></p>
 
                 
             </div>
@@ -968,9 +1055,9 @@ preds <span class="token operator">=</span> <span class="token punctuation">[</s
                 <a href="/2023/05/11/20235/">
                     <div class="card-image">
                         
-                        <img src="/img/erciyuan/black.png" class="responsive-img" alt="五月第二周-学习笔记">
+                        <img src="/img/erciyuan/black.png" class="responsive-img" alt="五月-学习笔记">
                         
-                        <span class="card-title">五月第二周-学习笔记</span>
+                        <span class="card-title">五月-学习笔记</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -1210,7 +1297,7 @@ preds <span class="token operator">=</span> <span class="token punctuation">[</s
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">60.2k</span>
+                        class="white-color">61.2k</span>
             
             
             
