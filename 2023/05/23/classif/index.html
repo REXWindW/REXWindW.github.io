@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="Mathjax内联公式出错的问题与解决方案, REXWind&#39;s Blog">
+    <meta name="keywords" content="Classification, REXWind&#39;s Blog">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>Mathjax内联公式出错的问题与解决方案 | REXWind&#39;s Blog</title>
+    <title>Classification | REXWind&#39;s Blog</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -325,12 +325,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/img/erciyuan/ling.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/img/erciyuan/black.png')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">Mathjax内联公式出错的问题与解决方案</h1>
+                    <h1 class="description center-align post-title">Classification</h1>
                 </div>
             </div>
         </div>
@@ -446,8 +446,12 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/mathjax/">
-                                <span class="chip bg-color">mathjax</span>
+                            <a href="/tags/%E7%AE%97%E6%B3%95%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
+                                <span class="chip bg-color">算法学习笔记</span>
+                            </a>
+                        
+                            <a href="/tags/ML/">
+                                <span class="chip bg-color">ML</span>
                             </a>
                         
                     </div>
@@ -458,8 +462,8 @@
                     <div class="post-cate">
                         <i class="fas fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/%E5%8D%9A%E5%AE%A2%E7%BB%B4%E6%8A%A4/" class="post-category">
-                                博客维护
+                            <a href="/categories/ML/" class="post-category">
+                                ML
                             </a>
                         
                     </div>
@@ -471,7 +475,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2020-11-08
+                    2023-05-23
                 </div>
                 
 
@@ -480,14 +484,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    480
+                    678
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    1 分
+                    2 分
                 </div>
                 
 
@@ -510,51 +514,30 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="问题的出现"><a href="#问题的出现" class="headerlink" title="问题的出现"></a>问题的出现</h1><p>今天写了公式特别多的一篇博客：FFT学习笔记</p>
-<p>然后我的博客的<strong>内联公式</strong>显示出了大量的问题。</p>
-<p><img src="/img/mathjax_tips/error.png" alt="mathjax">  </p>
-<h1 id="失败的尝试"><a href="#失败的尝试" class="headerlink" title="失败的尝试"></a>失败的尝试</h1><p>经过转爷的提醒，纠正了之前的错误写法</p>
-<p>$ x=1 $</p>
-<p>改成了正确的</p>
-<p>$x=1$</p>
-<p>后来还是不行，以为是大括号的问题</p>
-<p>最后发现，并不是大括号的问题，而是mathjax中内联公式就最好不要用太多\frac之类的这种转义字符了</p>
-<p><img src="/img/mathjax_tips/mathjax.png" alt="mathjax">  </p>
-<h1 id="最后是怎么解决的呢？"><a href="#最后是怎么解决的呢？" class="headerlink" title="最后是怎么解决的呢？"></a>最后是怎么解决的呢？</h1><p>参考了这个帖子：<a target="_blank" rel="noopener" href="https://www.jianshu.com/p/7ab21c7f0674">https://www.jianshu.com/p/7ab21c7f0674</a></p>
-<p>这个帖子先提到了要更换Hexo的markdown渲染引擎，<a target="_blank" rel="noopener" href="https://link.jianshu.com/?t=https://github.com/sun11/hexo-renderer-kramed">hexo-renderer-kramed</a>引擎是在默认的渲染引擎<a target="_blank" rel="noopener" href="https://link.jianshu.com/?t=https://github.com/hexojs/hexo-renderer-marked">hexo-renderer-marked</a>的基础上修改了一些bug，两者比较接近，也比较轻量级。但是我的引擎已经是这个了，所以问题再下一步。</p>
-<p>然后，跟换引擎后行间公式可以正确渲染了，但是这样还没有完全解决问题，行内公式的渲染还是有问题，因为<a target="_blank" rel="noopener" href="https://link.jianshu.com/?t=https://github.com/sun11/hexo-renderer-kramed">hexo-renderer-kramed</a>引擎也有语义冲突的问题。接下来到博客根目录下，找到node_modules\kramed\lib\rules\inline.js，把第11行的<strong>escape变量</strong>的值做相应的修改：</p>
-<pre class="line-numbers language-ruby" data-language="ruby"><code class="language-ruby"><span class="token operator">/</span><span class="token operator">/</span>  escape<span class="token punctuation">:</span> <span class="token regex">/^\\([\\`*{}\[\]()#$+\-.!_&gt;])/</span><span class="token punctuation">,</span>
-  escape<span class="token punctuation">:</span> <span class="token regex">/^\\([`*\[\]()#$+\-.!_&gt;])/</span><span class="token punctuation">,</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+                <h1 id="ML-Classification"><a href="#ML-Classification" class="headerlink" title="[ML] Classification"></a>[ML] Classification</h1><p>参考了<a target="_blank" rel="noopener" href="https://blog.lzlz.site/2019/06/08/hexo-%E6%8F%92%E5%85%A5%E5%9B%BE%E7%89%87/">hexo+typora 插入图片的简便解决方案 - lzlz000</a>的方法，在markdown的开头添加了</p>
+<pre class="line-numbers language-none"><code class="language-none">typora-root-url: ../<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
-<p>这一步是在原基础上<strong>取消了对,{,}的转义(escape)<strong>。<br>同时把第20行的</strong>em变量</strong>也要做相应的修改。</p>
-<pre class="line-numbers language-ruby" data-language="ruby"><code class="language-ruby"><span class="token operator">/</span><span class="token operator">/</span>  em<span class="token punctuation">:</span> <span class="token regex">/^\b_((?:__|[\s\S])+?)_\b|^\*((?:\*\*|[\s\S])+?)\*(?!\*)/</span><span class="token punctuation">,</span>
-  em<span class="token punctuation">:</span> <span class="token regex">/^\*((?:\*\*|[\s\S])+?)\*(?!\*)/</span><span class="token punctuation">,</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-
-<p>重新启动hexo（先clean再generate）,问题完美解决。哦，如果不幸还没解决的话，看看是不是还需要在使用的主题中配置mathjax开关。</p>
-<h1 id="补充"><a href="#补充" class="headerlink" title="补充"></a>补充</h1><p>在以上步骤之后，还是存在一些显示错误</p>
-<p><img src="/img/mathjax_tips/cdot.png" alt="cdot"></p>
-<p>我自己猜测的是mathjax最好不要用*号来乘，可以用点乘和叉乘</p>
-<p>如下：</p>
-<table>
-<thead>
-<tr>
-<th>符号</th>
-<th>写法</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>叉乘</td>
-<td>a \times b</td>
-</tr>
-<tr>
-<td>点除</td>
-<td>a \div b</td>
-</tr>
-<tr>
-<td>点乘</td>
-<td>a \cdot b</td>
-</tr>
-</tbody></table>
+<p>可以解决在本地编辑是无法预览图片的问题。</p>
+<h2 id="为什么不能用regression的方法解决分类问题"><a href="#为什么不能用regression的方法解决分类问题" class="headerlink" title="为什么不能用regression的方法解决分类问题"></a>为什么不能用regression的方法解决分类问题</h2><p><img src="/img/classif/reg.png" alt="reg"></p>
+<p>如图，使用regression方法时，接近1记为class1，接近-1记为class2，这种情况下计算损失函数时，如果出现图2中的情况，则远处的那一块蓝色的会有很大的损失，即会惩罚那些output值太大的点。这时候模型会把原本优秀的绿色线调整为这条蓝色的，因为这条线在计算loss时对regression来说是更好的function（loss更小）。</p>
+<ul>
+<li>简而言之：regression对model好坏的定义不适合用在classification</li>
+</ul>
+<p>而且在多种class的时候，如果说把1当作class1，2当作class2，3当作class3，显然是不可以的，因为这样class1和class2之间，class2和class3这些相邻组之间存在一定关系，但实际情况上可能不存在这样的关系。</p>
+<h2 id="应该如何实现"><a href="#应该如何实现" class="headerlink" title="应该如何实现"></a>应该如何实现</h2><p>在fxgx嵌套，使用g得出一个值，然后f判断分类</p>
+<p><img src="/img/classif/qt.png" alt="实现"></p>
+<p>我们知道之前regression中间，优化function的方法是<strong>gradient decent</strong>，但是显然这个loss函数没法微分，所以这里需要用到如：<strong>SVM、Perceptron</strong> （老师说之后讲）的优化方法。</p>
+<h2 id="G"><a href="#G" class="headerlink" title="G"></a>G</h2><h3 id="实现二元分类为例"><a href="#实现二元分类为例" class="headerlink" title="实现二元分类为例"></a>实现二元分类为例</h3><p><img src="/img/classif/c.png" alt="c"></p>
+<p>算x是属于class的概率计算公式如图，要实现概率的计算，需要用trainning data估测出$P(C_1)P(C_2)P(x|C_1)P(x|C_2)$的这四个值。（选C1的概率，选C2的概率，在C1中抽出x的概率，在C2中抽出x的概率。</p>
+<p>这样的模型叫做<strong>生成模型</strong>generative model，即可以自己产生一个x，因为可以计算某个x出现的几率$P(x) = P(x|C_1)\cdot P(C_1) + P(x|C_2)\cdot P(C_2)$即在C1中挑出的几率和C2中挑出的几率。</p>
+<h3 id="Prior"><a href="#Prior" class="headerlink" title="Prior"></a>Prior</h3><p>$P(C_1)andP(C_2)$这两个概率叫prior。</p>
+<p>比如class1有79个，class2有61个，则容易解$P(C_1) = 79/(79+61)$</p>
+<h3 id="Probability-from-Class"><a href="#Probability-from-Class" class="headerlink" title="Probability from Class"></a>Probability from Class</h3><p>计算$P(x|C_1)$即从C1中挑一个样本出来，这个样本正好是x的概率</p>
+<p><img src="/img/classif/hg.png" alt="1"></p>
+<p><img src="/img/classif/hg2.png" alt="2"></p>
+<p>老师举出的例子中海龟是一个不在集合里面的样本，虽然海龟不在水系神奇宝贝的样本中，但是显然海龟属于水系神奇宝贝的概率并不为0，假设水系神奇宝贝的防御和sp服从一个正态分布gaussian distribution，则可以通过这个正态分布计算出海龟属于水系神奇宝贝的概率。</p>
+<p>正态分布由两个参数决定，一个是mean$\mu$和一个矩阵convariance matrix$\sum$。</p>
+<p><img src="/img/classif/gauss.png" alt="gauss"></p>
 
                 
             </div>
@@ -581,7 +564,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://example.com/2020/11/08/matjax-tips/">http://example.com/2020/11/08/matjax-tips/</a>
+                    <a href="http://example.com/2023/05/23/classif/">http://example.com/2023/05/23/classif/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -619,8 +602,12 @@
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/mathjax/">
-                                    <span class="chip bg-color">mathjax</span>
+                                <a href="/tags/%E7%AE%97%E6%B3%95%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
+                                    <span class="chip bg-color">算法学习笔记</span>
+                                </a>
+                            
+                                <a href="/tags/ML/">
+                                    <span class="chip bg-color">ML</span>
                                 </a>
                             
                         </div>
@@ -791,7 +778,7 @@
         repo: 'REXWindW.github.io',
         owner: 'REXWindW',
         admin: "REXWindW",
-        id: '2020-11-08T01-42-13',
+        id: '2023-05-23T19-09-16',
         distractionFreeMode: false  // Facebook-like distraction free mode
     });
 
@@ -819,49 +806,51 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
-                <a href="/2020/11/09/git-update/">
+                <a href="/2023/05/23/classif/">
                     <div class="card-image">
                         
-                        <img src="/img/erciyuan/maoniang.png" class="responsive-img" alt="用Git Bash命令行提交修改">
+                        <img src="/img/erciyuan/black.png" class="responsive-img" alt="Classification">
                         
-                        <span class="card-title">用Git Bash命令行提交修改</span>
+                        <span class="card-title">Classification</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            之前都依赖于vscode的自动提交，现在用到了发现自己不太会用命令行来push
+                            跟随李宏毅课程完成classification的学习和第二个作业
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2020-11-09
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2023-05-23
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%9F%A5%E8%AF%86/" class="post-category">
-                                    计算机知识
+                            <a href="/categories/ML/" class="post-category">
+                                    ML
                                 </a>
                             
                             
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/git/">
-                        <span class="chip bg-color">git</span>
+                    <a href="/tags/%E7%AE%97%E6%B3%95%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
+                        <span class="chip bg-color">算法学习笔记</span>
                     </a>
                     
-                    <a href="/tags/github/">
-                        <span class="chip bg-color">github</span>
+                    <a href="/tags/ML/">
+                        <span class="chip bg-color">ML</span>
                     </a>
                     
                 </div>
@@ -875,30 +864,30 @@
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2020/11/07/banzi/">
+                <a href="/2023/05/12/20235/">
                     <div class="card-image">
                         
-                        <img src="/img/erciyuan/yinchuyin.png" class="responsive-img" alt="模板整理(持续更新)">
+                        <img src="/img/erciyuan/black.png" class="responsive-img" alt="Pytorch tutorial and Regression">
                         
-                        <span class="card-title">模板整理(持续更新)</span>
+                        <span class="card-title">Pytorch tutorial and Regression</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            ACM模板整理
+                            跟随李宏毅课程完成regression的学习和第一个作业
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2020-11-07
+                                <i class="far fa-clock fa-fw icon-date"></i>2023-05-12
                             </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/ACM/" class="post-category">
-                                    ACM
+                            <a href="/categories/ML/" class="post-category">
+                                    ML
                                 </a>
                             
                             
@@ -908,8 +897,12 @@
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/ACM%E6%A8%A1%E6%9D%BF/">
-                        <span class="chip bg-color">ACM模板</span>
+                    <a href="/tags/%E7%AE%97%E6%B3%95%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
+                        <span class="chip bg-color">算法学习笔记</span>
+                    </a>
+                    
+                    <a href="/tags/ML/">
+                        <span class="chip bg-color">ML</span>
                     </a>
                     
                 </div>

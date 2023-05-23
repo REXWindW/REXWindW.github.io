@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="五月-学习笔记, REXWind&#39;s Blog">
+    <meta name="keywords" content="Pytorch tutorial and Regression, REXWind&#39;s Blog">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>五月-学习笔记 | REXWind&#39;s Blog</title>
+    <title>Pytorch tutorial and Regression | REXWind&#39;s Blog</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -330,7 +330,7 @@
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">五月-学习笔记</h1>
+                    <h1 class="description center-align post-title">Pytorch tutorial and Regression</h1>
                 </div>
             </div>
         </div>
@@ -446,12 +446,12 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/ML/">
-                                <span class="chip bg-color">ML</span>
-                            </a>
-                        
                             <a href="/tags/%E7%AE%97%E6%B3%95%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
                                 <span class="chip bg-color">算法学习笔记</span>
+                            </a>
+                        
+                            <a href="/tags/ML/">
+                                <span class="chip bg-color">ML</span>
                             </a>
                         
                     </div>
@@ -475,7 +475,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2023-05-11
+                    2023-05-12
                 </div>
                 
 
@@ -484,7 +484,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    3.7k
+                    3.8k
                 </div>
                 
 
@@ -752,7 +752,6 @@ z <span class="token operator">=</span> x <span class="token operator">+</span> 
 <p><img src="/img/20235/pwf.png" alt="reg.png"></p>
 <p>用求偏导的方式计算Lossfunction对w和b的偏微分，过程如上。</p>
 <p>有时候这种wx+b的模型太简单，可以尝试引入二次项，如$y=b+w_1\cdot x+w_2\cdot x^2$</p>
-<p><img src="/img/20235/ec.png" alt="reg.png"></p>
 <p>效果比单纯一次的模型要更好，同理，可以再增加三次项、四次项$y=b+w_1\cdot x+w_2\cdot x^2 + w_3\cdot x^3$</p>
 <h3 id="over-fitting"><a href="#over-fitting" class="headerlink" title="over fitting"></a>over fitting</h3><p>老师在把模型增加到五次的时候，在trainning data的表现有继续变优，但是testing data反而效果变差了</p>
 <p><img src="/img/20235/overfit.png" alt="overfit"></p>
@@ -1019,6 +1018,9 @@ number of features: 88<span aria-hidden="true" class="line-numbers-rows"><span><
       <span class="token comment"># nn.InstanceNorm1d(1),</span>
       <span class="token comment"># nn.ReLU(),</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
+<p>使用归一化后效果还不如最开始什么都不加的。。</p>
+<p>思考了一下会不会是因为之前增加层数导致需要更多的epoch，所以尝试一下增加层数并且增加归一化层。</p>
+
                 
             </div>
             <hr/>
@@ -1044,7 +1046,7 @@ number of features: 88<span aria-hidden="true" class="line-numbers-rows"><span><
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://example.com/2023/05/11/20235/">http://example.com/2023/05/11/20235/</a>
+                    <a href="http://example.com/2023/05/12/20235/">http://example.com/2023/05/12/20235/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -1082,12 +1084,12 @@ number of features: 88<span aria-hidden="true" class="line-numbers-rows"><span><
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/ML/">
-                                    <span class="chip bg-color">ML</span>
-                                </a>
-                            
                                 <a href="/tags/%E7%AE%97%E6%B3%95%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
                                     <span class="chip bg-color">算法学习笔记</span>
+                                </a>
+                            
+                                <a href="/tags/ML/">
+                                    <span class="chip bg-color">ML</span>
                                 </a>
                             
                         </div>
@@ -1258,7 +1260,7 @@ number of features: 88<span aria-hidden="true" class="line-numbers-rows"><span><
         repo: 'REXWindW.github.io',
         owner: 'REXWindW',
         admin: "REXWindW",
-        id: '2023-05-11T16-50-23',
+        id: '2023-05-12T19-09-16',
         distractionFreeMode: false  // Facebook-like distraction free mode
     });
 
@@ -1286,29 +1288,28 @@ number of features: 88<span aria-hidden="true" class="line-numbers-rows"><span><
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="far fa-dot-circle"></i>&nbsp;本篇
-            </div>
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2023/05/11/20235/">
+                <a href="/2023/05/23/classif/">
                     <div class="card-image">
                         
-                        <img src="/img/erciyuan/black.png" class="responsive-img" alt="五月-学习笔记">
+                        <img src="/img/erciyuan/black.png" class="responsive-img" alt="Classification">
                         
-                        <span class="card-title">五月-学习笔记</span>
+                        <span class="card-title">Classification</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            毕设大体完成后开始跟随李宏毅课程学习
+                            跟随李宏毅课程完成classification的学习和第二个作业
                         
                     </div>
                     <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2023-05-11
-                            </span>
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2023-05-23
+                        </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
@@ -1321,16 +1322,15 @@ number of features: 88<span aria-hidden="true" class="line-numbers-rows"><span><
                         </span>
                     </div>
                 </div>
-
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/ML/">
-                        <span class="chip bg-color">ML</span>
-                    </a>
-                    
                     <a href="/tags/%E7%AE%97%E6%B3%95%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
                         <span class="chip bg-color">算法学习笔记</span>
+                    </a>
+                    
+                    <a href="/tags/ML/">
+                        <span class="chip bg-color">ML</span>
                     </a>
                     
                 </div>
@@ -1536,7 +1536,7 @@ number of features: 88<span aria-hidden="true" class="line-numbers-rows"><span><
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">62.8k</span>
+                        class="white-color">63.5k</span>
             
             
             
