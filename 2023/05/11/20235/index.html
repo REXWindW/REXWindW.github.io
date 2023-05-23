@@ -450,8 +450,8 @@
                                 <span class="chip bg-color">ML</span>
                             </a>
                         
-                            <a href="/tags/%E5%91%A8%E8%AE%B0/">
-                                <span class="chip bg-color">周记</span>
+                            <a href="/tags/%E7%AE%97%E6%B3%95%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
+                                <span class="chip bg-color">算法学习笔记</span>
                             </a>
                         
                     </div>
@@ -484,14 +484,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    2.2k
+                    3.7k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    10 分
+                    17 分
                 </div>
                 
 
@@ -514,7 +514,7 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="五月学习记录"><a href="#五月学习记录" class="headerlink" title="五月学习记录"></a>五月学习记录</h1><p>时隔两年重新开始写博客，毕设基本结束，现在先开始跟着李宏毅的课程，系统学习一下。</p>
+                <h1 id="ML-Pytorch-tutorial-and-Regression"><a href="#ML-Pytorch-tutorial-and-Regression" class="headerlink" title="[ML] Pytorch tutorial and Regression"></a>[ML] Pytorch tutorial and Regression</h1><p>时隔两年重新开始写博客，毕设基本结束，现在先开始跟着李宏毅的课程，系统学习一下。</p>
 <h2 id="Pytorch-Tutorial"><a href="#Pytorch-Tutorial" class="headerlink" title="Pytorch Tutorial"></a>Pytorch Tutorial</h2><h3 id="数据读入"><a href="#数据读入" class="headerlink" title="数据读入"></a>数据读入</h3><p>dataset和dataloder，dataset读入（stores data samles），dataloder使用（groups data in batches）</p>
 <pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> torch<span class="token punctuation">.</span>utils<span class="token punctuation">.</span>data <span class="token keyword">import</span> Dataset<span class="token punctuation">,</span>DataLoader
 
@@ -672,6 +672,8 @@ optimizer <span class="token operator">=</span> torch<span class="token punctuat
     loss<span class="token punctuation">.</span>backward<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token comment"># 2.计算loss的gradient</span>
     optimizer<span class="token punctuation">.</span>step<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token comment"># 3.利用gradient调整model的参数</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
+
+
 <h4 id="Validation-Loop验证"><a href="#Validation-Loop验证" class="headerlink" title="Validation Loop验证"></a>Validation Loop验证</h4><p>用于在训练过程中检验模型的状态，收敛情况</p>
 <pre class="line-numbers language-python" data-language="python"><code class="language-python">model<span class="token punctuation">.</span><span class="token builtin">eval</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token comment"># 这句是把model设置成evalidation mode</span>
 total_loss <span class="token operator">=</span> <span class="token number">0</span>
@@ -763,8 +765,22 @@ z <span class="token operator">=</span> x <span class="token operator">+</span> 
 <p><img src="/img/20235/regul.png" alt="在trainning和testing的影响"></p>
 <h2 id="Colab-tutorial"><a href="#Colab-tutorial" class="headerlink" title="Colab tutorial"></a>Colab tutorial</h2><p><a target="_blank" rel="noopener" href="https://colab.research.google.com/drive/1Qi4-BRqZ3qI3x_Jtr5ci_oRvHDMQpdiW?usp=sharing&amp;pli=1#scrollTo=bGCELEd1Poea">Google Colab Tutorial 2023 - Colaboratory</a></p>
 <p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/386162610">Google Colab 快速上手 - 知乎 (zhihu.com)</a></p>
+<h3 id="很重要！colab防断线"><a href="#很重要！colab防断线" class="headerlink" title="很重要！colab防断线"></a>很重要！colab防断线</h3><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/jinniulema/article/details/128994223">(160条消息) colab防止掉线断连及清除方法_colab断开连接_jinniulema的博客-CSDN博客</a></p>
+<pre class="line-numbers language-none"><code class="language-none">function ConnectButton(){
+    console.log("Connect pushed"); 
+    document.querySelector("#top-toolbar &gt; colab-connect-button").shadowRoot.querySelector("#connect").click() 
+}
+setInterval(ConnectButton,60000);
+
+# 结束
+clearInterval(intervalId) # intervalId换成具体的数字<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+
+
+
 <h2 id="作业1-新冠预测Regression"><a href="#作业1-新冠预测Regression" class="headerlink" title="作业1 : 新冠预测Regression"></a>作业1 : 新冠预测Regression</h2><p>给定1，2，3天的资料，每天的资料是survey和positive cases</p>
-<h4 id="input"><a href="#input" class="headerlink" title="input"></a>input</h4><ul>
+<h3 id="input"><a href="#input" class="headerlink" title="input"></a>input</h3><ul>
 <li>输入包括一个35维度的one-hot vector表示州，后面还跟着一系列feature，其中第三天的test positive case是我们需要预测的</li>
 </ul>
 <p><img src="/img/20235/feature.png" alt="feature"></p>
@@ -773,12 +789,235 @@ z <span class="token operator">=</span> x <span class="token operator">+</span> 
 <li>one-hot vector就是一个向量里面只有一个元素为1，其余全是0。在作业中，所在州的编码就是一个onehot vector。</li>
 </ul>
 <p><img src="/img/20235/onehot.png" alt="onehot vector">使用MSE（mean squared error)均方误差</p>
-<h4 id="我做了什么"><a href="#我做了什么" class="headerlink" title="我做了什么"></a>我做了什么</h4><ul>
-<li>在colab上下载samplecode</li>
-<li></li>
+<p>关于feature的大小，打印如下，88个特征我认为是35个州，加上三天的特征(5+5+2+2+3+1)*3 = 54 ，因为最后一天的那个1，感染人数是要预测的，所以-1，即35+54-1 = 88个特征值，一个预测值。</p>
+<p><img src="/img/20235/fsize.png" alt="88个feature"></p>
+<h3 id="sample-code实现细节理解"><a href="#sample-code实现细节理解" class="headerlink" title="sample code实现细节理解"></a>sample code实现细节理解</h3><h4 id="固定seed"><a href="#固定seed" class="headerlink" title="固定seed"></a>固定seed</h4><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">same_seed</span><span class="token punctuation">(</span>seed<span class="token punctuation">)</span><span class="token punctuation">:</span> 
+    <span class="token triple-quoted-string string">'''Fixes random number generator seeds for reproducibility.'''</span>
+    torch<span class="token punctuation">.</span>backends<span class="token punctuation">.</span>cudnn<span class="token punctuation">.</span>deterministic <span class="token operator">=</span> <span class="token boolean">True</span>
+    torch<span class="token punctuation">.</span>backends<span class="token punctuation">.</span>cudnn<span class="token punctuation">.</span>benchmark <span class="token operator">=</span> <span class="token boolean">False</span>
+    np<span class="token punctuation">.</span>random<span class="token punctuation">.</span>seed<span class="token punctuation">(</span>seed<span class="token punctuation">)</span>
+    torch<span class="token punctuation">.</span>manual_seed<span class="token punctuation">(</span>seed<span class="token punctuation">)</span>
+    <span class="token keyword">if</span> torch<span class="token punctuation">.</span>cuda<span class="token punctuation">.</span>is_available<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        torch<span class="token punctuation">.</span>cuda<span class="token punctuation">.</span>manual_seed_all<span class="token punctuation">(</span>seed<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>为了固定训练用的seed，让训练结果能够复现，一共四种随机种子，都输入预设好的seed值，在config中可以设置</p>
+<h4 id="train-和-valid-data的划分"><a href="#train-和-valid-data的划分" class="headerlink" title="train 和 valid data的划分"></a>train 和 valid data的划分</h4><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">train_valid_split</span><span class="token punctuation">(</span>data_set<span class="token punctuation">,</span> valid_ratio<span class="token punctuation">,</span> seed<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token triple-quoted-string string">'''Split provided training data into training set and validation set'''</span>
+    valid_set_size <span class="token operator">=</span> <span class="token builtin">int</span><span class="token punctuation">(</span>valid_ratio <span class="token operator">*</span> <span class="token builtin">len</span><span class="token punctuation">(</span>data_set<span class="token punctuation">)</span><span class="token punctuation">)</span> 
+    train_set_size <span class="token operator">=</span> <span class="token builtin">len</span><span class="token punctuation">(</span>data_set<span class="token punctuation">)</span> <span class="token operator">-</span> valid_set_size
+    train_set<span class="token punctuation">,</span> valid_set <span class="token operator">=</span> random_split<span class="token punctuation">(</span>data_set<span class="token punctuation">,</span> <span class="token punctuation">[</span>train_set_size<span class="token punctuation">,</span> valid_set_size<span class="token punctuation">]</span><span class="token punctuation">,</span> generator<span class="token operator">=</span>torch<span class="token punctuation">.</span>Generator<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>manual_seed<span class="token punctuation">(</span>seed<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token keyword">return</span> np<span class="token punctuation">.</span>array<span class="token punctuation">(</span>train_set<span class="token punctuation">)</span><span class="token punctuation">,</span> np<span class="token punctuation">.</span>array<span class="token punctuation">(</span>valid_set<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>valid_ratio在config中可以设置的一个比例。</p>
+<p>random_split把seed输进去</p>
+<h4 id="predict预测"><a href="#predict预测" class="headerlink" title="predict预测"></a>predict预测</h4><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">predict</span><span class="token punctuation">(</span>test_loader<span class="token punctuation">,</span> model<span class="token punctuation">,</span> device<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    model<span class="token punctuation">.</span><span class="token builtin">eval</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token comment"># Set your model to evaluation mode.</span>
+    preds <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+    <span class="token keyword">for</span> x <span class="token keyword">in</span> tqdm<span class="token punctuation">(</span>test_loader<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        x <span class="token operator">=</span> x<span class="token punctuation">.</span>to<span class="token punctuation">(</span>device<span class="token punctuation">)</span>                        
+        <span class="token keyword">with</span> torch<span class="token punctuation">.</span>no_grad<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>                   
+            pred <span class="token operator">=</span> model<span class="token punctuation">(</span>x<span class="token punctuation">)</span>                     
+            preds<span class="token punctuation">.</span>append<span class="token punctuation">(</span>pred<span class="token punctuation">.</span>detach<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>cpu<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>   
+    preds <span class="token operator">=</span> torch<span class="token punctuation">.</span>cat<span class="token punctuation">(</span>preds<span class="token punctuation">,</span> dim<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">.</span>numpy<span class="token punctuation">(</span><span class="token punctuation">)</span>  
+    <span class="token keyword">return</span> preds<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>比较直观，set成evalidation mode，tqdm是一个用于展示迭代进度条的库</p>
+<p>在preds用append()函数往后面插入结果。</p>
+<p>pred是当前这次预测的结果，这里的pred.detach().cpu()我查阅资料后的理解：</p>
+<p>pred是device:cuda得到的cuda tensor，在官方文档对detach()的说明是返回一个不包含gradient梯度的tensor（detach的含义是分离）</p>
+<pre class="line-numbers language-none"><code class="language-none">Returns a new Tensor, detached from the current graph.
+The result will never require gradient.<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<p>但是pred.detach()是一个gpu类型的tensor，这时候调用cpu()，转化成cpu tensor类型才可以被list读取。</p>
+<h4 id="dataset定义"><a href="#dataset定义" class="headerlink" title="dataset定义"></a>dataset定义</h4><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">class</span> <span class="token class-name">COVID19Dataset</span><span class="token punctuation">(</span>Dataset<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token triple-quoted-string string">'''
+    x: Features.
+    y: Targets, if none, do prediction.
+    '''</span>
+    <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> x<span class="token punctuation">,</span> y<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">if</span> y <span class="token keyword">is</span> <span class="token boolean">None</span><span class="token punctuation">:</span>
+            self<span class="token punctuation">.</span>y <span class="token operator">=</span> y
+        <span class="token keyword">else</span><span class="token punctuation">:</span>
+            self<span class="token punctuation">.</span>y <span class="token operator">=</span> torch<span class="token punctuation">.</span>FloatTensor<span class="token punctuation">(</span>y<span class="token punctuation">)</span>
+        self<span class="token punctuation">.</span>x <span class="token operator">=</span> torch<span class="token punctuation">.</span>FloatTensor<span class="token punctuation">(</span>x<span class="token punctuation">)</span>
+
+    <span class="token keyword">def</span> <span class="token function">__getitem__</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> idx<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">if</span> self<span class="token punctuation">.</span>y <span class="token keyword">is</span> <span class="token boolean">None</span><span class="token punctuation">:</span>
+            <span class="token keyword">return</span> self<span class="token punctuation">.</span>x<span class="token punctuation">[</span>idx<span class="token punctuation">]</span>
+        <span class="token keyword">else</span><span class="token punctuation">:</span>
+            <span class="token keyword">return</span> self<span class="token punctuation">.</span>x<span class="token punctuation">[</span>idx<span class="token punctuation">]</span><span class="token punctuation">,</span> self<span class="token punctuation">.</span>y<span class="token punctuation">[</span>idx<span class="token punctuation">]</span>
+
+    <span class="token keyword">def</span> <span class="token function">__len__</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> <span class="token builtin">len</span><span class="token punctuation">(</span>self<span class="token punctuation">.</span>x<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>包括初始化init，取单个元素getitem，取长度len</p>
+<h4 id="定义model"><a href="#定义model" class="headerlink" title="定义model"></a>定义model</h4><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">class</span> <span class="token class-name">My_Model</span><span class="token punctuation">(</span>nn<span class="token punctuation">.</span>Module<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> input_dim<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token builtin">super</span><span class="token punctuation">(</span>My_Model<span class="token punctuation">,</span> self<span class="token punctuation">)</span><span class="token punctuation">.</span>__init__<span class="token punctuation">(</span><span class="token punctuation">)</span>
+        <span class="token comment"># TODO: modify model's structure, be aware of dimensions. </span>
+        self<span class="token punctuation">.</span>layers <span class="token operator">=</span> nn<span class="token punctuation">.</span>Sequential<span class="token punctuation">(</span>
+            nn<span class="token punctuation">.</span>Linear<span class="token punctuation">(</span>input_dim<span class="token punctuation">,</span> <span class="token number">16</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+            nn<span class="token punctuation">.</span>ReLU<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+            nn<span class="token punctuation">.</span>Linear<span class="token punctuation">(</span><span class="token number">16</span><span class="token punctuation">,</span> <span class="token number">8</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+            nn<span class="token punctuation">.</span>ReLU<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+            nn<span class="token punctuation">.</span>Linear<span class="token punctuation">(</span><span class="token number">8</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span>
+        <span class="token punctuation">)</span>
+
+    <span class="token keyword">def</span> <span class="token function">forward</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> x<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        x <span class="token operator">=</span> self<span class="token punctuation">.</span>layers<span class="token punctuation">(</span>x<span class="token punctuation">)</span>
+        x <span class="token operator">=</span> x<span class="token punctuation">.</span>squeeze<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span> <span class="token comment"># (B, 1) -&gt; (B)</span>
+        <span class="token keyword">return</span> x<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>这里的super之前讲过是调用父类nn.Module的init函数</p>
+<p>然后也有了我们第一个任务，即完成对layers的修改</p>
+<p>这里的layers输入第一层就是input_dim，后来想了一下，其实这么设定的原因是因为有select_feat选择特征函数，所以这里的输入vector维度是不确定的。</p>
+<h4 id="特征选择"><a href="#特征选择" class="headerlink" title="特征选择"></a>特征选择</h4><p>通过select_feat函数减少特征的维度，即设定传入哪些特征</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">select_feat</span><span class="token punctuation">(</span>train_data<span class="token punctuation">,</span> valid_data<span class="token punctuation">,</span> test_data<span class="token punctuation">,</span> select_all<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token triple-quoted-string string">'''Selects useful features to perform regression'''</span>
+    y_train<span class="token punctuation">,</span> y_valid <span class="token operator">=</span> train_data<span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token punctuation">,</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">,</span> valid_data<span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token punctuation">,</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">]</span>
+    raw_x_train<span class="token punctuation">,</span> raw_x_valid<span class="token punctuation">,</span> raw_x_test <span class="token operator">=</span> train_data<span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token punctuation">,</span><span class="token punctuation">:</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">,</span> valid_data<span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token punctuation">,</span><span class="token punctuation">:</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">,</span> test_data
+
+    <span class="token keyword">if</span> select_all<span class="token punctuation">:</span>
+        feat_idx <span class="token operator">=</span> <span class="token builtin">list</span><span class="token punctuation">(</span><span class="token builtin">range</span><span class="token punctuation">(</span>raw_x_train<span class="token punctuation">.</span>shape<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token keyword">else</span><span class="token punctuation">:</span>
+        feat_idx <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">2</span><span class="token punctuation">,</span><span class="token number">3</span><span class="token punctuation">,</span><span class="token number">4</span><span class="token punctuation">]</span> <span class="token comment"># TODO: Select suitable feature columns.</span>
+        
+    <span class="token keyword">return</span> raw_x_train<span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token punctuation">,</span>feat_idx<span class="token punctuation">]</span><span class="token punctuation">,</span> raw_x_valid<span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token punctuation">,</span>feat_idx<span class="token punctuation">]</span><span class="token punctuation">,</span> raw_x_test<span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token punctuation">,</span>feat_idx<span class="token punctuation">]</span><span class="token punctuation">,</span> y_train<span class="token punctuation">,</span> y_valid<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>这里其实诸如train[:,-1]这样的语法不太理解。</p>
+<p>train[:, -1]， 是说对train这个二维的数据，逗号分隔开的前面的”:”是说取全部的行，逗号后面的-1是说取最后一列。 </p>
+<p>如果换成一维数组会容易理解，比如list[:]取全部的列 以及list[-1]取最后一个。</p>
+<h4 id="trainning"><a href="#trainning" class="headerlink" title="trainning"></a>trainning</h4><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">for</span> epoch <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span>n_epochs<span class="token punctuation">)</span><span class="token punctuation">:</span>
+      model<span class="token punctuation">.</span>train<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token comment"># Set your model to train mode.</span>
+      loss_record <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token comment">#记录loss</span>
+
+      <span class="token comment"># tqdm is a package to visualize your training progress.</span>
+      train_pbar <span class="token operator">=</span> tqdm<span class="token punctuation">(</span>train_loader<span class="token punctuation">,</span> position<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">,</span> leave<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">)</span>
+
+      <span class="token keyword">for</span> x<span class="token punctuation">,</span> y <span class="token keyword">in</span> train_pbar<span class="token punctuation">:</span>
+          optimizer<span class="token punctuation">.</span>zero_grad<span class="token punctuation">(</span><span class="token punctuation">)</span>               <span class="token comment"># Set gradient to zero.</span>
+          x<span class="token punctuation">,</span> y <span class="token operator">=</span> x<span class="token punctuation">.</span>to<span class="token punctuation">(</span>device<span class="token punctuation">)</span><span class="token punctuation">,</span> y<span class="token punctuation">.</span>to<span class="token punctuation">(</span>device<span class="token punctuation">)</span>   <span class="token comment"># Move your data to device. </span>
+          pred <span class="token operator">=</span> model<span class="token punctuation">(</span>x<span class="token punctuation">)</span>             
+          loss <span class="token operator">=</span> criterion<span class="token punctuation">(</span>pred<span class="token punctuation">,</span> y<span class="token punctuation">)</span>
+          loss<span class="token punctuation">.</span>backward<span class="token punctuation">(</span><span class="token punctuation">)</span>                     <span class="token comment"># Compute gradient(backpropagation).</span>
+          optimizer<span class="token punctuation">.</span>step<span class="token punctuation">(</span><span class="token punctuation">)</span>                    <span class="token comment"># Update parameters.</span>
+          step <span class="token operator">+=</span> <span class="token number">1</span>
+          loss_record<span class="token punctuation">.</span>append<span class="token punctuation">(</span>loss<span class="token punctuation">.</span>detach<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>item<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+          
+          <span class="token comment"># Display current epoch number and loss on tqdm progress bar.</span>
+          train_pbar<span class="token punctuation">.</span>set_description<span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f'Epoch [</span><span class="token interpolation"><span class="token punctuation">{</span>epoch<span class="token operator">+</span><span class="token number">1</span><span class="token punctuation">}</span></span><span class="token string">/</span><span class="token interpolation"><span class="token punctuation">{</span>n_epochs<span class="token punctuation">}</span></span><span class="token string">]'</span></span><span class="token punctuation">)</span>
+          train_pbar<span class="token punctuation">.</span>set_postfix<span class="token punctuation">(</span><span class="token punctuation">{</span><span class="token string">'loss'</span><span class="token punctuation">:</span> loss<span class="token punctuation">.</span>detach<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>item<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+      mean_train_loss <span class="token operator">=</span> <span class="token builtin">sum</span><span class="token punctuation">(</span>loss_record<span class="token punctuation">)</span><span class="token operator">/</span><span class="token builtin">len</span><span class="token punctuation">(</span>loss_record<span class="token punctuation">)</span>
+      writer<span class="token punctuation">.</span>add_scalar<span class="token punctuation">(</span><span class="token string">'Loss/train'</span><span class="token punctuation">,</span> mean_train_loss<span class="token punctuation">,</span> step<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>每个epoch中分train和validation两个部分</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">model<span class="token punctuation">.</span><span class="token builtin">eval</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token comment"># Set your model to evaluation mode.</span>
+    loss_record <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+    <span class="token keyword">for</span> x<span class="token punctuation">,</span> y <span class="token keyword">in</span> valid_loader<span class="token punctuation">:</span>
+        x<span class="token punctuation">,</span> y <span class="token operator">=</span> x<span class="token punctuation">.</span>to<span class="token punctuation">(</span>device<span class="token punctuation">)</span><span class="token punctuation">,</span> y<span class="token punctuation">.</span>to<span class="token punctuation">(</span>device<span class="token punctuation">)</span>
+        <span class="token keyword">with</span> torch<span class="token punctuation">.</span>no_grad<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+            pred <span class="token operator">=</span> model<span class="token punctuation">(</span>x<span class="token punctuation">)</span>
+            loss <span class="token operator">=</span> criterion<span class="token punctuation">(</span>pred<span class="token punctuation">,</span> y<span class="token punctuation">)</span>
+
+        loss_record<span class="token punctuation">.</span>append<span class="token punctuation">(</span>loss<span class="token punctuation">.</span>item<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+        
+    mean_valid_loss <span class="token operator">=</span> <span class="token builtin">sum</span><span class="token punctuation">(</span>loss_record<span class="token punctuation">)</span><span class="token operator">/</span><span class="token builtin">len</span><span class="token punctuation">(</span>loss_record<span class="token punctuation">)</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f'Epoch [</span><span class="token interpolation"><span class="token punctuation">{</span>epoch<span class="token operator">+</span><span class="token number">1</span><span class="token punctuation">}</span></span><span class="token string">/</span><span class="token interpolation"><span class="token punctuation">{</span>n_epochs<span class="token punctuation">}</span></span><span class="token string">]: Train loss: </span><span class="token interpolation"><span class="token punctuation">{</span>mean_train_loss<span class="token punctuation">:</span><span class="token format-spec">.4f</span><span class="token punctuation">}</span></span><span class="token string">, Valid loss: </span><span class="token interpolation"><span class="token punctuation">{</span>mean_valid_loss<span class="token punctuation">:</span><span class="token format-spec">.4f</span><span class="token punctuation">}</span></span><span class="token string">'</span></span><span class="token punctuation">)</span>
+    <span class="token comment"># writer.add_scalar('Loss/valid', mean_valid_loss, step)</span>
+
+    <span class="token keyword">if</span> mean_valid_loss <span class="token operator">&lt;</span> best_loss<span class="token punctuation">:</span>
+        best_loss <span class="token operator">=</span> mean_valid_loss
+        torch<span class="token punctuation">.</span>save<span class="token punctuation">(</span>model<span class="token punctuation">.</span>state_dict<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> config<span class="token punctuation">[</span><span class="token string">'save_path'</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token comment"># Save your best model</span>
+        <span class="token comment"># 即如果当前的loss比bestloss更好，才会save model</span>
+        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'Saving model with loss {:.3f}...'</span><span class="token punctuation">.</span><span class="token builtin">format</span><span class="token punctuation">(</span>best_loss<span class="token punctuation">)</span><span class="token punctuation">)</span>
+        early_stop_count <span class="token operator">=</span> <span class="token number">0</span>
+    <span class="token keyword">else</span><span class="token punctuation">:</span> 
+        early_stop_count <span class="token operator">+=</span> <span class="token number">1</span>
+
+    <span class="token keyword">if</span> early_stop_count <span class="token operator">&gt;=</span> config<span class="token punctuation">[</span><span class="token string">'early_stop'</span><span class="token punctuation">]</span><span class="token punctuation">:</span>
+        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'\nModel is not improving, so we halt the training session.'</span><span class="token punctuation">)</span>
+        <span class="token keyword">return</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>在validation中将mode设置为eval，另外和之前pytorch tutorial中一样，关闭grad，主要目的就是因为validation是不改变参数的。</p>
+<p>这里还添加了一个earlystop，即通过config中设置的参数early_stop（默认600），当模型经过600次都没有改进，则停止训练。</p>
+<h4 id="dataloader"><a href="#dataloader" class="headerlink" title="dataloader"></a>dataloader</h4><pre class="line-numbers language-python" data-language="python"><code class="language-python">same_seed<span class="token punctuation">(</span>config<span class="token punctuation">[</span><span class="token string">'seed'</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+train_data<span class="token punctuation">,</span> test_data <span class="token operator">=</span> pd<span class="token punctuation">.</span>read_csv<span class="token punctuation">(</span><span class="token string">'./covid_train.csv'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>values<span class="token punctuation">,</span> pd<span class="token punctuation">.</span>read_csv<span class="token punctuation">(</span><span class="token string">'./covid_test.csv'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>values
+train_data<span class="token punctuation">,</span> valid_data <span class="token operator">=</span> train_valid_split<span class="token punctuation">(</span>train_data<span class="token punctuation">,</span> config<span class="token punctuation">[</span><span class="token string">'valid_ratio'</span><span class="token punctuation">]</span><span class="token punctuation">,</span> config<span class="token punctuation">[</span><span class="token string">'seed'</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+
+<span class="token comment"># Print out the data size.</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f"""train_data size: </span><span class="token interpolation"><span class="token punctuation">{</span>train_data<span class="token punctuation">.</span>shape<span class="token punctuation">}</span></span><span class="token string"> 
+valid_data size: </span><span class="token interpolation"><span class="token punctuation">{</span>valid_data<span class="token punctuation">.</span>shape<span class="token punctuation">}</span></span><span class="token string"> 
+test_data size: </span><span class="token interpolation"><span class="token punctuation">{</span>test_data<span class="token punctuation">.</span>shape<span class="token punctuation">}</span></span><span class="token string">"""</span></span><span class="token punctuation">)</span>
+
+<span class="token comment"># Select features</span>
+x_train<span class="token punctuation">,</span> x_valid<span class="token punctuation">,</span> x_test<span class="token punctuation">,</span> y_train<span class="token punctuation">,</span> y_valid <span class="token operator">=</span> select_feat<span class="token punctuation">(</span>train_data<span class="token punctuation">,</span> valid_data<span class="token punctuation">,</span> test_data<span class="token punctuation">,</span> config<span class="token punctuation">[</span><span class="token string">'select_all'</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+<span class="token comment">#通过select_feat中的</span>
+
+<span class="token comment"># Print out the number of features.</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f'number of features: </span><span class="token interpolation"><span class="token punctuation">{</span>x_train<span class="token punctuation">.</span>shape<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">}</span></span><span class="token string">'</span></span><span class="token punctuation">)</span>
+
+train_dataset<span class="token punctuation">,</span> valid_dataset<span class="token punctuation">,</span> test_dataset <span class="token operator">=</span> COVID19Dataset<span class="token punctuation">(</span>x_train<span class="token punctuation">,</span> y_train<span class="token punctuation">)</span><span class="token punctuation">,</span> \
+                                            COVID19Dataset<span class="token punctuation">(</span>x_valid<span class="token punctuation">,</span> y_valid<span class="token punctuation">)</span><span class="token punctuation">,</span> \
+                                            COVID19Dataset<span class="token punctuation">(</span>x_test<span class="token punctuation">)</span>
+
+<span class="token comment"># Pytorch data loader loads pytorch dataset into batches.</span>
+train_loader <span class="token operator">=</span> DataLoader<span class="token punctuation">(</span>train_dataset<span class="token punctuation">,</span> batch_size<span class="token operator">=</span>config<span class="token punctuation">[</span><span class="token string">'batch_size'</span><span class="token punctuation">]</span><span class="token punctuation">,</span> shuffle<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">,</span> pin_memory<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">)</span>
+valid_loader <span class="token operator">=</span> DataLoader<span class="token punctuation">(</span>valid_dataset<span class="token punctuation">,</span> batch_size<span class="token operator">=</span>config<span class="token punctuation">[</span><span class="token string">'batch_size'</span><span class="token punctuation">]</span><span class="token punctuation">,</span> shuffle<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">,</span> pin_memory<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">)</span>
+test_loader <span class="token operator">=</span> DataLoader<span class="token punctuation">(</span>test_dataset<span class="token punctuation">,</span> batch_size<span class="token operator">=</span>config<span class="token punctuation">[</span><span class="token string">'batch_size'</span><span class="token punctuation">]</span><span class="token punctuation">,</span> shuffle<span class="token operator">=</span><span class="token boolean">False</span><span class="token punctuation">,</span> pin_memory<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+
+<p>输出的训练集，valid集和test集的大小如下，由于没做featureselect ，所以还是88维的输入。</p>
+<pre class="line-numbers language-none"><code class="language-none">train_data size: (2408, 89) 
+valid_data size: (601, 89) 
+test_data size: (997, 88)
+number of features: 88<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+
+
+
+<h3 id="todolist"><a href="#todolist" class="headerlink" title="todolist"></a>todolist</h3><ul>
+<li>modify model’s structure, be aware of dimensions. 更改layers</li>
+<li>Select suitable feature columns.选择重要的feature</li>
+<li>Define your optimization algorithm.选择optimization</li>
 </ul>
-<h3 id="colab导入数据"><a href="#colab导入数据" class="headerlink" title="colab导入数据"></a>colab导入数据</h3><p>通过google drive导入数据集</p>
+<h3 id="optimization"><a href="#optimization" class="headerlink" title="optimization"></a>optimization</h3><h3 id="我做了什么"><a href="#我做了什么" class="headerlink" title="我做了什么"></a>我做了什么</h3><ul>
+<li><p>在colab上保存了sample code的副本，阅读代码</p>
+</li>
+<li><p>通过google drive导入数据集</p>
 <p><img src="/img/20235/colab.png" alt="colab"></p>
+</li>
+<li><p>运行sample code生成pred.csv，上传到kaggle上，得分（1.68198，185034）</p>
+</li>
+<li><p>尝试修改layers层，增加了一层</p>
+</li>
+</ul>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">nn<span class="token punctuation">.</span>Linear<span class="token punctuation">(</span>input_dim<span class="token punctuation">,</span> <span class="token number">16</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+      nn<span class="token punctuation">.</span>ReLU<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+      nn<span class="token punctuation">.</span>Linear<span class="token punctuation">(</span><span class="token number">16</span><span class="token punctuation">,</span> <span class="token number">8</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+      nn<span class="token punctuation">.</span>ReLU<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+      nn<span class="token punctuation">.</span>Linear<span class="token punctuation">(</span><span class="token number">8</span><span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">)</span>
+      nn<span class="token punctuation">.</span>ReLU<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+      nn<span class="token punctuation">.</span>Linear<span class="token punctuation">(</span><span class="token number">4</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span>
+      <span class="token comment"># add a layer</span>
+      <span class="token comment"># 原本是nn.Linear(8, 1)就结束了的</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>最后上传到kaggle的效果反而变差了（3.90553，3.28428）</p>
+<ul>
+<li>尝试增加instancenorm1d归一化层</li>
+</ul>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">nn<span class="token punctuation">.</span>Linear<span class="token punctuation">(</span>input_dim<span class="token punctuation">,</span> <span class="token number">32</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+      nn<span class="token punctuation">.</span>InstanceNorm1d<span class="token punctuation">(</span><span class="token number">32</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+      nn<span class="token punctuation">.</span>ReLU<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+      nn<span class="token punctuation">.</span>Linear<span class="token punctuation">(</span><span class="token number">32</span><span class="token punctuation">,</span> <span class="token number">8</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+      nn<span class="token punctuation">.</span>InstanceNorm1d<span class="token punctuation">(</span><span class="token number">8</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+      nn<span class="token punctuation">.</span>ReLU<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+      nn<span class="token punctuation">.</span>Linear<span class="token punctuation">(</span><span class="token number">8</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+      <span class="token comment"># 最后这里加不加激活函数呢？</span>
+      <span class="token comment"># nn.InstanceNorm1d(1),</span>
+      <span class="token comment"># nn.ReLU(),</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
                 
             </div>
@@ -847,8 +1086,8 @@ z <span class="token operator">=</span> x <span class="token operator">+</span> 
                                     <span class="chip bg-color">ML</span>
                                 </a>
                             
-                                <a href="/tags/%E5%91%A8%E8%AE%B0/">
-                                    <span class="chip bg-color">周记</span>
+                                <a href="/tags/%E7%AE%97%E6%B3%95%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
+                                    <span class="chip bg-color">算法学习笔记</span>
                                 </a>
                             
                         </div>
@@ -1063,7 +1302,7 @@ z <span class="token operator">=</span> x <span class="token operator">+</span> 
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            完成毕设后5月第二周的学习记录
+                            毕设大体完成后开始跟随李宏毅课程学习
                         
                     </div>
                     <div class="publish-info">
@@ -1090,8 +1329,8 @@ z <span class="token operator">=</span> x <span class="token operator">+</span> 
                         <span class="chip bg-color">ML</span>
                     </a>
                     
-                    <a href="/tags/%E5%91%A8%E8%AE%B0/">
-                        <span class="chip bg-color">周记</span>
+                    <a href="/tags/%E7%AE%97%E6%B3%95%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
+                        <span class="chip bg-color">算法学习笔记</span>
                     </a>
                     
                 </div>
@@ -1297,7 +1536,7 @@ z <span class="token operator">=</span> x <span class="token operator">+</span> 
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">61.2k</span>
+                        class="white-color">62.8k</span>
             
             
             
