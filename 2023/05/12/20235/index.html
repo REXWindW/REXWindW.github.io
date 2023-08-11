@@ -484,14 +484,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    3.8k
+                    4k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    17 分
+                    18 分
                 </div>
                 
 
@@ -790,7 +790,7 @@ clearInterval(intervalId) # intervalId换成具体的数字<span aria-hidden="tr
 <p><img src="/img/20235/onehot.png" alt="onehot vector">使用MSE（mean squared error)均方误差</p>
 <p>关于feature的大小，打印如下，88个特征我认为是35个州，加上三天的特征(5+5+2+2+3+1)*3 = 54 ，因为最后一天的那个1，感染人数是要预测的，所以-1，即35+54-1 = 88个特征值，一个预测值。</p>
 <p><img src="/img/20235/fsize.png" alt="88个feature"></p>
-<h3 id="sample-code实现细节理解"><a href="#sample-code实现细节理解" class="headerlink" title="sample code实现细节理解"></a>sample code实现细节理解</h3><h4 id="固定seed"><a href="#固定seed" class="headerlink" title="固定seed"></a>固定seed</h4><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">same_seed</span><span class="token punctuation">(</span>seed<span class="token punctuation">)</span><span class="token punctuation">:</span> 
+<h3 id="sample-code复现"><a href="#sample-code复现" class="headerlink" title="sample code复现"></a>sample code复现</h3><h4 id="固定seed"><a href="#固定seed" class="headerlink" title="固定seed"></a>固定seed</h4><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">same_seed</span><span class="token punctuation">(</span>seed<span class="token punctuation">)</span><span class="token punctuation">:</span> 
     <span class="token triple-quoted-string string">'''Fixes random number generator seeds for reproducibility.'''</span>
     torch<span class="token punctuation">.</span>backends<span class="token punctuation">.</span>cudnn<span class="token punctuation">.</span>deterministic <span class="token operator">=</span> <span class="token boolean">True</span>
     torch<span class="token punctuation">.</span>backends<span class="token punctuation">.</span>cudnn<span class="token punctuation">.</span>benchmark <span class="token operator">=</span> <span class="token boolean">False</span>
@@ -886,7 +886,14 @@ The result will never require gradient.<span aria-hidden="true" class="line-numb
 <p>这里其实诸如train[:,-1]这样的语法不太理解。</p>
 <p>train[:, -1]， 是说对train这个二维的数据，逗号分隔开的前面的”:”是说取全部的行，逗号后面的-1是说取最后一列。 </p>
 <p>如果换成一维数组会容易理解，比如list[:]取全部的列 以及list[-1]取最后一个。</p>
-<h4 id="trainning"><a href="#trainning" class="headerlink" title="trainning"></a>trainning</h4><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">for</span> epoch <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span>n_epochs<span class="token punctuation">)</span><span class="token punctuation">:</span>
+<p>而后面的b = a[i:j]</p>
+<p>表示复制a[i]到a[j-1]，以生成新的list对象</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">a <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">2</span><span class="token punctuation">,</span><span class="token number">3</span><span class="token punctuation">,</span><span class="token number">4</span><span class="token punctuation">,</span><span class="token number">5</span><span class="token punctuation">,</span><span class="token number">6</span><span class="token punctuation">,</span><span class="token number">7</span><span class="token punctuation">,</span><span class="token number">8</span><span class="token punctuation">,</span><span class="token number">9</span><span class="token punctuation">]</span>
+b <span class="token operator">=</span> a<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">:</span><span class="token number">3</span><span class="token punctuation">]</span>  <span class="token comment"># 得到[1,2]</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<p>而如果不填，则默认为0，所以代码中的[:,:-1]其实是[:,0:-1]</p>
+<h4 id="trainning"><a href="#trainning" class="headerlink" title="trainning"></a>trainning</h4><p>torch.optism.SGD参数：第一个是网络的参数，第二个lr是learning rate，第三个momentum是冲量，即$v’ = -dx*lr + v\cdot momentum$即每次的更新量在之前的梯度计算基础上，还要加上上次的更新量乘上一个momentum。</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">for</span> epoch <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span>n_epochs<span class="token punctuation">)</span><span class="token punctuation">:</span>
       model<span class="token punctuation">.</span>train<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token comment"># Set your model to train mode.</span>
       loss_record <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token comment">#记录loss</span>
 
@@ -1020,6 +1027,7 @@ number of features: 88<span aria-hidden="true" class="line-numbers-rows"><span><
 
 <p>使用归一化后效果还不如最开始什么都不加的。。</p>
 <p>思考了一下会不会是因为之前增加层数导致需要更多的epoch，所以尝试一下增加层数并且增加归一化层。</p>
+<h3 id="代码复现"><a href="#代码复现" class="headerlink" title="代码复现"></a>代码复现</h3><p>torch.optism.SGD参数：第一个是网络的参数，第二个lr是learning rate，第三个momentum是冲量，即$v’ = -dx*lr + v\cdot momentum$即每次的更新量在之前的梯度计算基础上，还要加上上次的更新量乘上一个momentum。</p>
 
                 
             </div>
@@ -1295,7 +1303,7 @@ number of features: 88<span aria-hidden="true" class="line-numbers-rows"><span><
                 <a href="/2023/05/23/classif/">
                     <div class="card-image">
                         
-                        <img src="/img/erciyuan/black.png" class="responsive-img" alt="Classification">
+                        <img src="/img/erciyuan/miku.jpeg" class="responsive-img" alt="Classification">
                         
                         <span class="card-title">Classification</span>
                     </div>
@@ -1536,7 +1544,7 @@ number of features: 88<span aria-hidden="true" class="line-numbers-rows"><span><
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">63.5k</span>
+                        class="white-color">64.4k</span>
             
             
             
