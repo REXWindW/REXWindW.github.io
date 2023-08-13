@@ -484,14 +484,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    711
+                    1.1k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    2 分
+                    4 分
                 </div>
                 
 
@@ -606,6 +606,72 @@ inpt<span class="token punctuation">.</span>close<span class="token punctuation"
 
 <p>清洗后剩余六千多条记录，后续考虑导入知识库中</p>
 <p><img src="/img/agri/clean.png" alt="clean"></p>
+<h1 id="8月13日"><a href="#8月13日" class="headerlink" title="8月13日"></a>8月13日</h1><h2 id="处理问答数据"><a href="#处理问答数据" class="headerlink" title="处理问答数据"></a>处理问答数据</h2><p>获得了格式如下的问答数据，编写python程序处理。</p>
+<p>给出的问答同样还有不同格式的也通过类似方法进行处理。</p>
+<p><img src="/img/agri/data.jpg" alt="data"></p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> pandas <span class="token keyword">as</span> pd
+<span class="token keyword">import</span> re
+
+<span class="token comment"># 读入</span>
+<span class="token keyword">def</span> <span class="token function">process_input</span><span class="token punctuation">(</span>input_str<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    match <span class="token operator">=</span> re<span class="token punctuation">.</span>match<span class="token punctuation">(</span><span class="token string">r"(\d+)\s*、\s*(.*?)\s*答：(.*)"</span><span class="token punctuation">,</span> input_str<span class="token punctuation">)</span>
+    <span class="token keyword">if</span> match<span class="token punctuation">:</span>
+        number <span class="token operator">=</span> match<span class="token punctuation">.</span>group<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">.</span>strip<span class="token punctuation">(</span><span class="token punctuation">)</span>
+        question <span class="token operator">=</span> match<span class="token punctuation">.</span>group<span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">.</span>strip<span class="token punctuation">(</span><span class="token punctuation">)</span>
+        answer <span class="token operator">=</span> match<span class="token punctuation">.</span>group<span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">.</span>strip<span class="token punctuation">(</span><span class="token punctuation">)</span>
+        <span class="token keyword">return</span> <span class="token punctuation">{</span>
+            <span class="token string">"img"</span><span class="token punctuation">:</span> <span class="token boolean">None</span><span class="token punctuation">,</span>
+            <span class="token string">"prompt"</span><span class="token punctuation">:</span> question<span class="token punctuation">,</span>
+            <span class="token string">"label"</span><span class="token punctuation">:</span> answer<span class="token punctuation">,</span>
+        <span class="token punctuation">}</span>
+    <span class="token keyword">return</span> <span class="token boolean">None</span>
+
+<span class="token comment"># 开始处理</span>
+input_file <span class="token operator">=</span> <span class="token string">"input.txt"</span>
+processed_data <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+tmp <span class="token operator">=</span> <span class="token string">""</span>
+
+<span class="token keyword">with</span> <span class="token builtin">open</span><span class="token punctuation">(</span>input_file<span class="token punctuation">,</span> <span class="token string">"r"</span><span class="token punctuation">,</span> encoding<span class="token operator">=</span><span class="token string">"utf-8"</span><span class="token punctuation">)</span> <span class="token keyword">as</span> <span class="token builtin">file</span><span class="token punctuation">:</span>
+    flag <span class="token operator">=</span> <span class="token number">0</span>
+    <span class="token keyword">for</span> line <span class="token keyword">in</span> <span class="token builtin">file</span><span class="token punctuation">:</span>
+        <span class="token comment"># 调试用</span>
+        <span class="token comment"># print(line[0])</span>
+        <span class="token comment"># print(line[0].isdigit)</span>
+        <span class="token keyword">if</span> line<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token operator">&lt;=</span><span class="token string">'9'</span> <span class="token keyword">and</span> line<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token operator">&gt;=</span><span class="token string">'0'</span><span class="token punctuation">:</span>
+            <span class="token keyword">if</span> flag<span class="token punctuation">:</span>
+                processed_entry <span class="token operator">=</span> process_input<span class="token punctuation">(</span>tmp<span class="token punctuation">)</span>
+                <span class="token keyword">if</span> processed_entry<span class="token punctuation">:</span>
+                    processed_data<span class="token punctuation">.</span>append<span class="token punctuation">(</span>processed_entry<span class="token punctuation">)</span>
+                tmp <span class="token operator">=</span> <span class="token string">""</span>
+            tmp <span class="token operator">=</span> tmp <span class="token operator">+</span> line
+            flag <span class="token operator">=</span> <span class="token number">1</span>
+        <span class="token keyword">else</span><span class="token punctuation">:</span>
+            linep <span class="token operator">=</span> line<span class="token punctuation">.</span>replace<span class="token punctuation">(</span><span class="token string">'\n'</span><span class="token punctuation">,</span> <span class="token string">' '</span><span class="token punctuation">)</span>
+            tmp <span class="token operator">=</span> tmp <span class="token operator">+</span> linep
+
+    <span class="token comment">#结束后还有最后一个</span>
+    processed_entry <span class="token operator">=</span> process_input<span class="token punctuation">(</span>tmp<span class="token punctuation">)</span>
+    <span class="token keyword">if</span> processed_entry<span class="token punctuation">:</span>
+        processed_data<span class="token punctuation">.</span>append<span class="token punctuation">(</span>processed_entry<span class="token punctuation">)</span>
+
+df <span class="token operator">=</span> pd<span class="token punctuation">.</span>DataFrame<span class="token punctuation">(</span>processed_data<span class="token punctuation">)</span>
+df<span class="token punctuation">.</span>to_json<span class="token punctuation">(</span><span class="token string">"data.json"</span><span class="token punctuation">,</span> orient<span class="token operator">=</span><span class="token string">"records"</span><span class="token punctuation">,</span>force_ascii<span class="token operator">=</span><span class="token boolean">False</span><span class="token punctuation">,</span>indent<span class="token operator">=</span><span class="token number">4</span><span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"JSON文件已保存"</span><span class="token punctuation">)</span>
+
+<span class="token comment">#input来源与百度文库</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>将不同问答文件合成后输出到json中去，得到格式如下的json文件</p>
+<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token punctuation">{</span>
+    <span class="token property">"img"</span><span class="token operator">:</span><span class="token null keyword">null</span><span class="token punctuation">,</span>
+    <span class="token property">"prompt"</span><span class="token operator">:</span><span class="token string">"玉米实行宽窄行种植有哪些优点？"</span><span class="token punctuation">,</span>
+    <span class="token property">"label"</span><span class="token operator">:</span><span class="token string">"①改善了通风透光条件，发挥边行优势。     ②可以适当增加密度。     ③易于在宽行中间套种矮秆作物，提高经济效益。"</span>
+<span class="token punctuation">}</span><span class="token punctuation">,</span>
+<span class="token punctuation">{</span>
+    <span class="token property">"img"</span><span class="token operator">:</span><span class="token null keyword">null</span><span class="token punctuation">,</span>
+    <span class="token property">"prompt"</span><span class="token operator">:</span><span class="token string">"玉米高产栽培中，为什么提倡抽雄前10天左右追肥浇水？"</span><span class="token punctuation">,</span>
+    <span class="token property">"label"</span><span class="token operator">:</span><span class="token string">"这段时期是玉米雌、雄穗的小穗小花分化期，也是菅养生长和生殖生长并进旺盛期，是玉米一生需肥水最多的关键期。因此，这时追肥浇水可促进穗分化，协调菅养生长和生殖生长，争取穗大、粒多、达、到高产。"</span>
+<span class="token punctuation">}</span><span class="token punctuation">,</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
 
                 
             </div>
@@ -1128,7 +1194,7 @@ inpt<span class="token punctuation">.</span>close<span class="token punctuation"
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">64.4k</span>
+                        class="white-color">64.8k</span>
             
             
             
