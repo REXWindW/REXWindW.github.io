@@ -484,14 +484,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    1.5k
+                    2.5k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    6 分
+                    10 分
                 </div>
                 
 
@@ -514,7 +514,7 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="李沐D2L"><a href="#李沐D2L" class="headerlink" title="李沐D2L"></a>李沐D2L</h1><h2 id="colab-d2l"><a href="#colab-d2l" class="headerlink" title="colab d2l"></a>colab d2l</h2><ul>
+                <h1 id="李沐D2L-ML部分"><a href="#李沐D2L-ML部分" class="headerlink" title="李沐D2L ML部分"></a>李沐D2L ML部分</h1><h2 id="colab-d2l"><a href="#colab-d2l" class="headerlink" title="colab d2l"></a>colab d2l</h2><ul>
 <li>解决colab没有d2l的问题，使用这个比从github下载更快</li>
 </ul>
 <pre class="line-numbers language-none"><code class="language-none">!pip install d2l==0.14.<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
@@ -680,6 +680,134 @@ train_labels <span class="token operator">=</span> torch<span class="token punct
 
 <ul>
 <li>关于星号的解释<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/616180238">手动学深度学习|3.3章：data.TensorDataset(*) - 知乎 (zhihu.com)</a></li>
+</ul>
+<h3 id="可能是沐神的失误？"><a href="#可能是沐神的失误？" class="headerlink" title="可能是沐神的失误？"></a>可能是沐神的失误？</h3><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">for</span> X<span class="token punctuation">,</span>y <span class="token keyword">in</span> train_iter<span class="token punctuation">:</span>
+        optimizer<span class="token punctuation">.</span>zero_grad<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token comment"># 梯度清零</span>
+        <span class="token comment"># 沐神的代码，不知道为什么这里不用相对误差yhat/y，我改了一下这部分代码，使用之前写好的rmseloss</span>
+        <span class="token comment"># y_pred = net(X)</span>
+        <span class="token comment"># ls = loss(y_pred,y) </span>
+        <span class="token comment"># 修改的部分</span>
+        ls <span class="token operator">=</span> log_rmse<span class="token punctuation">(</span>net<span class="token punctuation">,</span>X<span class="token punctuation">,</span>y<span class="token punctuation">)</span> <span class="token comment"># 使用相对误差</span>
+        ls<span class="token punctuation">.</span>backward<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token comment"># 反向传播</span>
+        optimizer<span class="token punctuation">.</span>step<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token comment"># 更新参数</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<ul>
+<li>这段不知道为什么不用说好了的开根的loss来计算误差。</li>
+<li>修改，注意修改后需要改变rmse的返回值，原本是返回item，会报错</li>
+</ul>
+<pre class="line-numbers language-none"><code class="language-none">AttributeError: 'float' object has no attribute 'backward'<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<ul>
+<li>需要直接返回tensor，才好包含计算梯度所需的，这样以来统计loss的地方再使用item()得数值即可。</li>
+</ul>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">log_rmse</span><span class="token punctuation">(</span>net<span class="token punctuation">,</span>features<span class="token punctuation">,</span>labels<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    pred <span class="token operator">=</span> net<span class="token punctuation">(</span>features<span class="token punctuation">)</span>
+    clamped_pred <span class="token operator">=</span> torch<span class="token punctuation">.</span>clamp<span class="token punctuation">(</span>pred<span class="token punctuation">,</span><span class="token builtin">min</span><span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">)</span>
+    rmse <span class="token operator">=</span> torch<span class="token punctuation">.</span>sqrt<span class="token punctuation">(</span>loss<span class="token punctuation">(</span>torch<span class="token punctuation">.</span>log<span class="token punctuation">(</span>clamped_pred<span class="token punctuation">)</span><span class="token punctuation">,</span>torch<span class="token punctuation">.</span>log<span class="token punctuation">(</span>labels<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token comment"># 整组传到里面去计算mseloss</span>
+    <span class="token keyword">return</span> rmse<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<ul>
+<li>不过最后效果完全不如沐神原本的，逆天</li>
+</ul>
+<h3 id="标程的小问题"><a href="#标程的小问题" class="headerlink" title="标程的小问题"></a>标程的小问题</h3><ul>
+<li><p>d2l中的标程也应做相应修改才能正常执行</p>
+</li>
+<li><p>报错：all_features经过处理后类型不符合，告知不能转成tensor，float32</p>
+</li>
+<li><p>答：某些ide独热编码时会将数据处理成boolean类型，需要指定处理类型为数值型，如int。尝试这么处理，pd.get_dummies(all_features, dummy_na=True, dtype=int) </p>
+</li>
+</ul>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">all_features <span class="token operator">=</span> pd<span class="token punctuation">.</span>get_dummies<span class="token punctuation">(</span>all_features<span class="token punctuation">,</span>dummy_na<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">,</span>dtype<span class="token operator">=</span><span class="token builtin">int</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h3 id="调参过程"><a href="#调参过程" class="headerlink" title="调参过程"></a>调参过程</h3><ul>
+<li>先使用沐神原版的网络结构</li>
+</ul>
+<pre class="line-numbers language-none"><code class="language-none">折1，训练log rmse0.170212, 验证log rmse0.156864
+折2，训练log rmse0.162003, 验证log rmse0.188812
+折3，训练log rmse0.163810, 验证log rmse0.168171
+折4，训练log rmse0.167946, 验证log rmse0.154694
+折5，训练log rmse0.163320, 验证log rmse0.182928
+5-折验证: 平均训练log rmse: 0.165458, 平均验证log rmse: 0.170293<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<ul>
+<li>然后增加了网络层层数，很明显是过拟合的数据</li>
+</ul>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">get_net</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">return</span> nn<span class="token punctuation">.</span>Sequential<span class="token punctuation">(</span>
+        nn<span class="token punctuation">.</span>Linear<span class="token punctuation">(</span>input_size<span class="token punctuation">,</span><span class="token number">5</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+        nn<span class="token punctuation">.</span>ReLU<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+        nn<span class="token punctuation">.</span>Linear<span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">,</span>output_size<span class="token punctuation">)</span>
+    <span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<pre class="line-numbers language-none"><code class="language-none">折1，训练log rmse0.123148, 验证log rmse0.263349
+折2，训练log rmse0.119781, 验证log rmse0.244233
+折3，训练log rmse0.120550, 验证log rmse0.208438
+折4，训练log rmse0.179972, 验证log rmse0.332736
+折5，训练log rmse0.156284, 验证log rmse0.200350
+5-折验证: 平均训练log rmse: 0.139947, 平均验证log rmse: 0.249821<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<ul>
+<li>后面查看曲线，感觉这个可能是lr设置的太大了的原因</li>
+</ul>
+<p><img src="/img/d2l/train1.jpg" alt="train1"></p>
+<ul>
+<li>考虑减少lr到1</li>
+</ul>
+<p><img src="/img/d2l/overfitting.jpg" alt="overfitting"></p>
+<pre class="line-numbers language-none"><code class="language-none">折1，训练log rmse0.080356, 验证log rmse0.175418
+折2，训练log rmse0.056644, 验证log rmse0.179348
+折3，训练log rmse0.120459, 验证log rmse0.193579
+折4，训练log rmse0.101917, 验证log rmse0.149796
+折5，训练log rmse0.177175, 验证log rmse0.241251
+5-折验证: 平均训练log rmse: 0.107310, 平均验证log rmse: 0.187878<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<ul>
+<li>很明显的overfitting，增加一个dropout</li>
+</ul>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">get_net</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">return</span> nn<span class="token punctuation">.</span>Sequential<span class="token punctuation">(</span>
+        nn<span class="token punctuation">.</span>Linear<span class="token punctuation">(</span>input_size<span class="token punctuation">,</span><span class="token number">64</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+        nn<span class="token punctuation">.</span>ReLU<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+        nn<span class="token punctuation">.</span>dropout<span class="token punctuation">(</span>p<span class="token operator">=</span><span class="token number">0.2</span><span class="token punctuation">)</span>
+        nn<span class="token punctuation">.</span>Linear<span class="token punctuation">(</span><span class="token number">64</span><span class="token punctuation">,</span>output_size<span class="token punctuation">)</span>
+    <span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<ul>
+<li>发现效果还是不理想，可能因为我增加了dropout，但是却没有设置在valid的时候关dropout，修改代码如下：原来valid的效果差并不是我还overfitting，只是我忘了关dropout</li>
+</ul>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">for</span> epoch <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span>num_epochs<span class="token punctuation">)</span><span class="token punctuation">:</span>
+      net<span class="token punctuation">.</span>train<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token comment"># 开dropout</span>
+      <span class="token keyword">for</span> X<span class="token punctuation">,</span>y <span class="token keyword">in</span> train_iter<span class="token punctuation">:</span>
+          optimizer<span class="token punctuation">.</span>zero_grad<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token comment"># 梯度清零</span>
+          <span class="token comment"># 沐神的代码，不知道为什么这里不用相对误差yhat/y，我改了一下这部分代码，使用之前写好的rmseloss</span>
+          y_pred <span class="token operator">=</span> net<span class="token punctuation">(</span>X<span class="token punctuation">)</span>
+          ls <span class="token operator">=</span> loss<span class="token punctuation">(</span>y_pred<span class="token punctuation">,</span>y<span class="token punctuation">)</span> 
+          <span class="token comment"># 修改的部分</span>
+          <span class="token comment"># ls = log_rmse(net,X,y) # 使用相对误差</span>
+          ls<span class="token punctuation">.</span>backward<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token comment"># 反向传播</span>
+          optimizer<span class="token punctuation">.</span>step<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token comment"># 更新参数</span>
+      
+      <span class="token comment"># 记录一下loss</span>
+      net<span class="token punctuation">.</span><span class="token builtin">eval</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+      train_ls<span class="token punctuation">.</span>append<span class="token punctuation">(</span>log_rmse<span class="token punctuation">(</span>net<span class="token punctuation">,</span>train_features<span class="token punctuation">,</span>train_labels<span class="token punctuation">)</span><span class="token punctuation">.</span>item<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token comment"># 因为前面修改了函数，所以这里多加一个item</span>
+      <span class="token keyword">if</span> test_labels <span class="token keyword">is</span> <span class="token keyword">not</span> <span class="token boolean">None</span><span class="token punctuation">:</span>
+          net<span class="token punctuation">.</span><span class="token builtin">eval</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token comment"># 关dropout</span>
+          test_ls<span class="token punctuation">.</span>append<span class="token punctuation">(</span>log_rmse<span class="token punctuation">(</span>net<span class="token punctuation">,</span>test_features<span class="token punctuation">,</span>test_labels<span class="token punctuation">)</span><span class="token punctuation">.</span>item<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+  <span class="token keyword">return</span> train_ls<span class="token punctuation">,</span>test_ls<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<ul>
+<li>对比一下先后的曲线吧，发现确实是这个原因造成的，在valid上面跑的从0.18到0.15的区别。</li>
+</ul>
+<p><img src="/img/d2l/dropout.jpg" alt="dropout"></p>
+<p><img src="/img/d2l/dropout2.jpg" alt="dropout2"></p>
+<ul>
+<li>后面想想还是不要费时间在调参了</li>
+</ul>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ul>
+<li>感觉python还是需要再学一下</li>
+<li>关于如何解决过拟合，使用了ReLU+Dropout的多层感知机也还是不太行</li>
+<li>不过至少知道了如果loss后面不稳定的话，可以适当调低lr就是了</li>
 </ul>
 
                 
@@ -1203,7 +1331,7 @@ train_labels <span class="token operator">=</span> torch<span class="token punct
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">66.3k</span>
+                        class="white-color">67.4k</span>
             
             
             
