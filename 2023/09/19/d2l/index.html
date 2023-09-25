@@ -484,14 +484,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    2.5k
+                    2.6k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    10 分
+                    11 分
                 </div>
                 
 
@@ -804,6 +804,13 @@ train_labels <span class="token operator">=</span> torch<span class="token punct
 <ul>
 <li>后面想想还是不要费时间在调参了</li>
 </ul>
+<h3 id="上传kaggle"><a href="#上传kaggle" class="headerlink" title="上传kaggle"></a>上传kaggle</h3><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token comment"># 将网络应用于测试集。</span>
+preds <span class="token operator">=</span> net<span class="token punctuation">(</span>test_features<span class="token punctuation">)</span><span class="token punctuation">.</span>detach<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>numpy<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<ul>
+<li>这一部分的detach作用和item类似，只不过detach应用于向量，item应用于标量</li>
+</ul>
+<p><img src="/img/d2l/lb.jpg" alt="lb"></p>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ul>
 <li>感觉python还是需要再学一下</li>
 <li>关于如何解决过拟合，使用了ReLU+Dropout的多层感知机也还是不太行</li>
@@ -1077,42 +1084,40 @@ train_labels <span class="token operator">=</span> torch<span class="token punct
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="far fa-dot-circle"></i>&nbsp;本篇
-            </div>
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2023/09/19/d2l/">
+                <a href="/2023/09/25/d2l-dl/">
                     <div class="card-image">
                         
-                        <img src="/img/erciyuan/xiaoyang.jpg" class="responsive-img" alt="李沐d2l学习笔记ML部分">
+                        <img src="/img/erciyuan/xiaoyang.png" class="responsive-img" alt="李沐d2lDL部分-深度学习代码">
                         
-                        <span class="card-title">李沐d2l学习笔记ML部分</span>
+                        <span class="card-title">李沐d2lDL部分-深度学习代码</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            系统学习一下ML部分知识和代码实现
+                            系统学习一下DL部分知识和代码实现
                         
                     </div>
                     <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2023-09-19
-                            </span>
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2023-09-25
+                        </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/ML/" class="post-category">
-                                    ML
+                            <a href="/categories/DL/" class="post-category">
+                                    DL
                                 </a>
                             
                             
                         </span>
                     </div>
                 </div>
-
                 
                 <div class="card-action article-tags">
                     
@@ -1120,8 +1125,8 @@ train_labels <span class="token operator">=</span> torch<span class="token punct
                         <span class="chip bg-color">算法学习笔记</span>
                     </a>
                     
-                    <a href="/tags/ML/">
-                        <span class="chip bg-color">ML</span>
+                    <a href="/tags/DL/">
+                        <span class="chip bg-color">DL</span>
                     </a>
                     
                 </div>
@@ -1331,7 +1336,7 @@ train_labels <span class="token operator">=</span> torch<span class="token punct
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">67.4k</span>
+                        class="white-color">69.1k</span>
             
             
             
