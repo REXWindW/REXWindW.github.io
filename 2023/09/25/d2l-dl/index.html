@@ -722,6 +722,14 @@ z <span class="token operator">=</span> x<span class="token punctuation">.</span
 
 
 
+<h3 id="LeNet"><a href="#LeNet" class="headerlink" title="LeNet"></a>LeNet</h3><ul>
+<li>lenet一章中提供了一种输出在sequential中，不同层间输入输出大小的方法</li>
+</ul>
+<p><a target="_blank" rel="noopener" href="https://zh-v2.d2l.ai/chapter_convolutional-neural-networks/lenet.html">6.6. 卷积神经网络（LeNet） — 动手学深度学习 2.0.0 documentation (d2l.ai)</a></p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">X <span class="token operator">=</span> torch<span class="token punctuation">.</span>rand<span class="token punctuation">(</span>size<span class="token operator">=</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">28</span><span class="token punctuation">,</span> <span class="token number">28</span><span class="token punctuation">)</span><span class="token punctuation">,</span> dtype<span class="token operator">=</span>torch<span class="token punctuation">.</span>float32<span class="token punctuation">)</span>
+<span class="token keyword">for</span> layer <span class="token keyword">in</span> net<span class="token punctuation">:</span>
+    X <span class="token operator">=</span> layer<span class="token punctuation">(</span>X<span class="token punctuation">)</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span>layer<span class="token punctuation">.</span>__class__<span class="token punctuation">.</span>__name__<span class="token punctuation">,</span><span class="token string">'output shape: \t'</span><span class="token punctuation">,</span>X<span class="token punctuation">.</span>shape<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 
                 
             </div>
@@ -990,29 +998,28 @@ z <span class="token operator">=</span> x<span class="token punctuation">.</span
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="far fa-dot-circle"></i>&nbsp;本篇
-            </div>
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2023/09/25/d2l-dl/">
+                <a href="/2023/10/09/d2l-practice/">
                     <div class="card-image">
                         
-                        <img src="/img/erciyuan/xiaoyang.png" class="responsive-img" alt="李沐d2lDL部分-深度学习代码">
+                        <img src="/img/erciyuan/xiaoyang.png" class="responsive-img" alt="李沐d2l课后练习">
                         
-                        <span class="card-title">李沐d2lDL部分-深度学习代码</span>
+                        <span class="card-title">李沐d2l课后练习</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            系统学习一下DL部分知识和代码实现
+                            课后联系
                         
                     </div>
                     <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2023-09-25
-                            </span>
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2023-10-09
+                        </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
@@ -1025,7 +1032,6 @@ z <span class="token operator">=</span> x<span class="token punctuation">.</span
                         </span>
                     </div>
                 </div>
-
                 
                 <div class="card-action article-tags">
                     
@@ -1244,7 +1250,7 @@ z <span class="token operator">=</span> x<span class="token punctuation">.</span
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">69.1k</span>
+                        class="white-color">73.6k</span>
             
             
             
