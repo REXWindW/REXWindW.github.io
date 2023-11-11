@@ -488,14 +488,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    4.2k
+                    5.2k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    17 分
+                    22 分
                 </div>
                 
 
@@ -865,7 +865,142 @@ mlm_l <span class="token operator">=</span> loss<span class="token punctuation">
 <li>这个是transformers库文件结构的介绍视频，里面一整个系列都是带读transformers库源码的，之后有时间再看。<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1Tm4y1M7nQ">https://www.bilibili.com/video/BV1Tm4y1M7nQ</a></li>
 <li>关于transformers库如何配合pytorch使用<a target="_blank" rel="noopener" href="https://jinhanlei.github.io/posts/Transformers%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8-%E5%9B%9B-%E7%BB%93%E5%90%88Transformers%E5%92%8CPyTorch%E4%BF%AE%E6%94%B9%E6%A8%A1%E5%9E%8B/">Transformers快速入门（四）：结合Transformers和PyTorch修改模型 | Jin blog (jinhanlei.github.io)</a></li>
 </ul>
-<h2 id="阅读LLM综述"><a href="#阅读LLM综述" class="headerlink" title="阅读LLM综述"></a>阅读LLM综述</h2>
+<h3 id="Transformers库BLIP2代码阅读"><a href="#Transformers库BLIP2代码阅读" class="headerlink" title="Transformers库BLIP2代码阅读"></a>Transformers库BLIP2代码阅读</h3><h4 id="视觉embedding部分"><a href="#视觉embedding部分" class="headerlink" title="视觉embedding部分"></a>视觉embedding部分</h4><ul>
+<li>通过一个ViT，把不同分辨率的图片映射</li>
+</ul>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">class</span> <span class="token class-name">Blip2VisionEmbeddings</span><span class="token punctuation">(</span>nn<span class="token punctuation">.</span>Module<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> config<span class="token punctuation">:</span> Blip2VisionConfig<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token builtin">super</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>__init__<span class="token punctuation">(</span><span class="token punctuation">)</span>
+        self<span class="token punctuation">.</span>config <span class="token operator">=</span> config
+        self<span class="token punctuation">.</span>embed_dim <span class="token operator">=</span> config<span class="token punctuation">.</span>hidden_size
+        self<span class="token punctuation">.</span>image_size <span class="token operator">=</span> config<span class="token punctuation">.</span>image_size
+        self<span class="token punctuation">.</span>patch_size <span class="token operator">=</span> config<span class="token punctuation">.</span>patch_size
+
+        self<span class="token punctuation">.</span>class_embedding <span class="token operator">=</span> nn<span class="token punctuation">.</span>Parameter<span class="token punctuation">(</span>torch<span class="token punctuation">.</span>randn<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> self<span class="token punctuation">.</span>embed_dim<span class="token punctuation">)</span><span class="token punctuation">)</span>
+        <span class="token comment"># CLS token，是可学习的</span>
+
+        self<span class="token punctuation">.</span>patch_embedding <span class="token operator">=</span> nn<span class="token punctuation">.</span>Conv2d<span class="token punctuation">(</span> 
+            in_channels<span class="token operator">=</span><span class="token number">3</span><span class="token punctuation">,</span> out_channels<span class="token operator">=</span>self<span class="token punctuation">.</span>embed_dim<span class="token punctuation">,</span> kernel_size<span class="token operator">=</span>self<span class="token punctuation">.</span>patch_size<span class="token punctuation">,</span> stride<span class="token operator">=</span>self<span class="token punctuation">.</span>patch_size
+        <span class="token punctuation">)</span> <span class="token comment"># 注意这里stride == patch_size，说明是每个patch和卷积核卷积提取特征</span>
+        <span class="token comment"># 从3个通道到embed_dim个通道，是为了映射到和单词同样的维度。这里</span>
+
+        self<span class="token punctuation">.</span>num_patches <span class="token operator">=</span> <span class="token punctuation">(</span>self<span class="token punctuation">.</span>image_size <span class="token operator">//</span> self<span class="token punctuation">.</span>patch_size<span class="token punctuation">)</span> <span class="token operator">**</span> <span class="token number">2</span> <span class="token comment"># 适用于不同分辨率的图片，图片变大则patch变多</span>
+        self<span class="token punctuation">.</span>num_positions <span class="token operator">=</span> self<span class="token punctuation">.</span>num_patches <span class="token operator">+</span> <span class="token number">1</span>
+
+        self<span class="token punctuation">.</span>position_embedding <span class="token operator">=</span> nn<span class="token punctuation">.</span>Parameter<span class="token punctuation">(</span>torch<span class="token punctuation">.</span>randn<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> self<span class="token punctuation">.</span>num_positions<span class="token punctuation">,</span> self<span class="token punctuation">.</span>embed_dim<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token comment"># 使用可学习的位置编码</span>
+
+    <span class="token keyword">def</span> <span class="token function">forward</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> pixel_values<span class="token punctuation">:</span> torch<span class="token punctuation">.</span>FloatTensor<span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">&gt;</span> torch<span class="token punctuation">.</span>Tensor<span class="token punctuation">:</span>
+        batch_size <span class="token operator">=</span> pixel_values<span class="token punctuation">.</span>shape<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span>
+        target_dtype <span class="token operator">=</span> self<span class="token punctuation">.</span>patch_embedding<span class="token punctuation">.</span>weight<span class="token punctuation">.</span>dtype
+        patch_embeds <span class="token operator">=</span> self<span class="token punctuation">.</span>patch_embedding<span class="token punctuation">(</span>pixel_values<span class="token punctuation">.</span>to<span class="token punctuation">(</span>dtype<span class="token operator">=</span>target_dtype<span class="token punctuation">)</span><span class="token punctuation">)</span>  <span class="token comment"># shape = [*, width, grid, grid]</span>
+        <span class="token comment"># 通过卷积，分patch</span>
+        patch_embeds <span class="token operator">=</span> patch_embeds<span class="token punctuation">.</span>flatten<span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">.</span>transpose<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">)</span>
+
+        class_embeds <span class="token operator">=</span> self<span class="token punctuation">.</span>class_embedding<span class="token punctuation">.</span>expand<span class="token punctuation">(</span>batch_size<span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">.</span>to<span class="token punctuation">(</span>target_dtype<span class="token punctuation">)</span>
+        embeddings <span class="token operator">=</span> torch<span class="token punctuation">.</span>cat<span class="token punctuation">(</span><span class="token punctuation">[</span>class_embeds<span class="token punctuation">,</span> patch_embeds<span class="token punctuation">]</span><span class="token punctuation">,</span> dim<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">)</span> <span class="token comment"># 把CLS token和图片embedding 接在一起</span>
+        embeddings <span class="token operator">=</span> embeddings <span class="token operator">+</span> self<span class="token punctuation">.</span>position_embedding<span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token punctuation">,</span> <span class="token punctuation">:</span> embeddings<span class="token punctuation">.</span>size<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token punctuation">:</span><span class="token punctuation">]</span><span class="token punctuation">.</span>to<span class="token punctuation">(</span>target_dtype<span class="token punctuation">)</span> <span class="token comment"># 加上位置编码</span>
+        <span class="token keyword">return</span> embeddings<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h4 id="Attention"><a href="#Attention" class="headerlink" title="Attention"></a>Attention</h4><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">class</span> <span class="token class-name">Blip2Attention</span><span class="token punctuation">(</span>nn<span class="token punctuation">.</span>Module<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token triple-quoted-string string">"""Multi-headed attention from 'Attention Is All You Need' paper"""</span>
+
+    <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> config<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token builtin">super</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>__init__<span class="token punctuation">(</span><span class="token punctuation">)</span>
+        self<span class="token punctuation">.</span>config <span class="token operator">=</span> config
+        self<span class="token punctuation">.</span>embed_dim <span class="token operator">=</span> config<span class="token punctuation">.</span>hidden_size
+        self<span class="token punctuation">.</span>num_heads <span class="token operator">=</span> config<span class="token punctuation">.</span>num_attention_heads
+        self<span class="token punctuation">.</span>head_dim <span class="token operator">=</span> self<span class="token punctuation">.</span>embed_dim <span class="token operator">//</span> self<span class="token punctuation">.</span>num_heads
+        <span class="token keyword">if</span> self<span class="token punctuation">.</span>head_dim <span class="token operator">*</span> self<span class="token punctuation">.</span>num_heads <span class="token operator">!=</span> self<span class="token punctuation">.</span>embed_dim<span class="token punctuation">:</span>
+            <span class="token keyword">raise</span> ValueError<span class="token punctuation">(</span>
+                <span class="token string-interpolation"><span class="token string">f"embed_dim must be divisible by num_heads (got `embed_dim`: </span><span class="token interpolation"><span class="token punctuation">{</span>self<span class="token punctuation">.</span>embed_dim<span class="token punctuation">}</span></span><span class="token string"> and `num_heads`:"</span></span>
+                <span class="token string-interpolation"><span class="token string">f" </span><span class="token interpolation"><span class="token punctuation">{</span>self<span class="token punctuation">.</span>num_heads<span class="token punctuation">}</span></span><span class="token string">)."</span></span>
+            <span class="token punctuation">)</span>
+        self<span class="token punctuation">.</span>scale <span class="token operator">=</span> self<span class="token punctuation">.</span>head_dim<span class="token operator">**</span><span class="token operator">-</span><span class="token number">0.5</span>
+        self<span class="token punctuation">.</span>dropout <span class="token operator">=</span> nn<span class="token punctuation">.</span>Dropout<span class="token punctuation">(</span>config<span class="token punctuation">.</span>attention_dropout<span class="token punctuation">)</span>
+
+        <span class="token comment"># small tweak here compared to CLIP, no bias here</span>
+        self<span class="token punctuation">.</span>qkv <span class="token operator">=</span> nn<span class="token punctuation">.</span>Linear<span class="token punctuation">(</span>self<span class="token punctuation">.</span>embed_dim<span class="token punctuation">,</span> <span class="token number">3</span> <span class="token operator">*</span> self<span class="token punctuation">.</span>embed_dim<span class="token punctuation">,</span> bias<span class="token operator">=</span><span class="token boolean">False</span><span class="token punctuation">)</span>
+        <span class="token comment"># 不单独建Wq，Wk，Wv，直接和在一起和input相乘，所以是3*embed_dim</span>
+        <span class="token comment"># 如果是单独一个q，就是q = nn.Linear(self.embed_dim, self.embed_dim, bias=False)</span>
+
+        <span class="token keyword">if</span> config<span class="token punctuation">.</span>qkv_bias<span class="token punctuation">:</span>
+            q_bias <span class="token operator">=</span> nn<span class="token punctuation">.</span>Parameter<span class="token punctuation">(</span>torch<span class="token punctuation">.</span>zeros<span class="token punctuation">(</span>self<span class="token punctuation">.</span>embed_dim<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token comment"># 参数设置是否使用bias</span>
+            v_bias <span class="token operator">=</span> nn<span class="token punctuation">.</span>Parameter<span class="token punctuation">(</span>torch<span class="token punctuation">.</span>zeros<span class="token punctuation">(</span>self<span class="token punctuation">.</span>embed_dim<span class="token punctuation">)</span><span class="token punctuation">)</span>
+        <span class="token keyword">else</span><span class="token punctuation">:</span>
+            q_bias <span class="token operator">=</span> <span class="token boolean">None</span>
+            v_bias <span class="token operator">=</span> <span class="token boolean">None</span>
+
+        <span class="token keyword">if</span> q_bias <span class="token keyword">is</span> <span class="token keyword">not</span> <span class="token boolean">None</span><span class="token punctuation">:</span>
+            qkv_bias <span class="token operator">=</span> torch<span class="token punctuation">.</span>cat<span class="token punctuation">(</span><span class="token punctuation">(</span>q_bias<span class="token punctuation">,</span> torch<span class="token punctuation">.</span>zeros_like<span class="token punctuation">(</span>v_bias<span class="token punctuation">,</span> requires_grad<span class="token operator">=</span><span class="token boolean">False</span><span class="token punctuation">)</span><span class="token punctuation">,</span> v_bias<span class="token punctuation">)</span><span class="token punctuation">)</span>
+            self<span class="token punctuation">.</span>qkv<span class="token punctuation">.</span>bias <span class="token operator">=</span> nn<span class="token punctuation">.</span>Parameter<span class="token punctuation">(</span>qkv_bias<span class="token punctuation">)</span>
+
+        self<span class="token punctuation">.</span>projection <span class="token operator">=</span> nn<span class="token punctuation">.</span>Linear<span class="token punctuation">(</span>self<span class="token punctuation">.</span>embed_dim<span class="token punctuation">,</span> self<span class="token punctuation">.</span>embed_dim<span class="token punctuation">)</span>
+        <span class="token comment"># 模态投影层projection layer</span>
+
+    <span class="token keyword">def</span> <span class="token function">_shape</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> tensor<span class="token punctuation">:</span> torch<span class="token punctuation">.</span>Tensor<span class="token punctuation">,</span> seq_len<span class="token punctuation">:</span> <span class="token builtin">int</span><span class="token punctuation">,</span> bsz<span class="token punctuation">:</span> <span class="token builtin">int</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> tensor<span class="token punctuation">.</span>view<span class="token punctuation">(</span>bsz<span class="token punctuation">,</span> seq_len<span class="token punctuation">,</span> self<span class="token punctuation">.</span>num_heads<span class="token punctuation">,</span> self<span class="token punctuation">.</span>head_dim<span class="token punctuation">)</span><span class="token punctuation">.</span>transpose<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">.</span>contiguous<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+    <span class="token keyword">def</span> <span class="token function">forward</span><span class="token punctuation">(</span>
+        self<span class="token punctuation">,</span>
+        hidden_states<span class="token punctuation">:</span> torch<span class="token punctuation">.</span>Tensor<span class="token punctuation">,</span>
+        head_mask<span class="token punctuation">:</span> Optional<span class="token punctuation">[</span>torch<span class="token punctuation">.</span>Tensor<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token boolean">None</span><span class="token punctuation">,</span>
+        output_attentions<span class="token punctuation">:</span> Optional<span class="token punctuation">[</span><span class="token builtin">bool</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token boolean">False</span><span class="token punctuation">,</span>
+    <span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">&gt;</span> Tuple<span class="token punctuation">[</span>torch<span class="token punctuation">.</span>Tensor<span class="token punctuation">,</span> Optional<span class="token punctuation">[</span>torch<span class="token punctuation">.</span>Tensor<span class="token punctuation">]</span><span class="token punctuation">,</span> Optional<span class="token punctuation">[</span>Tuple<span class="token punctuation">[</span>torch<span class="token punctuation">.</span>Tensor<span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">:</span>
+        <span class="token triple-quoted-string string">"""Input shape: Batch x Time x Channel"""</span>
+
+        bsz<span class="token punctuation">,</span> tgt_len<span class="token punctuation">,</span> embed_dim <span class="token operator">=</span> hidden_states<span class="token punctuation">.</span>size<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+        mixed_qkv <span class="token operator">=</span> self<span class="token punctuation">.</span>qkv<span class="token punctuation">(</span>hidden_states<span class="token punctuation">)</span> <span class="token comment"># 这里为了方便计算，不单独建Wq，Wk，Wv，直接和在一起和input相乘</span>
+
+        mixed_qkv <span class="token operator">=</span> mixed_qkv<span class="token punctuation">.</span>reshape<span class="token punctuation">(</span>bsz<span class="token punctuation">,</span> tgt_len<span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">,</span> self<span class="token punctuation">.</span>num_heads<span class="token punctuation">,</span> embed_dim <span class="token operator">//</span> self<span class="token punctuation">.</span>num_heads<span class="token punctuation">)</span><span class="token punctuation">.</span>permute<span class="token punctuation">(</span>
+            <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">4</span>
+        <span class="token punctuation">)</span> <span class="token comment"># 把维度重排，原本2维度上拼接起来的qkv结果，这里给他移动到第0维，方便后面拆分</span>
+        <span class="token comment"># 这里的5个维度：qkv拼接，batch大小，注意力头数，序列长度，embed_dim</span>
+        query_states<span class="token punctuation">,</span> key_states<span class="token punctuation">,</span> value_states <span class="token operator">=</span> mixed_qkv<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">,</span> mixed_qkv<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">,</span> mixed_qkv<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span>
+        <span class="token comment"># 在第0维上拆分成q k v</span>
+
+        <span class="token comment"># Take the dot product between "query" and "key" to get the raw attention scores.</span>
+        attention_scores <span class="token operator">=</span> torch<span class="token punctuation">.</span>matmul<span class="token punctuation">(</span>query_states<span class="token punctuation">,</span> key_states<span class="token punctuation">.</span>transpose<span class="token punctuation">(</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+        <span class="token comment"># 相当于q(seq_len, embed_dim) * k(embed_dim, seq_len) 相乘</span>
+
+        attention_scores <span class="token operator">=</span> attention_scores <span class="token operator">*</span> self<span class="token punctuation">.</span>scale
+        <span class="token comment"># 缩放操作是为了确保在计算 softmax 函数时，分数不会因为维度的不同而导致数值问题</span>
+
+        <span class="token comment"># Normalize the attention scores to probabilities.</span>
+        attention_probs <span class="token operator">=</span> nn<span class="token punctuation">.</span>functional<span class="token punctuation">.</span>softmax<span class="token punctuation">(</span>attention_scores<span class="token punctuation">,</span> dim<span class="token operator">=</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span>
+        <span class="token comment"># 通过softmax计算得到attention_probs</span>
+
+        <span class="token comment"># This is actually dropping out entire tokens to attend to, which might</span>
+        <span class="token comment"># seem a bit unusual, but is taken from the original Transformer paper.</span>
+        attention_probs <span class="token operator">=</span> self<span class="token punctuation">.</span>dropout<span class="token punctuation">(</span>attention_probs<span class="token punctuation">)</span>
+        <span class="token comment"># 这里介绍了attention进行dropout的方式，直接对attention_prob进行dropout，而不是计算后再对结果dropout</span>
+
+        <span class="token comment"># Mask heads if we want to</span>
+        <span class="token keyword">if</span> head_mask <span class="token keyword">is</span> <span class="token keyword">not</span> <span class="token boolean">None</span><span class="token punctuation">:</span>
+            attention_probs <span class="token operator">=</span> attention_probs <span class="token operator">*</span> head_mask
+
+        context_layer <span class="token operator">=</span> torch<span class="token punctuation">.</span>matmul<span class="token punctuation">(</span>attention_probs<span class="token punctuation">,</span> value_states<span class="token punctuation">)</span><span class="token punctuation">.</span>permute<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">)</span>
+
+        new_context_layer_shape <span class="token operator">=</span> context_layer<span class="token punctuation">.</span>size<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token operator">-</span><span class="token number">2</span><span class="token punctuation">]</span> <span class="token operator">+</span> <span class="token punctuation">(</span>self<span class="token punctuation">.</span>embed_dim<span class="token punctuation">,</span><span class="token punctuation">)</span>
+        context_layer <span class="token operator">=</span> context_layer<span class="token punctuation">.</span>reshape<span class="token punctuation">(</span>new_context_layer_shape<span class="token punctuation">)</span>
+
+        output <span class="token operator">=</span> self<span class="token punctuation">.</span>projection<span class="token punctuation">(</span>context_layer<span class="token punctuation">)</span>
+        <span class="token comment"># 经过projection layer输出结果</span>
+
+        outputs <span class="token operator">=</span> <span class="token punctuation">(</span>output<span class="token punctuation">,</span> attention_probs<span class="token punctuation">)</span> <span class="token keyword">if</span> output_attentions <span class="token keyword">else</span> <span class="token punctuation">(</span>output<span class="token punctuation">,</span> <span class="token boolean">None</span><span class="token punctuation">)</span>
+
+        <span class="token keyword">return</span> outputs<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<ul>
+<li>值得注意的是里面把WqWkWv相接到同一个Linear中，输入经过线性层后再拆分出qkv。</li>
+<li>而且在attention中的dropout，直接对attention_prob进行dropout，而不是计算后再对结果dropout</li>
+</ul>
+<h2 id="阅读LLM综述"><a href="#阅读LLM综述" class="headerlink" title="阅读LLM综述"></a>阅读LLM综述</h2><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/612181615">人工智能 LLM 革命破晓：一文读懂当下超大语言模型发展现状 /麦克船长LLM革命系列2 - 知乎 (zhihu.com)</a></p>
+<ul>
+<li>之前一直不理解为什么叫few-shot prompt：在无监督训练好的 GPT-3，使用时用少量示例（加在prompt里面）就可以得到有较好的输出反馈，这就叫 Few-Shot Prompt。pretrain后的模型通过finetune或者In-context learning完成不同类型的任务，又分zeroshot，oneshot，fewshot，在综述的11.5节有详细区分。</li>
+<li></li>
+</ul>
+
                 
             </div>
             <hr/>
@@ -1395,7 +1530,7 @@ mlm_l <span class="token operator">=</span> loss<span class="token punctuation">
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">73.6k</span>
+                        class="white-color">74.6k</span>
             
             
             
