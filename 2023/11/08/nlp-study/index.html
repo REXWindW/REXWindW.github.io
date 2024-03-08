@@ -488,14 +488,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    5.2k
+                    6.1k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    22 分
+                    26 分
                 </div>
                 
 
@@ -523,6 +523,7 @@
 </ul>
 <h2 id="一些网址记录"><a href="#一些网址记录" class="headerlink" title="一些网址记录"></a>一些网址记录</h2><ul>
 <li>LLM综述<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/612181615">人工智能 LLM 革命破晓：一文读懂当下超大语言模型发展现状 /麦克船长LLM革命系列2 - 知乎 (zhihu.com)</a></li>
+<li>李沐的D2L<a target="_blank" rel="noopener" href="https://zh-v2.d2l.ai/">《动手学深度学习》 — 动手学深度学习 2.0.0 documentation (d2l.ai)</a></li>
 </ul>
 <h2 id="给自己的话"><a href="#给自己的话" class="headerlink" title="给自己的话"></a>给自己的话</h2><h3 id="2023-11-1"><a href="#2023-11-1" class="headerlink" title="2023.11.1"></a>2023.11.1</h3><ul>
 <li>刚完成情感分类的任务，感觉自己的代码能力有点差，主要是写的太少了，还是要多结合一下kaggle竞赛之类的练习，coding这块不能落下</li>
@@ -696,6 +697,10 @@ get_similar_tokens<span class="token punctuation">(</span><span class="token str
 <p>$$<br>\mathbf{H}<em>t = \phi(\mathbf{X}<em>t \mathbf{W}</em>{xh} + \mathbf{H}</em>{t-1} \mathbf{W}_{hh}  + \mathbf{b}_h)\<br>\mathbf{O}_t = \mathbf{H}<em>t \mathbf{W}</em>{hq} + \mathbf{b}_q.<br>$$</p>
 <ul>
 <li>在LSTM中，隐状态H和记忆细胞C有什么区别？GPT:H通常用于短期信息的编码，而C则用于长期信息的编码</li>
+<li>门单元计算如下,有h个隐藏单元和d的输入大小。这里面X的大小是$d\cdot h$，W的大小$h\cdot h$</li>
+</ul>
+<p>$$<br>\begin{split}\begin{aligned}<br>\mathbf{I}<em>t &amp;= \sigma(\mathbf{X}<em>t \mathbf{W}</em>{xi} + \mathbf{H}</em>{t-1} \mathbf{W}_{hi} + \mathbf{b}<em>i),\<br>\mathbf{F}<em>t &amp;= \sigma(\mathbf{X}<em>t \mathbf{W}</em>{xf} + \mathbf{H}</em>{t-1} \mathbf{W}</em>{hf} + \mathbf{b}<em>f),\<br>\mathbf{O}<em>t &amp;= \sigma(\mathbf{X}<em>t \mathbf{W}</em>{xo} + \mathbf{H}</em>{t-1} \mathbf{W}</em>{ho} + \mathbf{b}_o),<br>\end{aligned}\end{split}<br>$$</p>
+<ul>
 <li>隐状态H是一直传递下去，C的传递收到几个门控的影响。</li>
 </ul>
 <p><img src="https://zh-v2.d2l.ai/_images/lstm-3.svg"></p>
@@ -714,8 +719,8 @@ get_similar_tokens<span class="token punctuation">(</span><span class="token str
         I <span class="token operator">=</span> torch<span class="token punctuation">.</span>sigmoid<span class="token punctuation">(</span><span class="token punctuation">(</span>X @ W_xi<span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token punctuation">(</span>H @ W_hi<span class="token punctuation">)</span> <span class="token operator">+</span> b_i<span class="token punctuation">)</span>
         F <span class="token operator">=</span> torch<span class="token punctuation">.</span>sigmoid<span class="token punctuation">(</span><span class="token punctuation">(</span>X @ W_xf<span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token punctuation">(</span>H @ W_hf<span class="token punctuation">)</span> <span class="token operator">+</span> b_f<span class="token punctuation">)</span>
         O <span class="token operator">=</span> torch<span class="token punctuation">.</span>sigmoid<span class="token punctuation">(</span><span class="token punctuation">(</span>X @ W_xo<span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token punctuation">(</span>H @ W_ho<span class="token punctuation">)</span> <span class="token operator">+</span> b_o<span class="token punctuation">)</span> <span class="token comment"># 这里的O和RNN中的O不同，是个门，RNN中的O直接是输出</span>
-        C_tilda <span class="token operator">=</span> torch<span class="token punctuation">.</span>tanh<span class="token punctuation">(</span><span class="token punctuation">(</span>X @ W_xc<span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token punctuation">(</span>H @ W_hc<span class="token punctuation">)</span> <span class="token operator">+</span> b_c<span class="token punctuation">)</span>
-        C <span class="token operator">=</span> F <span class="token operator">*</span> C <span class="token operator">+</span> I <span class="token operator">*</span> C_tilda
+        C_tilda <span class="token operator">=</span> torch<span class="token punctuation">.</span>tanh<span class="token punctuation">(</span><span class="token punctuation">(</span>X @ W_xc<span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token punctuation">(</span>H @ W_hc<span class="token punctuation">)</span> <span class="token operator">+</span> b_c<span class="token punctuation">)</span> <span class="token comment"># 候选记忆元</span>
+        C <span class="token operator">=</span> F <span class="token operator">*</span> C <span class="token operator">+</span> I <span class="token operator">*</span> C_tilda <span class="token comment"># 记住多少</span>
         H <span class="token operator">=</span> O <span class="token operator">*</span> torch<span class="token punctuation">.</span>tanh<span class="token punctuation">(</span>C<span class="token punctuation">)</span>
         Y <span class="token operator">=</span> <span class="token punctuation">(</span>H @ W_hq<span class="token punctuation">)</span> <span class="token operator">+</span> b_q <span class="token comment"># 注意这里的输出就是把隐状态乘上Hq再加偏置</span>
         outputs<span class="token punctuation">.</span>append<span class="token punctuation">(</span>Y<span class="token punctuation">)</span>
@@ -755,6 +760,61 @@ get_similar_tokens<span class="token punctuation">(</span><span class="token str
 <ul>
 <li>RNN，LSTM的长程梯度消失问题，对于较长的句子，我们很难寄希望于将输入的序列转化为定长的向量而保存所有有效信息，即便 LSTM 加了门控机制可以选择性遗忘和记忆，随着所需翻译的句子难度怎能更加，这个结构的效果仍然不理想。</li>
 </ul>
+<h2 id="多头自注意力"><a href="#多头自注意力" class="headerlink" title="多头自注意力"></a>多头自注意力</h2><ul>
+<li>关于多头注意力，看李沐的教学<a target="_blank" rel="noopener" href="https://zh-v2.d2l.ai/chapter_attention-mechanisms/multihead-attention.html">10.5. 多头注意力 — 动手学深度学习 2.0.0 documentation (d2l.ai)</a></li>
+<li>沐神的代码：</li>
+</ul>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token comment">#@save</span>
+<span class="token keyword">class</span> <span class="token class-name">MultiHeadAttention</span><span class="token punctuation">(</span>nn<span class="token punctuation">.</span>Module<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token triple-quoted-string string">"""多头注意力"""</span>
+    <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> key_size<span class="token punctuation">,</span> query_size<span class="token punctuation">,</span> value_size<span class="token punctuation">,</span> num_hiddens<span class="token punctuation">,</span>
+                 num_heads<span class="token punctuation">,</span> dropout<span class="token punctuation">,</span> bias<span class="token operator">=</span><span class="token boolean">False</span><span class="token punctuation">,</span> <span class="token operator">**</span>kwargs<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token builtin">super</span><span class="token punctuation">(</span>MultiHeadAttention<span class="token punctuation">,</span> self<span class="token punctuation">)</span><span class="token punctuation">.</span>__init__<span class="token punctuation">(</span><span class="token operator">**</span>kwargs<span class="token punctuation">)</span>
+        self<span class="token punctuation">.</span>num_heads <span class="token operator">=</span> num_heads
+        self<span class="token punctuation">.</span>attention <span class="token operator">=</span> d2l<span class="token punctuation">.</span>DotProductAttention<span class="token punctuation">(</span>dropout<span class="token punctuation">)</span>
+        self<span class="token punctuation">.</span>W_q <span class="token operator">=</span> nn<span class="token punctuation">.</span>Linear<span class="token punctuation">(</span>query_size<span class="token punctuation">,</span> num_hiddens<span class="token punctuation">,</span> bias<span class="token operator">=</span>bias<span class="token punctuation">)</span>
+        self<span class="token punctuation">.</span>W_k <span class="token operator">=</span> nn<span class="token punctuation">.</span>Linear<span class="token punctuation">(</span>key_size<span class="token punctuation">,</span> num_hiddens<span class="token punctuation">,</span> bias<span class="token operator">=</span>bias<span class="token punctuation">)</span>
+        self<span class="token punctuation">.</span>W_v <span class="token operator">=</span> nn<span class="token punctuation">.</span>Linear<span class="token punctuation">(</span>value_size<span class="token punctuation">,</span> num_hiddens<span class="token punctuation">,</span> bias<span class="token operator">=</span>bias<span class="token punctuation">)</span>
+        self<span class="token punctuation">.</span>W_o <span class="token operator">=</span> nn<span class="token punctuation">.</span>Linear<span class="token punctuation">(</span>num_hiddens<span class="token punctuation">,</span> num_hiddens<span class="token punctuation">,</span> bias<span class="token operator">=</span>bias<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<ul>
+<li>使用GPT让他对forward函数的中间变量大小进行标注</li>
+<li><code>B</code>: batch_size</li>
+<li><code>Tq</code>: 查询的个数（queries）</li>
+<li><code>Tk</code>: 键的个数（keys）</li>
+<li><code>Tv</code>: 值的个数（values）</li>
+<li><code>H</code>: 注意力头的个数（num_heads）</li>
+<li><code>D</code>: 隐藏单元的个数（num_hiddens）</li>
+</ul>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">forward</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> queries<span class="token punctuation">,</span> keys<span class="token punctuation">,</span> values<span class="token punctuation">,</span> valid_lens<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token comment"># queries，keys，values的形状:</span>
+    <span class="token comment"># (B，Tq，D)， (B，Tk，D)， (B，Tv，D)</span>
+    <span class="token comment"># valid_lens的形状:</span>
+    <span class="token comment"># (B,) 或 (B，Tq)</span>
+    <span class="token comment"># 经过变换后，输出的queries，keys，values的形状:</span>
+    <span class="token comment"># (B*H，Tq，D/H)， (B*H，Tk，D/H)， (B*H，Tv，D/H)</span>
+    queries <span class="token operator">=</span> transpose_qkv<span class="token punctuation">(</span>self<span class="token punctuation">.</span>W_q<span class="token punctuation">(</span>queries<span class="token punctuation">)</span><span class="token punctuation">,</span> self<span class="token punctuation">.</span>num_heads<span class="token punctuation">)</span>  <span class="token comment"># (B*H, Tq, D/H)</span>
+    keys <span class="token operator">=</span> transpose_qkv<span class="token punctuation">(</span>self<span class="token punctuation">.</span>W_k<span class="token punctuation">(</span>keys<span class="token punctuation">)</span><span class="token punctuation">,</span> self<span class="token punctuation">.</span>num_heads<span class="token punctuation">)</span>        <span class="token comment"># (B*H, Tk, D/H)</span>
+    values <span class="token operator">=</span> transpose_qkv<span class="token punctuation">(</span>self<span class="token punctuation">.</span>W_v<span class="token punctuation">(</span>values<span class="token punctuation">)</span><span class="token punctuation">,</span> self<span class="token punctuation">.</span>num_heads<span class="token punctuation">)</span>    <span class="token comment"># (B*H, Tv, D/H)</span>
+
+    <span class="token keyword">if</span> valid_lens <span class="token keyword">is</span> <span class="token keyword">not</span> <span class="token boolean">None</span><span class="token punctuation">:</span>
+        <span class="token comment"># 在轴0，将第一项（标量或者矢量）复制H次，</span>
+        <span class="token comment"># 然后如此复制第二项，然后诸如此类。</span>
+        valid_lens <span class="token operator">=</span> torch<span class="token punctuation">.</span>repeat_interleave<span class="token punctuation">(</span>
+            valid_lens<span class="token punctuation">,</span> repeats<span class="token operator">=</span>self<span class="token punctuation">.</span>num_heads<span class="token punctuation">,</span> dim<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">)</span>  <span class="token comment"># (B*H,)</span>
+
+    <span class="token comment"># output的形状: (B*H, Tq, D/H)</span>
+    output <span class="token operator">=</span> self<span class="token punctuation">.</span>attention<span class="token punctuation">(</span>queries<span class="token punctuation">,</span> keys<span class="token punctuation">,</span> values<span class="token punctuation">,</span> valid_lens<span class="token punctuation">)</span>
+
+    <span class="token comment"># output_concat的形状: (B, Tq, D)</span>
+    output_concat <span class="token operator">=</span> transpose_output<span class="token punctuation">(</span>output<span class="token punctuation">,</span> self<span class="token punctuation">.</span>num_heads<span class="token punctuation">)</span>
+    <span class="token keyword">return</span> self<span class="token punctuation">.</span>W_o<span class="token punctuation">(</span>output_concat<span class="token punctuation">)</span>  <span class="token comment"># (B, Tq, D)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<ul>
+<li>其实代码很难懂，但是评论区有人画了一张图来表示中间shape的变化，非常形象</li>
+</ul>
+<p><img src="/img/nlp_study/multihead_attention.png" alt="multihead_attention"></p>
 <h2 id="BERT"><a href="#BERT" class="headerlink" title="BERT"></a>BERT</h2><ul>
 <li>代码依旧是看李沐d2l的代码<a target="_blank" rel="noopener" href="https://zh-v2.d2l.ai/chapter_natural-language-processing-pretraining/bert.html">14.8. 来自Transformers的双向编码器表示（BERT） — 动手学深度学习 2.0.0 documentation (d2l.ai)</a></li>
 <li>这篇相对详细 <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/403495863">读懂BERT，看这一篇就够了 - 知乎 (zhihu.com)</a></li>
@@ -998,7 +1058,26 @@ mlm_l <span class="token operator">=</span> loss<span class="token punctuation">
 <h2 id="阅读LLM综述"><a href="#阅读LLM综述" class="headerlink" title="阅读LLM综述"></a>阅读LLM综述</h2><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/612181615">人工智能 LLM 革命破晓：一文读懂当下超大语言模型发展现状 /麦克船长LLM革命系列2 - 知乎 (zhihu.com)</a></p>
 <ul>
 <li>之前一直不理解为什么叫few-shot prompt：在无监督训练好的 GPT-3，使用时用少量示例（加在prompt里面）就可以得到有较好的输出反馈，这就叫 Few-Shot Prompt。pretrain后的模型通过finetune或者In-context learning完成不同类型的任务，又分zeroshot，oneshot，fewshot，在综述的11.5节有详细区分。</li>
-<li></li>
+</ul>
+<h2 id="topk，topp和tempreture"><a href="#topk，topp和tempreture" class="headerlink" title="topk，topp和tempreture"></a>topk，topp和tempreture</h2><ul>
+<li><p>参考这一篇博客<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/613428710">Top-k &amp; Top-p, Temperature - 知乎 (zhihu.com)</a></p>
+</li>
+<li><p>topk即从前k个高概率的token中随机选，topp是从概率和为topp的前几个token中随机，而tempreture是在softmax中除上了一个系数T，来控制模型的随机性，T越大生成的内容越随机</p>
+</li>
+</ul>
+<h2 id="RoPE编码"><a href="#RoPE编码" class="headerlink" title="RoPE编码"></a>RoPE编码</h2><ul>
+<li>参考1<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/647832706">超超超超超简单！从结果推导RoPE旋转位置编码 - 知乎 (zhihu.com)</a></li>
+<li>参考2<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/641274061">【论文阅读】RoPE为何成为大模型中最常见的位置编码？ - 知乎 (zhihu.com)</a></li>
+<li>$\langle f(q, m), f(k, n) \rangle = g(q, k, m - n)$怎么理解？</li>
+<li>f(q,m)和f(k,n)表示查询qk的位置编码，做内积之后，要和g(q, k, m-n)算出来的相等，即结果是和相对位置m-n相关的，要找这样一个映射（位置编码方式）f。</li>
+<li>一开始的疑问是，为什么$e^{m\theta i}$和$e^{n\theta i}$乘积不是$e^{(m+n)\theta i}$而是$e^{(m-n)\theta i}$，因为<strong>两个复向量q，k的内积等于q乘（k的共轭复数），再取实部</strong>即$\langle q,k\rangle = Re(q^*k)$。复数内积参考<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_43800577/article/details/126869092">复向量的内积（例题详解）-CSDN博客</a></li>
+</ul>
+<p><img src="/img/nlp_study/neiji.png" alt="neiji"></p>
+<ul>
+<li><p>共轭复数的定义是将复数的虚部取负值,对于复数 $re^{\theta i}$，其共轭复数为$re^{-\theta i}$。</p>
+</li>
+<li><p>感觉论文中的2D的例子，可以发现</p>
+</li>
 </ul>
 
                 
@@ -1272,29 +1351,28 @@ mlm_l <span class="token operator">=</span> loss<span class="token punctuation">
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="far fa-dot-circle"></i>&nbsp;本篇
-            </div>
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2023/11/08/nlp-study/">
+                <a href="/2024/03/05/llm-study/">
                     <div class="card-image">
                         
-                        <img src="/img/photo/flower_window.jpg" class="responsive-img" alt="我的NLP学习路径和笔记">
+                        <img src="/img/photo/tower.jpg" class="responsive-img" alt="llama代码解读（一）LlamaDecoderLayer">
                         
-                        <span class="card-title">我的NLP学习路径和笔记</span>
+                        <span class="card-title">llama代码解读（一）LlamaDecoderLayer</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            我的NLP学习路径
+                            我的LLM学习路径
                         
                     </div>
                     <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2023-11-08
-                            </span>
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2024-03-05
+                        </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
@@ -1307,12 +1385,15 @@ mlm_l <span class="token operator">=</span> loss<span class="token punctuation">
                         </span>
                     </div>
                 </div>
-
                 
                 <div class="card-action article-tags">
                     
                     <a href="/tags/%E7%AE%97%E6%B3%95%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
                         <span class="chip bg-color">算法学习笔记</span>
+                    </a>
+                    
+                    <a href="/tags/LLM/">
+                        <span class="chip bg-color">LLM</span>
                     </a>
                     
                     <a href="/tags/DL/">
@@ -1521,7 +1602,7 @@ mlm_l <span class="token operator">=</span> loss<span class="token punctuation">
         <div class="col s12 m8 l8 copy-right">
             Copyright&nbsp;&copy;
             
-                <span id="year">2020-2023</span>
+                <span id="year">2020-2024</span>
             
             <span id="year">2020</span>
             <a href="/about" target="_blank">REXWind</a>
@@ -1530,7 +1611,7 @@ mlm_l <span class="token operator">=</span> loss<span class="token punctuation">
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">74.6k</span>
+                        class="white-color">78.3k</span>
             
             
             
